@@ -29,7 +29,11 @@ test("notice bundle preserves nested texts and excludes stale or linked outside 
     await write("node_modules/.bun/stale@0.1.0/node_modules/stale/package.json", JSON.stringify({ name: "stale", version: "0.1.0" }));
     await write("THIRD_PARTY_NOTICES.md", "source provenance\n");
     await write("licenses/source-mit.txt", "source upstream terms\n");
-    const result = Bun.spawnSync([process.execPath, new URL("../../scripts/license-inventory.ts", import.meta.url).pathname, "bundle.json"], { cwd: directory });
+    // OS notices are verified in the image; this fixture must not scan the CI runner's packages.
+    const result = Bun.spawnSync([process.execPath, new URL("../../scripts/license-inventory.ts", import.meta.url).pathname, "bundle.json"], {
+      cwd: directory,
+      env: { ...process.env, PATH: "" },
+    });
     expect(result.exitCode).toBe(0);
     const bundle = await Bun.file(join(directory, "bundle.json")).json();
     expect(bundle.packages.map((item: { name: string }) => item.name)).toEqual(["@img/sharp-libvips-test", "fixture"]);
@@ -43,6 +47,8 @@ test("notice bundle preserves nested texts and excludes stale or linked outside 
     expect(bundle.sourceNotices).toContainEqual({ file: "licenses/source-mit.txt", text: "source upstream terms\n" });
     expect(JSON.stringify(bundle)).not.toContain("outside sentinel");
     expect(bundle.lockfileSha256).toMatch(/^[a-f0-9]{64}$/);
+    expect(bundle.osPackages).toBeNull();
+    expect(bundle.osNotices).toEqual([]);
   } finally {
     await rm(directory, { recursive: true, force: true });
   }
