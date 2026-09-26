@@ -40,21 +40,32 @@ async function verifyEmail(email: string, client: BrowserContext) {
   const link = html.match(/href="([^"]*\/api\/auth\/verify-email[^\"]*)"/)?.[1]?.replaceAll('&amp;', '&')
   assert(link, 'Signup must produce a real verification message in the local inbox')
   assert.equal(new URL(link).origin, base, 'Verification must return to this installation')
-  const verification = await client.request.get(link)
-  assert(verification.ok(), `Verification failed: ${verification.status()}`)
+  // Bun 1.3.10's HTTP response URL breaks Playwright's API cookie parser; browsers handle auth cookies normally.
+  const verificationPage = await client.newPage()
+  try {
+    const verification = await verificationPage.goto(link)
+    assert(verification?.ok(), `Verification failed: ${verification?.status()}`)
+  } finally {
+    await verificationPage.close()
+  }
 }
 
-async function login(email: string, password: string) {
-  await context.clearCookies()
-  await page.goto('/login')
-  await page.locator('input[type="email"]').fill(email)
-  await page.locator('input[type="password"]').fill(password)
-  const responsePromise = page.waitForResponse((r) => r.url().endsWith('/api/auth/sign-in/email'))
-  await page.locator('button[type="submit"]').click()
-  const response = await responsePromise
-  assert(response.ok(), `Browser login failed: ${response.status()} ${await response.text()}`)
-  const session = await api('auth/get-session')
-  assert.equal(session.user.email, email)
+async function login(email: string, password: string, client = context) {
+  const loginPage = client === context ? page : await client.newPage()
+  try {
+    await client.clearCookies()
+    await loginPage.goto('/login')
+    await loginPage.locator('input[type="email"]').fill(email)
+    await loginPage.locator('input[type="password"]').fill(password)
+    const responsePromise = loginPage.waitForResponse((r) => r.url().endsWith('/api/auth/sign-in/email'))
+    await loginPage.locator('button[type="submit"]').click()
+    const response = await responsePromise
+    assert(response.ok(), `Browser login failed: ${response.status()} ${await response.text()}`)
+    const session = await api('auth/get-session', undefined, 'GET', client)
+    assert.equal(session.user.email, email)
+  } finally {
+    if (loginPage !== page) await loginPage.close()
+  }
 }
 
 async function checkFile(id: string, expected: string) {
@@ -146,7 +157,7 @@ try {
     const strangerEmail = `other-${suffix}@example.test`
     await api('auth/sign-up/email', { name: 'Other local user', email: strangerEmail, password }, 'POST', stranger)
     await verifyEmail(strangerEmail, stranger)
-    await api('auth/sign-in/email', { email: strangerEmail, password }, 'POST', stranger)
+    await login(strangerEmail, password, stranger)
     const forbidden = await stranger.request.get(`${base}/api/storage/files/${file.id}/url`)
     assert.equal(forbidden.status(), 404, 'A second account cannot sign a private file download')
     await stranger.close()
