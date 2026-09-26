@@ -1,0 +1,42 @@
+{
+  "name": "@mana/db",
+  "license": "AGPL-3.0-only",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./schema": "./src/schema/index.ts",
+    "./calendar-date": "./src/lib/calendar-date.ts",
+    "./document-create-validation": "./src/lib/document-create-validation.ts",
+    "./quantity": "./src/lib/quantity.ts",
+    "./rich-text": "./src/lib/rich-text.ts",
+    "./task-status": "./src/task-status.ts",
+    "./plan-entitlements": "./src/lib/plan-entitlements.ts",
+    "./private-network": "./src/lib/private-network.ts",
+    "./google-scopes": "./src/lib/google-scopes.ts"
+  },
+  "scripts": {
+    "test": "bun test",
+    "typecheck": "tsc --noEmit",
+    "seed": "bun run src/seed.ts",
+    "seed:cms": "bun run src/seed-cms.ts",
+    "db:generate": "bunx drizzle-kit generate --config drizzle.config.ts",
+    "db:migrate": "bun run migrate.ts",
+    "db:studio": "bunx drizzle-kit studio --config drizzle.config.ts"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^10.4.0",
+    "date-fns": "^4.2.1",
+    "drizzle-orm": "catalog:",
+    "postgres": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.3.14",
+    "@types/node": "^22.10.2",
+    "drizzle-kit": "^0.31.1",
+    "typescript": "catalog:"
+  }
+}

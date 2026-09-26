@@ -1,0 +1,2 @@
+ALTER TABLE "user_profitability_snapshots" ADD COLUMN "estimated_monthly_revenue_reporting_cents" integer NOT NULL;--> statement-breakpoint
+ALTER TABLE "user_profitability_snapshots" ADD COLUMN "ai_cost_reporting_cents" integer NOT NULL;

@@ -1,0 +1,582 @@
+{
+  "updatedAt": "2025-06-27",
+  "banks": [
+    {
+      "code": "002",
+      "abbreviation": "BBL",
+      "slug": "bbl",
+      "nameTh": "ธนาคารกรุงเทพ",
+      "nameEn": "Bangkok Bank",
+      "officialNameEn": "Bangkok Bank Public Company Limited",
+      "swift": "BKKBTHBK",
+      "accountDigits": [
+        10
+      ],
+      "type": "commercial",
+      "active": true,
+      "color": "#1e4598"
+    },
+    {
+      "code": "004",
+      "abbreviation": "KBANK",
+      "slug": "kbank",
+      "nameTh": "ธนาคารกสิกรไทย",
+      "nameEn": "Kasikornbank",
+      "officialNameEn": "Kasikornbank Public Company Limited",
+      "swift": "KASITHBK",
+      "accountDigits": [
+        10
+      ],
+      "type": "commercial",
+      "active": true,
+      "color": "#138f2d"
+    },
+    {
+      "code": "005",
+      "abbreviation": "RBS",
+      "slug": "rbs",
+      "nameTh": "ธนาคาร เดอะรอยัลแบงก์ออฟสกอตแลนด์",
+      "nameEn": "Royal Bank of Scotland",
+      "officialNameEn": "The Royal Bank of Scotland PLC",
+      "swift": null,
+      "accountDigits": [
+        10
+      ],
+      "type": "foreign_branch",
+      "active": false
+    },
+    {
+      "code": "006",
+      "abbreviation": "KTB",
+      "slug": "ktb",
+      "nameTh": "ธนาคารกรุงไทย",
+      "nameEn": "Krungthai Bank",
+      "officialNameEn": "Krung Thai Bank Public Company Limited",
+      "swift": "KRTHTHBK",
+      "accountDigits": [
+        10
+      ],
+      "type": "commercial",
+      "active": true,
+      "color": "#1ba5e1"
+    },
+    {
+      "code": "008",
+      "abbreviation": "JPMC",
+      "slug": "jpmorgan",
+      "nameTh": "เจพีมอร์แกน เชส",
+      "nameEn": "JPMorgan Chase Bank",
+      "officialNameEn": "JPMorgan Chase Bank, N.A. Bangkok Branch",
+      "swift": "CHASTHBX",
+      "accountDigits": [
+        10
+      ],
+      "type": "foreign_branch",
+      "active": true
+    },
+    {
+      "code": "009",
+      "abbreviation": "OCBC",
+      "slug": "ocbc",
+      "nameTh": "ธนาคารโอซีบีซี",
+      "nameEn": "Oversea-Chinese Banking Corporation",
+      "officialNameEn": "Oversea-Chinese Banking Corporation Ltd.",
+      "swift": "OCBCTHBK",
+      "accountDigits": [
+        10
+      ],
+      "type": "foreign_branch",
+      "active": true
+    },
+    {
+      "code": "010",
+      "abbreviation": "MUFG",
+      "slug": "mufg",
+      "nameTh": "ธนาคารแห่งโตเกียว-มิตซูบิชิ ยูเอฟเจ",
+      "nameEn": "MUFG Bank",
+      "officialNameEn": "MUFG Bank, Ltd. Bangkok Branch",
+      "swift": "BOTKTHBX",
+      "accountDigits": [
+        10
+      ],
+      "type": "foreign_branch",
+      "active": true
+    },
+    {
+      "code": "011",
+      "abbreviation": "TTB",
+      "slug": "ttb",
+      "nameTh": "ธนาคารทหารไทยธนชาต",
+      "nameEn": "TMBThanachart Bank",
+      "officialNameEn": "TMBThanachart Bank Public Company Limited",
+      "swift": "TMBKTHBK",
+      "accountDigits": [
+        10
+      ],
+      "type": "commercial",
+      "active": true,
+      "color": "#1279be"
+    },
+    {
+      "code": "014",
+      "abbreviation": "SCB",
+      "slug": "scb",
+      "nameTh": "ธนาคารไทยพาณิชย์",
+      "nameEn": "Siam Commercial Bank",
+      "officialNameEn": "Siam Commercial Bank Public Company Limited",
+      "swift": "SICOTHBK",
+      "accountDigits": [
+        10
+      ],
+      "type": "commercial",
+      "active": true,
+      "color": "#4e2e7f"
+    },
+    {
+      "code": "017",
+      "abbreviation": "CITI",
+      "slug": "citibank",
+      "nameTh": "ธนาคารซิตี้แบงก์",
+      "nameEn": "Citibank",
+      "officialNameEn": "Citibank, N.A. Bangkok Branch",
+      "swift": "CITITHBX",
+      "accountDigits": [
+        10
+      ],
+      "type": "foreign_branch",
+      "active": true,
+      "color": "#1583c7"
+    },
+    {
+      "code": "018",
+      "abbreviation": "SMBC",
+      "slug": "smbc",
+      "nameTh": "ธนาคารซูมิโตโม มิตซุย แบงก์กิ้ง คอร์ปอเรชั่น",
+      "nameEn": "Sumitomo Mitsui Banking Corporation",
+      "officialNameEn": "Sumitomo Mitsui Banking Corporation Bangkok Branch",
+      "swift": "SMBCTHBK",
+      "accountDigits": [
+        10
+      ],
+      "type": "foreign_branch",
+      "active": true
+    },
+    {
+      "code": "020",
+      "abbreviation": "SCBT",
+      "slug": "standard-chartered",
+      "nameTh": "ธนาคารสแตนดาร์ดชาร์เตอร์ด (ไทย)",
+      "nameEn": "Standard Chartered Bank (Thai)",
+      "officialNameEn": "Standard Chartered Bank (Thai) Public Company Limited",
+      "swift": "SCBLTHBX",
+      "accountDigits": [
+        10,
+        11
+      ],
+      "type": "commercial",
+      "active": true,
+      "color": "#0f6ea1"
+    },
+    {
+      "code": "022",
+      "abbreviation": "CIMBT",
+      "slug": "cimb-thai",
+      "nameTh": "ธนาคารซีไอเอ็มบีไทย",
+      "nameEn": "CIMB Thai Bank",
+      "officialNameEn": "CIMB Thai Bank Public Company Limited",
+      "swift": "UBOBTHBK",
+      "accountDigits": [
+        10
+      ],
+      "type": "commercial",
+      "active": true,
+      "color": "#7e2f36"
+    },
+    {
+      "code": "023",
+      "abbreviation": "RHB",
+      "slug": "rhb",
+      "nameTh": "ธนาคารอาร์เอชบี",
+      "nameEn": "RHB Bank",
+      "officialNameEn": "RHB Bank Berhad Bangkok Branch",
+      "swift": null,
+      "accountDigits": [
+        10
+      ],
+      "type": "foreign_branch",
+      "active": true
+    },
+    {
+      "code": "024",
+      "abbreviation": "UOBT",
+      "slug": "uob",
+      "nameTh": "ธนาคารยูโอบี",
+      "nameEn": "United Overseas Bank (Thai)",
+      "officialNameEn": "United Overseas Bank (Thai) Public Company Limited",
+      "swift": "UOVBTHBK",
+      "accountDigits": [
+        10
+      ],
+      "type": "commercial",
+      "active": true,
+      "color": "#0b3979"
+    },
+    {
+      "code": "025",
+      "abbreviation": "BAY",
+      "slug": "krungsri",
+      "nameTh": "ธนาคารกรุงศรีอยุธยา",
+      "nameEn": "Bank of Ayudhya",
+      "officialNameEn": "Bank of Ayudhya Public Company Limited",
+      "swift": "AYUDTHBK",
+      "accountDigits": [
+        10
+      ],
+      "type": "commercial",
+      "active": true,
+      "color": "#fec43b"
+    },
+    {
+      "code": "026",
+      "abbreviation": "MEGA",
+      "slug": "mega-icbc",
+      "nameTh": "ธนาคารเมกะ สากลพาณิชย์",
+      "nameEn": "Mega International Commercial Bank",
+      "officialNameEn": "Mega International Commercial Bank Public Company Limited",
+      "swift": null,
+      "accountDigits": [
+        10
+      ],
+      "type": "commercial",
+      "active": true
+    },
+    {
+      "code": "027",
+      "abbreviation": "BOA",
+      "slug": "bank-of-america",
+      "nameTh": "แบงก์ออฟอเมริกาคอร์ปอเรชั่น",
+      "nameEn": "Bank of America",
+      "officialNameEn": "Bank of America, National Association Bangkok Branch",
+      "swift": "BOFATH2X",
+      "accountDigits": [
+        10
+      ],
+      "type": "foreign_branch",
+      "active": true,
+      "color": "#e11e3c"
+    },
+    {
+      "code": "028",
+      "abbreviation": "CACIB",
+      "slug": "credit-agricole",
+      "nameTh": "ธนาคารเครดิต อะกริโคล",
+      "nameEn": "Crédit Agricole CIB",
+      "officialNameEn": "Crédit Agricole Corporate and Investment Bank Bangkok Branch",
+      "swift": "AGRITHB1",
+      "accountDigits": [
+        10
+      ],
+      "type": "foreign_branch",
+      "active": true,
+      "color": "#0e765b"
+    },
+    {
+      "code": "029",
+      "abbreviation": "IOB",
+      "slug": "indian-overseas",
+      "nameTh": "ธนาคารอินเดียน โอเวอร์ซีส์",
+      "nameEn": "Indian Overseas Bank",
+      "officialNameEn": "Indian Overseas Bank Bangkok Branch",
+      "swift": "IOBATHBK",
+      "accountDigits": [
+        10
+      ],
+      "type": "foreign_branch",
+      "active": true
+    },
+    {
+      "code": "030",
+      "abbreviation": "GSB",
+      "slug": "gsb",
+      "nameTh": "ธนาคารออมสิน",
+      "nameEn": "Government Savings Bank",
+      "officialNameEn": "Government Savings Bank",
+      "swift": null,
+      "accountDigits": [
+        12
+      ],
+      "type": "government",
+      "active": true,
+      "color": "#eb198d"
+    },
+    {
+      "code": "031",
+      "abbreviation": "HSBC",
+      "slug": "hsbc",
+      "nameTh": "ฮ่องกงและเซี่ยงไฮ้แบงกิ้งคอร์ปอเรชั่น",
+      "nameEn": "HSBC",
+      "officialNameEn": "The Hongkong and Shanghai Banking Corporation Limited Bangkok Branch",
+      "swift": "HSBCTHBK",
+      "accountDigits": [
+        12
+      ],
+      "type": "foreign_branch",
+      "active": true,
+      "color": "#fd0d1b"
+    },
+    {
+      "code": "032",
+      "abbreviation": "DB",
+      "slug": "deutsche-bank",
+      "nameTh": "ธนาคารดอยช์แบงก์",
+      "nameEn": "Deutsche Bank",
+      "officialNameEn": "Deutsche Bank Aktiengesellschaft Bangkok Branch",
+      "swift": "DEUTTHBK",
+      "accountDigits": [
+        10
+      ],
+      "type": "foreign_branch",
+      "active": true,
+      "color": "#0522a5"
+    },
+    {
+      "code": "033",
+      "abbreviation": "GHB",
+      "slug": "ghb",
+      "nameTh": "ธนาคารอาคารสงเคราะห์",
+      "nameEn": "Government Housing Bank",
+      "officialNameEn": "Government Housing Bank",
+      "swift": "GOHUTHB1",
+      "accountDigits": [
+        12
+      ],
+      "type": "government",
+      "active": true,
+      "color": "#f57d23"
+    },
+    {
+      "code": "034",
+      "abbreviation": "BAAC",
+      "slug": "baac",
+      "nameTh": "ธนาคารเพื่อการเกษตรและสหกรณ์การเกษตร",
+      "nameEn": "Bank for Agriculture and Agricultural Cooperatives",
+      "officialNameEn": "Bank for Agriculture and Agricultural Cooperatives",
+      "swift": "BAABTHBK",
+      "accountDigits": [
+        10,
+        12
+      ],
+      "type": "government",
+      "active": true,
+      "color": "#4b9b1d"
+    },
+    {
+      "code": "035",
+      "abbreviation": "EXIM",
+      "slug": "exim",
+      "nameTh": "ธนาคารเพื่อการส่งออกและนำเข้าแห่งประเทศไทย",
+      "nameEn": "Export-Import Bank of Thailand",
+      "officialNameEn": "Export-Import Bank of Thailand",
+      "swift": "EXTHTHBK",
+      "accountDigits": [
+        10
+      ],
+      "type": "state",
+      "active": true
+    },
+    {
+      "code": "039",
+      "abbreviation": "MHCB",
+      "slug": "mizuho",
+      "nameTh": "ธนาคารมิซูโฮ",
+      "nameEn": "Mizuho Bank",
+      "officialNameEn": "Mizuho Bank, Ltd. Bangkok Branch",
+      "swift": "MHCBTHBK",
+      "accountDigits": [
+        11
+      ],
+      "type": "foreign_branch",
+      "active": true,
+      "color": "#150b78"
+    },
+    {
+      "code": "045",
+      "abbreviation": "BNPP",
+      "slug": "bnp-paribas",
+      "nameTh": "ธนาคารบีเอ็นพี พารีบาส์",
+      "nameEn": "BNP Paribas",
+      "officialNameEn": "BNP Paribas Bangkok Branch",
+      "swift": "BNPATHBK",
+      "accountDigits": [
+        10
+      ],
+      "type": "foreign_branch",
+      "active": true,
+      "color": "#14925e"
+    },
+    {
+      "code": "052",
+      "abbreviation": "BOC",
+      "slug": "bank-of-china",
+      "nameTh": "ธนาคารแห่งประเทศจีน (ไทย)",
+      "nameEn": "Bank of China (Thai)",
+      "officialNameEn": "Bank of China (Thai) Public Company Limited",
+      "swift": "BKCHTHBK",
+      "accountDigits": [
+        10
+      ],
+      "type": "commercial",
+      "active": true
+    },
+    {
+      "code": "065",
+      "abbreviation": "TBANK",
+      "slug": "thanachart",
+      "nameTh": "ธนาคารธนชาต",
+      "nameEn": "Thanachart Bank",
+      "officialNameEn": "Thanachart Bank Public Company Limited",
+      "swift": "TBNKTHBK",
+      "accountDigits": [
+        10
+      ],
+      "type": "commercial",
+      "active": false,
+      "mergedInto": "011"
+    },
+    {
+      "code": "066",
+      "abbreviation": "ISBT",
+      "slug": "islamic-bank",
+      "nameTh": "ธนาคารอิสลามแห่งประเทศไทย",
+      "nameEn": "Islamic Bank of Thailand",
+      "officialNameEn": "Islamic Bank of Thailand",
+      "swift": "TIBTTHBK",
+      "accountDigits": [
+        10
+      ],
+      "type": "specialized",
+      "active": true,
+      "color": "#184615"
+    },
+    {
+      "code": "067",
+      "abbreviation": "TISCO",
+      "slug": "tisco",
+      "nameTh": "ธนาคารทิสโก้",
+      "nameEn": "TISCO Bank",
+      "officialNameEn": "TISCO Bank Public Company Limited",
+      "swift": "TFPCTHB1",
+      "accountDigits": [
+        14
+      ],
+      "type": "specialized",
+      "active": true,
+      "color": "#12549f"
+    },
+    {
+      "code": "069",
+      "abbreviation": "KKP",
+      "slug": "kiatnakin-phatra",
+      "nameTh": "ธนาคารเกียรตินาคินภัทร",
+      "nameEn": "Kiatnakin Phatra Bank",
+      "officialNameEn": "Kiatnakin Phatra Bank Public Company Limited",
+      "swift": "KKPCTHBK",
+      "accountDigits": [
+        10,
+        14
+      ],
+      "type": "commercial",
+      "active": true,
+      "color": "#199cc5"
+    },
+    {
+      "code": "070",
+      "abbreviation": "ICBCT",
+      "slug": "icbc-thai",
+      "nameTh": "ธนาคารไอซีบีซี (ไทย)",
+      "nameEn": "ICBC (Thai)",
+      "officialNameEn": "Industrial and Commercial Bank of China (Thai) Public Company Limited",
+      "swift": "ICBCTHBK",
+      "accountDigits": [
+        10,
+        14,
+        16
+      ],
+      "type": "commercial",
+      "active": true,
+      "color": "#c50f1c"
+    },
+    {
+      "code": "071",
+      "abbreviation": "TCRB",
+      "slug": "thai-credit",
+      "nameTh": "ธนาคารไทยเครดิต เพื่อรายย่อย",
+      "nameEn": "Thai Credit Retail Bank",
+      "officialNameEn": "Thai Credit Retail Bank Public Company Limited",
+      "swift": "THCETHB1",
+      "accountDigits": [
+        10
+      ],
+      "type": "specialized",
+      "active": true,
+      "color": "#0a4ab3"
+    },
+    {
+      "code": "073",
+      "abbreviation": "LHFG",
+      "slug": "land-and-houses",
+      "nameTh": "ธนาคารแลนด์ แอนด์ เฮ้าส์",
+      "nameEn": "Land and Houses Bank",
+      "officialNameEn": "Land and Houses Bank Public Company Limited",
+      "swift": "LAHRTHB2",
+      "accountDigits": [
+        10
+      ],
+      "type": "commercial",
+      "active": true,
+      "color": "#6d6e71"
+    },
+    {
+      "code": "079",
+      "abbreviation": "ANZ",
+      "slug": "anz",
+      "nameTh": "ธนาคารเอเอ็นแซด (ไทย)",
+      "nameEn": "ANZ Bank (Thai)",
+      "officialNameEn": "ANZ Bank (Thai) Public Company Limited",
+      "swift": "ANZBTHBK",
+      "accountDigits": [
+        10
+      ],
+      "type": "commercial",
+      "active": true
+    },
+    {
+      "code": "080",
+      "abbreviation": "SMTB",
+      "slug": "smtb",
+      "nameTh": "ธนาคาร Sumitomo Mitsui Trust (ไทย)",
+      "nameEn": "Sumitomo Mitsui Trust Bank (Thai)",
+      "officialNameEn": "Sumitomo Mitsui Trust Bank (Thai) Public Company Limited",
+      "swift": "STBCTHBK",
+      "accountDigits": [
+        10
+      ],
+      "type": "commercial",
+      "active": true
+    },
+    {
+      "code": "098",
+      "abbreviation": "SME",
+      "slug": "sme-development",
+      "nameTh": "ธนาคารพัฒนาวิสาหกิจขนาดกลางและขนาดย่อมแห่งประเทศไทย",
+      "nameEn": "SME Development Bank of Thailand",
+      "officialNameEn": "Small and Medium Enterprise Development Bank of Thailand",
+      "swift": "SMEATHB1",
+      "accountDigits": [
+        10
+      ],
+      "type": "state",
+      "active": true
+    }
+  ]
+}

@@ -1,0 +1,162 @@
+{
+  "save": "Save",
+  "cancel": "Cancel",
+  "reset": "Reset",
+  "loading": "Loading…",
+  "retry": "Try again",
+  "loadFailed": "Could not load this data.",
+  "sessionExpired": "Session expired",
+  "sessionExpiredDescription": "Please sign in again to continue.",
+  "notFoundTitle": "Page not found",
+  "notFoundDescription": "The page you are looking for does not exist or has been moved.",
+  "goHome": "Go to dashboard",
+  "goBack": "Go back",
+  "somethingWentWrong": "Something went wrong",
+  "unexpectedError": "An unexpected error occurred.",
+  "tryAgain": "Try again",
+  "entityNotFoundTitle": "Not found",
+  "entityNotFoundDescription": "This item does not exist or you no longer have access to it.",
+  "delete": "Delete",
+  "deleteTitle": "Delete this item?",
+  "deleteDescription": "This action cannot be undone.",
+  "offline": "You're offline",
+  "offlineDescription": "Changes may not save until your connection returns.",
+  "online": "Back online",
+  "mediaDeleteFailed": "Failed to delete media file",
+  "mediaRestoreFailed": "Failed to restore media file",
+  "relativeTime": {
+    "todayAt": "Today at {{time}}",
+    "yesterdayAt": "Yesterday at {{time}}"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "Nothing here yet",
+    "markAllRead": "Mark all read",
+    "items": {
+      "contactAdded": {
+        "title": "New contact added",
+        "body": "{{name}} was added to your contacts."
+      },
+      "reconciliationFlagged": {
+        "title": "Reconciliation flagged",
+        "body": "Transaction amount ({{transaction}}) does not match document amount due ({{document}})"
+      },
+      "eventReminder": {
+        "title": "Upcoming event reminder",
+        "body": "{{eventTitle}}"
+      },
+      "milestoneStatus": {
+        "title": "Milestone status changed",
+        "body": "{{name}} is now {{status}}."
+      },
+      "feedbackPlanned": {
+        "title": "Your feedback is planned",
+        "body": "{{message}}"
+      },
+      "feedbackInProgress": {
+        "title": "Your feedback is being worked on",
+        "body": "{{message}}"
+      },
+      "feedbackResolved": {
+        "title": "Your feedback has been resolved",
+        "body": "{{message}}"
+      },
+      "feedbackDeclined": {
+        "title": "Your feedback was reviewed and declined",
+        "body": "{{message}}"
+      },
+      "budgetExceeded": {
+        "title": "Budget exceeded",
+        "body": "{{category}} spending is at {{percent}}% of its monthly budget."
+      },
+      "budgetWarning": {
+        "title": "Approaching budget limit",
+        "body": "{{category}} spending is at {{percent}}% of its monthly budget."
+      },
+      "paymentReceived": {
+        "title": "Payment received",
+        "body": "{{description}} — ${{amount}}"
+      },
+      "paymentPaid": {
+        "title": "Payment marked paid",
+        "body": "{{description}} — ${{amount}}"
+      },
+      "receiptReview": {
+        "title": "Receipt import needs review",
+        "body": "{{description}} — ${{amount}} was imported from a receipt: {{reasons}}."
+      },
+      "documentViewed": {
+        "title": "Document viewed",
+        "body": "{{type}} {{number}} was viewed by the client."
+      },
+      "documentAccepted": {
+        "title": "Document accepted",
+        "body": "{{type}} {{number}} was accepted by the client."
+      },
+      "documentRejected": {
+        "title": "Document rejected",
+        "body": "{{type}} {{number}} was rejected by the client."
+      },
+      "remindersSent": {
+        "title": "Invoice reminders sent",
+        "body_one": "{{count}} payment reminder sent.",
+        "body_other": "{{count}} payment reminders sent."
+      },
+      "paymentSlipUploaded": {
+        "title": "Payment slip uploaded",
+        "body": "A PromptPay slip was uploaded for {{number}} — review and confirm."
+      }
+    },
+    "flags": {
+      "uncertain_currency": "the currency was unclear and defaulted to your base currency",
+      "uncertain_amount": "the total amount was unclear",
+      "unclear_image": "the receipt image was hard to read"
+    }
+  },
+  "feedback": {
+    "title": "Send feedback",
+    "description": "Found a bug or have an idea? Tell us — it lands straight in the triage queue.",
+    "typeBug": "Bug",
+    "typeIdea": "Idea",
+    "typeQuestion": "Question",
+    "typeOther": "Other",
+    "messageLabel": "Message",
+    "messagePlaceholder": "What happened, or what would make this better?",
+    "submit": "Send feedback",
+    "success": "Thanks! Your feedback was sent.",
+    "successDescription": "We attached your route, app version, and theme automatically.",
+    "done": "Done",
+    "attachScreenshot": "Attach screenshot",
+    "screenshotTooLarge": "Screenshot is too large (max 5MB)",
+    "contextNote": "Your current page, app version, and theme are attached automatically.",
+    "error": "Failed to send feedback"
+  },
+  "dataTable": {
+    "search": "Search...",
+    "sort": "Sort",
+    "sortBy": "Sort by",
+    "noSortingApplied": "No sorting applied",
+    "modifySortingDescription": "Modify sorting to organize your rows.",
+    "addSortingDescription": "Add sorting to organize your rows.",
+    "addSort": "Add sort",
+    "resetSorting": "Reset sorting",
+    "searchFields": "Search fields...",
+    "noFieldsFound": "No fields found.",
+    "asc": "Asc",
+    "desc": "Desc",
+    "filter": "Filter",
+    "filters": "Filters",
+    "clear": "Clear",
+    "clearAllFilters": "Clear all filters",
+    "toggleColumns": "Choose columns",
+    "searchColumns": "Search columns...",
+    "noColumnsFound": "No columns found."
+  },
+  "consent": {
+    "title": "Analytics",
+    "body": "May we record which screens you open? It shows us which parts of MANA get used. Client names, documents, and amounts are never sent, and declining changes nothing.",
+    "privacyLink": "Privacy policy",
+    "accept": "Accept",
+    "decline": "Decline"
+  }
+}

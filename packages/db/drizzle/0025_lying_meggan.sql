@@ -1,0 +1,1 @@
+ALTER TABLE "calendar_connections" ADD COLUMN "account_email" text;

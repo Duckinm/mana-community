@@ -1,0 +1,137 @@
+{
+  "progress": "Setting up your workspace",
+  "steps": {
+    "profile": "Profile",
+    "preferences": "Preferences",
+    "account": "Account"
+  },
+  "actions": {
+    "back": "← Back",
+    "continue": "Continue →",
+    "submit": "Submit",
+    "finish": "Let's rock!",
+    "optional": "optional"
+  },
+  "flow": {
+    "title": "Get to know you more"
+  },
+  "identity": {
+    "iAmA": "I am a",
+    "jobPlaceholder": "Select your job",
+    "jobSearch": "Search jobs…",
+    "jobEmpty": "No job found.",
+    "otherPlaceholder": "Tell us what you do",
+    "hourlyRate": "Hourly rate",
+    "rangePlaceholder": "Select a range",
+    "rateHint": "Used only to size up your profit estimates in the AI command centre — it never changes how you invoice clients, and you can update it anytime.",
+    "revenueGoal": "Revenue goal",
+    "revenueGoalPlaceholder": "Select a goal",
+    "perMonth": "/mo",
+    "activeProjects": "Max projects per month",
+    "projectsDecrease": "Decrease active projects",
+    "projectsIncrease": "Increase active projects"
+  },
+  "goals": {
+    "painPoint": "Interest in",
+    "painPointHint": "Choose all that apply.",
+    "otherPlaceholder": "Tell us what else you use MANA for",
+    "painPoints": {
+      "invoicing": "Invoicing & payments",
+      "projects": "Project tracking",
+      "clients": "Client communication",
+      "cashflow": "Cash flow & runway",
+      "pricing": "Pricing my work",
+      "contracts": "Contracts & scope",
+      "taxes": "Taxes & compliance",
+      "timeManagement": "Time management",
+      "marketing": "Finding new clients",
+      "workLifeBalance": "Work-life balance",
+      "other": "Other"
+    }
+  },
+  "marketing": {
+    "heardFrom": "How did you hear about MANA?",
+    "sourcePlaceholder": "Select a source",
+    "sources": {
+      "twitter": "Twitter / X",
+      "google": "Google Search",
+      "friend": "Friend / Colleague",
+      "discord": "Discord",
+      "producthunt": "Product Hunt",
+      "other": "Other"
+    }
+  },
+  "finish": {
+    "subtitle": "Your freelance command centre is ready.",
+    "role": "Role",
+    "rate": "Rate",
+    "goal": "Goal",
+    "projects": "Projects",
+    "waiting": "✦ What's waiting for you",
+    "ai": "→ Your AI command centre — ask anything about your business",
+    "finance": "→ Financial snapshot with manday rate calculations",
+    "board": "→ Project board pre-loaded with your work style in mind",
+    "saving": "Setting up…",
+    "error": "We couldn't save your profile. Please try again."
+  },
+  "welcome": {
+    "title": "You're all set!",
+    "subtitle": "Your freelance command centre is ready to go.",
+    "community": "Join the community",
+    "discord": "Join our Discord",
+    "getStarted": "Get Started →"
+  },
+  "quickstart": {
+    "start": "Start quickstart →",
+    "skipForNow": "Skip for now",
+    "stepCount": "Step {{current}} of {{total}}",
+    "go": "Take me there",
+    "skip": "Skip",
+    "exit": "Exit quickstart",
+    "doneTitle": "Quickstart complete!",
+    "doneSubtitle": "You know your way around now — MANA is all yours."
+  },
+  "getStarted": {
+    "navLabel": "Get started",
+    "badge": "{{completed}}/{{total}}",
+    "popoverTitle": "Get started",
+    "popoverSubtitle": "A few quick things to unlock the full picture of your business.",
+    "hide": "Hide this",
+    "completeTitle": "All set!",
+    "completeSubtitle": "You've wrapped up the get-started checklist.",
+    "steps": {
+      "contact": {
+        "title": "Add your first contact",
+        "description": "Keep client and collaborator details in one place."
+      },
+      "project": {
+        "title": "Create your first project",
+        "description": "Organize your work into a project workspace."
+      },
+      "document": {
+        "title": "Create your first document",
+        "description": "Send a quotation, invoice, or receipt."
+      },
+      "transaction": {
+        "title": "Record your first transaction",
+        "description": "Track revenue and expenses as they happen."
+      }
+    },
+    "profile": {
+      "title": "Personalize MANA",
+      "description": "Tell us your work style and get 5 extra AI Actions.",
+      "credit": "+5 AI"
+    }
+  },
+  "profileReward": {
+    "close": "Close profile setup",
+    "title": "Make MANA more useful",
+    "subtitle": "Your answers tune the business context MANA uses for suggestions. You can change them anytime in Settings.",
+    "creditTitle": "5 one-time AI Actions",
+    "creditDescription": "They stay on your account and are used only after your normal monthly Actions are exhausted.",
+    "roleRequired": "Choose your role before claiming the credit.",
+    "claim": "Save profile + claim 5 Actions",
+    "saving": "Saving your profile…",
+    "error": "We couldn't save your profile. Please try again."
+  }
+}

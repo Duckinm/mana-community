@@ -1,0 +1,202 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:16.15-alpine3.24
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: mana_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+          ref: ${{ github.sha }}
+
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+        with:
+          bun-version: 1.3.10
+
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+          restore-keys: bun-${{ runner.os }}-
+
+      - run: bun install --frozen-lockfile
+
+      - name: Check workflow safety and license inventory
+        run: bun --no-env-file test tests/ci/workflows.test.ts tests/ci/license-inventory.test.ts
+
+      - name: Typecheck web
+        run: bun run typecheck
+        working-directory: apps/web
+
+      - name: Typecheck api
+        run: bun run typecheck
+        working-directory: apps/api
+
+      - name: Typecheck database
+        run: bun run typecheck
+        working-directory: packages/db
+
+      - name: Typecheck UI
+        run: bun run typecheck
+        working-directory: packages/ui
+
+      - name: Test database
+        run: bun run test
+        working-directory: packages/db
+
+      - name: Migrate test database
+        run: bun --no-env-file packages/db/migrate.ts
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/mana_ci
+
+      - name: Test api
+        # one process per file: mock.module() leaks across files in a shared
+        # process, and file order differs between macOS (dev) and linux (ci)
+        run: |
+          set -e
+          for f in $(find src -name "*.test.ts" | sort); do
+            bun --no-env-file test "$f"
+          done
+        working-directory: apps/api
+        # dummy values so env.ts validation passes; integration tests only need Postgres
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/mana_ci
+          BETTER_AUTH_SECRET: ci-dummy-secret
+          BETTER_AUTH_URL: http://localhost:4000
+          ANTHROPIC_API_KEY: sk-ant-ci-dummy
+          RESEND_API_KEY: re_ci_dummy
+          CLOUDFLARE_ACCOUNT_ID: ci-dummy
+          R2_ACCESS_KEY_ID: ci-dummy
+          R2_SECRET_ACCESS_KEY: ci-dummy
+          R2_PUBLIC_URL: https://pub-ci-dummy.r2.dev
+          # optional in env.ts, but the token-refresh test needs provider IDs — its
+          # fetch is stubbed, so these never leave the process
+          GOOGLE_CLIENT_ID: ci-dummy
+          GOOGLE_CLIENT_SECRET: ci-dummy
+
+      - name: Test web
+        run: bun run test
+        working-directory: apps/web
+
+      - name: Build web
+        run: bun run build
+        working-directory: apps/web
+
+  self-host:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      COMPOSE_PROJECT_NAME: mana-ci-${{ github.run_id }}-${{ github.run_attempt }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+          ref: ${{ github.sha }}
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+        with:
+          bun-version: 1.3.10
+      - name: Set isolated evidence paths
+        run: |
+          {
+            echo "SELF_HOST_SMOKE_STATE=$RUNNER_TEMP/mana-self-host-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT.json"
+            echo "SELF_HOST_BACKUP=$RUNNER_TEMP/mana-self-host-backup-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+            echo "TMPDIR=$RUNNER_TEMP"
+          } >> "$GITHUB_ENV"
+      - run: bun install --frozen-lockfile
+      - run: bunx playwright install --with-deps chromium
+      - name: Verify migration ownership against fresh and upgraded databases
+        run: bun --no-env-file tests/self-host/migration-ownership.ts
+      - name: Install self-hosted core with fresh volumes
+        run: sh scripts/self-host.sh
+      - name: Verify signup, core workflows, private files, and PDF generation
+        run: |
+          printf '{}' > "$SELF_HOST_SMOKE_STATE"
+          chmod 644 "$SELF_HOST_SMOKE_STATE"
+          bun --no-env-file tests/self-host/smoke.ts
+      - name: Recreate containers while keeping volumes
+        run: |
+          docker compose --env-file .env.selfhost -f compose.selfhost.yml down
+          docker compose --env-file .env.selfhost -f compose.selfhost.yml up --wait --wait-timeout 180
+      - name: Verify persisted records and private files after restart
+        run: bun --no-env-file tests/self-host/smoke.ts --verify-persistence
+      - name: Back up and restore into fresh volumes
+        run: |
+          sh scripts/self-host-backup.sh backup "$SELF_HOST_BACKUP"
+          if sh scripts/self-host-backup.sh restore "$SELF_HOST_BACKUP"; then
+            echo "::error::Restore must refuse an existing installation"
+            exit 1
+          fi
+          docker compose --env-file .env.selfhost -f compose.selfhost.yml down
+          rm .env.selfhost
+          export COMPOSE_PROJECT_NAME="$COMPOSE_PROJECT_NAME-restored"
+          sh scripts/self-host-backup.sh restore "$SELF_HOST_BACKUP"
+          sh scripts/self-host.sh
+          bun --no-env-file tests/self-host/smoke.ts --verify-persistence
+      - name: Retain browser screenshots
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: self-host-screenshots
+          path: ${{ runner.temp }}/mana-self-host-*.png
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Remove rehearsal containers and credentials
+        if: always()
+        run: |
+          cleanup_status=0
+          env_file=.env.selfhost
+          if [ -f "${SELF_HOST_BACKUP:-}/.env.selfhost" ]; then
+            env_file="$SELF_HOST_BACKUP/.env.selfhost"
+          fi
+          if [ -f "$env_file" ]; then
+            for project in "$COMPOSE_PROJECT_NAME-restored" "$COMPOSE_PROJECT_NAME"; do
+              docker compose -p "$project" --env-file "$env_file" -f compose.selfhost.yml down --volumes || cleanup_status=1
+            done
+          fi
+          if [ -n "${SELF_HOST_BACKUP:-}" ]; then rm -rf "$SELF_HOST_BACKUP"; fi
+          rm -f .env.selfhost "$SELF_HOST_SMOKE_STATE"
+          exit "$cleanup_status"
+
+  required-ci:
+    name: Required CI
+    needs: [check, self-host]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Require successful checks for this candidate
+        env:
+          CHECK_RESULT: ${{ needs.check.result }}
+          SELF_HOST_RESULT: ${{ needs.self-host.result }}
+        run: |
+          test "$CHECK_RESULT" = success
+          test "$SELF_HOST_RESULT" = success
+          echo "CI and self-host acceptance passed for commit $GITHUB_SHA." >> "$GITHUB_STEP_SUMMARY"

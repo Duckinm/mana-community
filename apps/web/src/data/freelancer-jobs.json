@@ -1,0 +1,30 @@
+{
+  "updatedAt": "2026-07-11",
+  "jobs": [
+    { "slug": "web-developer", "nameEn": "Web Developer", "nameTh": "นักพัฒนาเว็บไซต์" },
+    { "slug": "mobile-developer", "nameEn": "Mobile Developer", "nameTh": "นักพัฒนาแอปมือถือ" },
+    { "slug": "software-engineer", "nameEn": "Software Engineer", "nameTh": "วิศวกรซอฟต์แวร์" },
+    { "slug": "ui-ux-designer", "nameEn": "UI/UX Designer", "nameTh": "นักออกแบบ UI/UX" },
+    { "slug": "graphic-designer", "nameEn": "Graphic Designer", "nameTh": "นักออกแบบกราฟิก" },
+    { "slug": "illustrator", "nameEn": "Illustrator", "nameTh": "นักวาดภาพประกอบ" },
+    { "slug": "photographer", "nameEn": "Photographer", "nameTh": "ช่างภาพ" },
+    { "slug": "videographer", "nameEn": "Videographer / Video Editor", "nameTh": "ช่างวิดีโอ / ตัดต่อวิดีโอ" },
+    { "slug": "copywriter", "nameEn": "Copywriter", "nameTh": "นักเขียนคำโฆษณา" },
+    { "slug": "content-writer", "nameEn": "Content Writer", "nameTh": "นักเขียนคอนเทนต์" },
+    { "slug": "translator", "nameEn": "Translator", "nameTh": "นักแปล" },
+    { "slug": "digital-marketer", "nameEn": "Digital Marketer", "nameTh": "นักการตลาดดิจิทัล" },
+    { "slug": "seo-specialist", "nameEn": "SEO Specialist", "nameTh": "ผู้เชี่ยวชาญ SEO" },
+    { "slug": "social-media-manager", "nameEn": "Social Media Manager", "nameTh": "ผู้จัดการโซเชียลมีเดีย" },
+    { "slug": "virtual-assistant", "nameEn": "Virtual Assistant", "nameTh": "ผู้ช่วยเสมือน" },
+    { "slug": "bookkeeper", "nameEn": "Bookkeeper / Accountant", "nameTh": "นักบัญชี" },
+    { "slug": "consultant", "nameEn": "Consultant", "nameTh": "ที่ปรึกษา" },
+    { "slug": "project-manager", "nameEn": "Project Manager", "nameTh": "ผู้จัดการโปรเจกต์" },
+    { "slug": "data-analyst", "nameEn": "Data Analyst", "nameTh": "นักวิเคราะห์ข้อมูล" },
+    { "slug": "3d-animator", "nameEn": "3D Artist / Animator", "nameTh": "นักออกแบบ 3D / แอนิเมเตอร์" },
+    { "slug": "game-developer", "nameEn": "Game Developer", "nameTh": "นักพัฒนาเกม" },
+    { "slug": "voice-over-artist", "nameEn": "Voice Over Artist", "nameTh": "นักพากย์เสียง" },
+    { "slug": "architect", "nameEn": "Architect / Interior Designer", "nameTh": "สถาปนิก / นักออกแบบตกแต่งภายใน" },
+    { "slug": "tutor", "nameEn": "Tutor / Teacher", "nameTh": "ติวเตอร์ / ครูสอนพิเศษ" },
+    { "slug": "other", "nameEn": "Other", "nameTh": "อื่น ๆ" }
+  ]
+}

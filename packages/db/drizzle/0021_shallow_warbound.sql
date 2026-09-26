@@ -1,0 +1,1 @@
+ALTER TABLE "sender_profiles" ADD COLUMN "etax_enabled" boolean DEFAULT false NOT NULL;

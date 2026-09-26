@@ -1,0 +1,146 @@
+name: mana-selfhost
+
+x-api-image: &api-image
+  image: mana-selfhost-api:local
+  build:
+    context: .
+    dockerfile: apps/api/Dockerfile
+
+services:
+  db:
+    image: postgres:16.15-alpine3.24
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: mana
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Run sh scripts/self-host.sh --init-only first}
+      POSTGRES_DB: mana
+    volumes:
+      - database:/var/lib/postgresql/data
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U mana -d mana"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  storage:
+    image: chrislusf/seaweedfs:4.47
+    restart: unless-stopped
+    command: [mini, -dir=/data, -ip=storage, -ip.bind=0.0.0.0, -webdav=false]
+    environment:
+      AWS_ACCESS_KEY_ID: ${R2_ACCESS_KEY_ID:?Run sh scripts/self-host.sh --init-only first}
+      AWS_SECRET_ACCESS_KEY: ${R2_SECRET_ACCESS_KEY:?Run sh scripts/self-host.sh --init-only first}
+      S3_BUCKET: mana,mana-public
+    ports:
+      - "127.0.0.1:${MANA_S3_PORT:-39000}:8333"
+    volumes:
+      - storage:/data
+    healthcheck:
+      test: [CMD, wget, -q, --spider, http://127.0.0.1:8888/]
+      interval: 5s
+      timeout: 5s
+      retries: 24
+      start_period: 20s
+
+  mail:
+    image: axllent/mailpit:v1.31.1
+    restart: unless-stopped
+    environment:
+      MP_DATABASE: /data/mailpit.db
+    ports:
+      - "127.0.0.1:${MANA_MAIL_PORT:-38025}:8025"
+    volumes:
+      - mail:/data
+    healthcheck:
+      test: [CMD, /mailpit, readyz]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  migrate:
+    <<: *api-image
+    command: [bun, /app/packages/db/migrate.ts]
+    environment:
+      DATABASE_URL: postgresql://mana:${POSTGRES_PASSWORD}@db:5432/mana
+    depends_on:
+      db:
+        condition: service_healthy
+
+  storage-init:
+    <<: *api-image
+    command: [bun, /app/apps/api/self-host/storage-init.ts]
+    environment:
+      R2_ENDPOINT: http://storage:8333
+      R2_ACCESS_KEY_ID: ${R2_ACCESS_KEY_ID}
+      R2_SECRET_ACCESS_KEY: ${R2_SECRET_ACCESS_KEY}
+      WEB_URL: http://localhost:${MANA_WEB_PORT:-3300}
+    volumes:
+      - ./self-host:/app/apps/api/self-host:ro
+    depends_on:
+      storage:
+        condition: service_healthy
+
+  api:
+    <<: *api-image
+    restart: unless-stopped
+    env_file:
+      - path: .env.selfhost.integrations
+        required: false
+    environment:
+      NODE_ENV: production
+      DEPLOYMENT_MODE: self-hosted
+      PORT: 4000
+      DATABASE_URL: postgresql://mana:${POSTGRES_PASSWORD}@db:5432/mana
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:?Run sh scripts/self-host.sh --init-only first}
+      BETTER_AUTH_URL: http://localhost:${MANA_WEB_PORT:-3300}
+      WEB_URL: http://localhost:${MANA_WEB_PORT:-3300}
+      CORS_ORIGIN: http://localhost:${MANA_WEB_PORT:-3300}
+      PDF_WEB_ORIGIN: http://web:3000
+      MAILPIT_URL: http://mail:8025
+      R2_ENDPOINT: http://storage:8333
+      R2_PRESIGN_ENDPOINT: http://localhost:${MANA_S3_PORT:-39000}
+      R2_REGION: us-east-1
+      R2_FORCE_PATH_STYLE: "true"
+      R2_ACCESS_KEY_ID: ${R2_ACCESS_KEY_ID}
+      R2_SECRET_ACCESS_KEY: ${R2_SECRET_ACCESS_KEY}
+      R2_BUCKET_NAME: mana
+      R2_PUBLIC_BUCKET_NAME: mana-public
+      R2_PUBLIC_URL: http://localhost:${MANA_S3_PORT:-39000}/mana-public
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      storage-init:
+        condition: service_completed_successfully
+      mail:
+        condition: service_healthy
+    healthcheck:
+      test: [CMD, bun, -e, "const response = await fetch('http://localhost:4000/health'); process.exit(response.ok ? 0 : 1)"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      args:
+        VITE_API_URL: same-origin
+    restart: unless-stopped
+    environment:
+      API_ORIGIN: http://api:4000
+    ports:
+      - "127.0.0.1:${MANA_WEB_PORT:-3300}:3000"
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: [CMD, bun, -e, "const response = await fetch('http://localhost:3000/login'); process.exit(response.ok ? 0 : 1)"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+
+volumes:
+  database:
+  storage:
+  mail:

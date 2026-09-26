@@ -1,0 +1,164 @@
+:root {
+  --font-display-stack:
+    "Sora Variable", "Sora", "Geist", "IBM Plex Sans Thai", -apple-system,
+    BlinkMacSystemFont, sans-serif;
+  --font-serif-stack:
+    "Playfair Display Variable", "Playfair Display", "Georgia", serif;
+  --nav-item-height: 2rem;
+  --nav-item-padding-x: 0.625rem;
+  --table-row-height: 2.5rem;
+  --table-header-height: 2.25rem;
+  --badge-height: 1.25rem;
+  --badge-padding-x: 0.5rem;
+  --badge-radius: 0.25rem;
+  --content-padding: 1.5rem;
+  --content-padding-sm: 0.75rem;
+  --mobile-dock-clearance: 6.25rem;
+
+  --transition-fast: 100ms ease;
+  --transition-base: 150ms ease;
+  --transition-slow: 250ms ease;
+
+  --surface-page: #14151a;
+  --surface-card: #1a1b21;
+  --surface-raised: #212329;
+  --surface-overlay: #26282f;
+  --surface-input: rgba(255, 255, 255, 0.05);
+
+  --text-primary: #eceef1;
+  --text-muted: #92959e;
+  --text-faint: #4d4f57;
+  --text-disabled: #2a2c32;
+  --text-on-accent: #ffffff;
+
+  --border-subtle: rgba(160, 165, 175, 0.07);
+  --border-default: rgba(160, 165, 175, 0.12);
+  --border-strong: rgba(160, 165, 175, 0.2);
+
+  --accent: #1f2127;
+  --accent-hover: #26282f;
+  --accent-soft: rgba(31, 33, 39, 0.6);
+  --accent-border: rgba(140, 145, 155, 0.24);
+
+  --primary-hover: #79a4f9;
+  --primary-soft: rgba(95, 150, 245, 0.14);
+  --primary-border: rgba(95, 150, 245, 0.3);
+
+  --category-green: #4ade80;
+  --category-green-soft: rgba(74, 222, 128, 0.12);
+  --category-orange: #fb923c;
+  --category-orange-soft: rgba(251, 146, 60, 0.12);
+  --category-purple: #a78bfa;
+  --category-purple-soft: rgba(167, 139, 250, 0.12);
+
+  --danger: #f87171;
+  --danger-soft: rgba(248, 113, 113, 0.12);
+
+  --warning: #fbbf24;
+  --warning-soft: rgba(251, 191, 36, 0.12);
+  --warning-border: rgba(251, 191, 36, 0.25);
+
+  --success: #4ade80;
+  --success-soft: rgba(74, 222, 128, 0.12);
+  --success-border: rgba(74, 222, 128, 0.25);
+
+  --info: #38bdf8;
+  --info-soft: rgba(56, 189, 248, 0.12);
+  --info-border: rgba(56, 189, 248, 0.25);
+
+  --shadow-card: none;
+  --shadow-card-hover:
+    0 0 0 1px rgba(95, 150, 245, 0.08), 0 4px 16px rgba(0, 0, 0, 0.25);
+  --shadow-popover:
+    0 0 0 1px rgba(160, 165, 175, 0.06),
+    0 2px 4px -1px rgba(0, 0, 0, 0.22),
+    0 8px 20px -2px rgba(0, 0, 0, 0.32);
+  --shadow-popover-filter:
+    drop-shadow(0 2px 4px rgba(0, 0, 0, 0.22))
+    drop-shadow(0 8px 16px rgba(0, 0, 0, 0.28));
+  --shadow-modal: 0 32px 64px rgba(0, 0, 0, 0.6);
+  --shadow-glow-accent: 0 0 0 transparent;
+  --shadow-glow-primary: 0 0 40px rgba(95, 150, 245, 0.15);
+
+  --status-active: var(--primary);
+  --status-active-bg: var(--primary-soft);
+  --status-warning: var(--warning);
+  --status-warning-bg: var(--warning-soft);
+  --status-error: var(--danger);
+  --status-error-bg: var(--danger-soft);
+  --status-neutral: var(--text-muted);
+  --status-neutral-bg: rgba(140, 150, 170, 0.1);
+  --status-info: var(--primary);
+  --status-info-bg: var(--primary-soft);
+}
+
+/* Scrolled-away dock reserves nothing but the page's own bottom padding. */
+:root[data-dock-hidden] {
+  --mobile-dock-clearance: 1.5rem;
+}
+
+[data-theme="light"] {
+  --surface-page: #f0eeea;
+  --surface-card: #f8f6f2;
+  --surface-raised: #eceae4;
+  --surface-overlay: #faf8f4;
+  --surface-input: #f5f3ef;
+
+  --text-primary: #2a2826;
+  --text-muted: #6c6964;
+  --text-faint: #8a8680;
+  --text-disabled: #c8c4bd;
+  --text-on-accent: #ffffff;
+
+  --border-subtle: rgba(45, 40, 35, 0.06);
+  --border-default: rgba(45, 40, 35, 0.1);
+  --border-strong: rgba(45, 40, 35, 0.16);
+
+  --accent: #e8e6e0;
+  --accent-hover: #dedcd6;
+  --accent-soft: rgba(232, 230, 224, 0.72);
+  --accent-border: rgba(120, 115, 105, 0.22);
+
+  --primary-hover: #4470d8;
+  --primary-soft: rgba(95, 150, 245, 0.08);
+  --primary-border: rgba(95, 150, 245, 0.18);
+
+  --category-green: #16a34a;
+  --category-green-soft: rgba(22, 163, 74, 0.1);
+  --category-orange: #ea580c;
+  --category-orange-soft: rgba(234, 88, 12, 0.1);
+  --category-purple: #7c3aed;
+  --category-purple-soft: rgba(124, 58, 237, 0.1);
+
+  --danger: #dc2626;
+  --danger-soft: rgba(220, 38, 38, 0.08);
+
+  --warning: #d97706;
+  --warning-soft: rgba(217, 119, 6, 0.1);
+  --warning-border: rgba(217, 119, 6, 0.22);
+
+  --success: #16a34a;
+  --success-soft: rgba(22, 163, 74, 0.1);
+  --success-border: rgba(22, 163, 74, 0.22);
+
+  --info: #0284c7;
+  --info-soft: rgba(2, 132, 199, 0.1);
+  --info-border: rgba(2, 132, 199, 0.22);
+
+  --shadow-card: none;
+  --shadow-card-hover:
+    0 2px 6px rgba(40, 35, 30, 0.05), 0 8px 24px rgba(40, 35, 30, 0.04);
+  --shadow-popover:
+    0 0 0 1px rgba(45, 40, 35, 0.04),
+    0 1px 2px rgba(40, 35, 30, 0.04),
+    0 4px 14px rgba(40, 35, 30, 0.06);
+  --shadow-popover-filter:
+    drop-shadow(0 1px 2px rgba(40, 35, 30, 0.04))
+    drop-shadow(0 4px 10px rgba(40, 35, 30, 0.08));
+  --shadow-modal:
+    0 2px 8px rgba(40, 35, 30, 0.05), 0 16px 48px rgba(40, 35, 30, 0.07);
+  --shadow-glow-accent: 0 0 0 transparent;
+  --shadow-glow-primary: 0 0 0 transparent;
+
+  --status-neutral-bg: rgba(120, 115, 105, 0.1);
+}

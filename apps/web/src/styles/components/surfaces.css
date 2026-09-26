@@ -1,0 +1,32 @@
+.glow-amber {
+  box-shadow: 0 0 40px rgba(212, 168, 67, 0.15);
+}
+
+.glow-teal {
+  box-shadow: 0 0 30px rgba(78, 205, 196, 0.20);
+}
+
+.ambient-glow {
+  position: fixed;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(120px);
+  border-radius: 50%;
+}
+
+.auth-radial-login-top,
+.auth-radial-register-bottom {
+  background: radial-gradient(ellipse at center, var(--warning) 0%, transparent 70%);
+}
+
+.auth-radial-login-bottom,
+.auth-radial-register-top {
+  background: radial-gradient(ellipse at center, var(--primary) 0%, transparent 70%);
+}
+
+html[data-theme="light"] .auth-radial-login-top,
+html[data-theme="light"] .auth-radial-login-bottom,
+html[data-theme="light"] .auth-radial-register-top,
+html[data-theme="light"] .auth-radial-register-bottom {
+  background: radial-gradient(ellipse at center, var(--primary) 0%, transparent 70%);
+}

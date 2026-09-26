@@ -1,0 +1,195 @@
+.notes-editor-wrap [contenteditable="true"] {
+  outline: none;
+}
+
+.notes-editor-wrap .ProseMirror {
+  outline: none;
+}
+
+.notes-editor-wrap .ProseMirror {
+  font-size: 0.875em;
+}
+
+.notes-editor-wrap .ProseMirror p {
+  margin: 0.4em 0;
+}
+
+.notes-editor-wrap .ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: var(--muted-foreground);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.notes-editor-wrap .ProseMirror h1,
+.notes-editor-wrap .ProseMirror h2,
+.notes-editor-wrap .ProseMirror h3 {
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 1em 0 0.4em;
+}
+
+.notes-editor-wrap .ProseMirror h1 {
+  font-size: 1.5em;
+}
+
+.notes-editor-wrap .ProseMirror h2 {
+  font-size: 1.25em;
+}
+
+.notes-editor-wrap .ProseMirror h3 {
+  font-size: 1.1em;
+}
+
+.notes-editor-wrap .ProseMirror ul,
+.notes-editor-wrap .ProseMirror ol {
+  margin: 0.25em 0;
+  padding-left: 1.5em;
+}
+
+.notes-editor-wrap .ProseMirror ul {
+  list-style: disc;
+}
+
+.notes-editor-wrap .ProseMirror ol {
+  list-style: decimal;
+}
+
+.notes-editor-wrap .ProseMirror ul ul {
+  list-style: circle;
+}
+
+.notes-editor-wrap .ProseMirror li {
+  margin: 0.05em 0;
+}
+
+.notes-editor-wrap .ProseMirror ul[data-type="taskList"] {
+  list-style: none;
+  padding-left: 0.25em;
+}
+
+.notes-editor-wrap .ProseMirror ul[data-type="taskList"] li {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin: 0.05em 0;
+}
+
+.notes-editor-wrap .ProseMirror ul[data-type="taskList"] li > label {
+  display: flex;
+  align-items: center;
+  user-select: none;
+}
+
+.notes-editor-wrap .ProseMirror ul[data-type="taskList"] li > div {
+  flex: 1;
+}
+
+.notes-editor-wrap .ProseMirror ul[data-type="taskList"] input[type="checkbox"] {
+  cursor: pointer;
+}
+
+.notes-editor-wrap .ProseMirror blockquote {
+  border: 1px solid var(--border-subtle, var(--border));
+  border-radius: var(--radius);
+  background: var(--muted);
+  margin: 0.75em 0;
+  padding: 0.75em 1em;
+  color: var(--muted-foreground);
+}
+
+.notes-editor-wrap .ProseMirror pre {
+  background: var(--muted);
+  border-radius: var(--radius);
+  padding: 0.75em 1em;
+  margin: 0.75em 0;
+  overflow-x: auto;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.875em;
+}
+
+.notes-editor-wrap .ProseMirror pre code {
+  background: none;
+  padding: 0;
+}
+
+.notes-editor-wrap .ProseMirror code {
+  background: var(--muted);
+  border-radius: var(--radius-sm);
+  padding: 0.15em 0.35em;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.875em;
+}
+
+.notes-editor-wrap .ProseMirror hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 1.5em 0;
+}
+
+.notes-editor-wrap .ProseMirror mark {
+  background: color-mix(in srgb, var(--primary) 35%, transparent);
+  border-radius: 0.15em;
+}
+
+.notes-editor-wrap .ProseMirror a {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+.notes-editor-wrap .ProseMirror img {
+  max-width: 100%;
+  max-height: 480px;
+  border-radius: var(--radius);
+  margin: 0.5em 0;
+  object-fit: contain;
+}
+
+.notes-editor-wrap .ProseMirror table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+  margin: 0.75em 0;
+}
+
+.notes-editor-wrap .ProseMirror th,
+.notes-editor-wrap .ProseMirror td {
+  border: 1px solid var(--border);
+  padding: 0.4em 0.6em;
+  vertical-align: top;
+}
+
+.notes-editor-wrap .ProseMirror th {
+  background: var(--muted);
+  font-weight: 600;
+  text-align: left;
+}
+
+.notes-editor-wrap .ProseMirror .selectedCell {
+  background: color-mix(in srgb, var(--primary) 12%, transparent);
+}
+
+.notes-editor-wrap .ProseMirror [data-callout] {
+  background: var(--muted);
+  border-radius: var(--radius);
+  padding: 0.75em 1em;
+  margin: 0.75em 0;
+}
+
+.notes-editor-wrap .ProseMirror video {
+  max-width: 100%;
+  border-radius: var(--radius);
+  margin: 0.5em 0;
+}
+
+.notes-editor-wrap .ProseMirror [data-file] {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  background: var(--muted);
+  border-radius: var(--radius-sm);
+  padding: 0.25em 0.6em;
+  color: var(--primary);
+  text-decoration: none;
+}

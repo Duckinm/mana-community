@@ -1,0 +1,30 @@
+@theme inline {
+  --color-surface-page: var(--surface-page);
+  --color-surface-card: var(--surface-card);
+  --color-surface-raised: var(--surface-raised);
+
+  --color-border-subtle: var(--border-subtle);
+  --color-border-default: var(--border-default);
+
+  --color-primary: var(--primary);
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-border: var(--primary-border);
+
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+
+  --color-category-purple: var(--category-purple);
+  --color-category-purple-soft: var(--category-purple-soft);
+
+  --color-ink: var(--text-primary);
+  --color-ink-muted: var(--text-muted);
+  --color-ink-faint: var(--text-faint);
+
+  --font-sans: var(--font-sans-stack);
+}

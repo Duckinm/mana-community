@@ -1,0 +1,35 @@
+name: QA Report Link
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  check-qa-report:
+    name: Report link (process check)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+          ref: ${{ github.sha }}
+
+      - name: Require a tests/results/*.md report linked in the PR body
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          path=$(printf '%s' "$PR_BODY" | grep -oE 'tests/results/[A-Za-z0-9_\-]+\.md' | head -n1 || true)
+          if [ -z "$path" ]; then
+            echo "::error::No tests/results/*.md QA report linked in the PR description. Add the report path to the 'QA report linked' checklist item."
+            exit 1
+          fi
+          if [ ! -f "$path" ]; then
+            echo "::error::PR references '$path' but that file does not exist in this branch."
+            exit 1
+          fi
+          echo "Found QA report: $path"
+          echo "Report link exists. This process check does not verify the report's claims; Required CI runs the checks for this candidate." >> "$GITHUB_STEP_SUMMARY"

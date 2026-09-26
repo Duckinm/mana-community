@@ -1,0 +1,109 @@
+{
+  "fields": {
+    "name": "ชื่อ",
+    "role": "ตำแหน่ง",
+    "company": "บริษัท",
+    "email": "อีเมล",
+    "phone": "โทรศัพท์",
+    "website": "เว็บไซต์",
+    "color": "สี",
+    "tags": "แท็ก",
+    "notes": "บันทึก",
+    "relationshipLevel": "ความสัมพันธ์",
+    "metVia": "พบกันผ่าน",
+    "imageUrl": "รูปภาพ",
+    "stage": "ขั้นตอน",
+    "dealValue": "มูลค่าดีล",
+    "dealStatus": "สถานะดีล",
+    "entityType": "ประเภทนิติบุคคล",
+    "nameTh": "ชื่อ (ไทย)",
+    "addressTh": "ที่อยู่ (ไทย)",
+    "taxId": "เลขประจำตัวผู้เสียภาษี",
+    "branchNumber": "เลขสาขา",
+    "zip": "รหัสไปรษณีย์",
+    "country": "ประเทศ",
+    "address": "ที่อยู่",
+    "nationalId": "เลขบัตรประชาชน",
+    "companyNameEn": "ชื่อบริษัท (อังกฤษ)",
+    "companyNameTh": "ชื่อบริษัท (ไทย)",
+    "status": "สถานะ",
+    "dueDate": "วันครบกำหนด",
+    "issueDate": "วันที่ออก",
+    "totalCents": "ยอดรวม"
+  },
+  "relationshipLevel": {
+    "1": "ผู้ติดต่อใหม่",
+    "2": "คนรู้จัก",
+    "3": "ความสัมพันธ์ในการทำงาน",
+    "4": "ผู้ร่วมงานใกล้ชิด",
+    "5": "พาร์ทเนอร์ที่เชื่อใจได้"
+  },
+  "contact": {
+    "created": "เพิ่มผู้ติดต่อ {{name}}",
+    "updatedField": "อัปเดต{{field}}ของ {{name}}",
+    "updated": "อัปเดต {{name}}",
+    "deleted": "ลบผู้ติดต่อแล้ว",
+    "merged": "รวม {{mergedName}} เข้ากับ {{name}}",
+    "relationshipSet": "ตั้งความสัมพันธ์เป็น {{level}} สำหรับ {{name}}",
+    "notesUpdated": "อัปเดตบันทึกของ {{name}}",
+    "tagsUpdated": "อัปเดตแท็กของ {{name}}",
+    "photoAdded": "เพิ่มรูปภาพของ {{name}}",
+    "photoRemoved": "ลบรูปภาพของ {{name}}",
+    "nameChanged": "เปลี่ยนชื่อเป็น {{value}}",
+    "fieldUpdated": "อัปเดต{{field}}ของ {{name}}",
+    "fieldsUpdated": "อัปเดต{{fields}}ของ {{name}}"
+  },
+  "document": {
+    "created": "สร้าง{{type}} {{number}}",
+    "published": "ออก{{type}} {{number}}",
+    "emailed": "ส่งอีเมล{{type}} {{number}}",
+    "emailedTo": "ส่งอีเมล{{type}} {{number}} ถึง {{email}}",
+    "paid": "ทำเครื่องหมาย{{type}} {{number}}ว่าชำระแล้ว",
+    "unreconciled": "ยกเลิกการเชื่อมโยง{{type}} {{number}}จากการชำระเงิน เปลี่ยนกลับเป็นเอกสารที่ออกแล้ว",
+    "generated": "สร้าง{{type}} {{number}} จากรายการประจำ {{templateNumber}}",
+    "patchedField": "อัปเดต{{field}}ของ {{label}}",
+    "patched": "อัปเดต {{label}}",
+    "overdue": "{{label}} ถูกทำเครื่องหมายว่าเกินกำหนด",
+    "linkedToPayment": "เชื่อมโยง {{label}} กับการชำระเงิน"
+  },
+  "transaction": {
+    "created": "{{type}}: {{description}} — {{amount}}",
+    "updated": "อัปเดตรายการ: {{description}}",
+    "deleted": "ลบรายการ: {{description}}",
+    "paid": "บันทึกการชำระเงิน: {{description}}"
+  },
+  "project": {
+    "created": "เริ่มโปรเจกต์ \"{{name}}\"",
+    "updatedField": "อัปเดต{{field}}ของโปรเจกต์ \"{{name}}\"",
+    "updated": "อัปเดตโปรเจกต์ \"{{name}}\"",
+    "archived": "เก็บโปรเจกต์ \"{{name}}\" เข้าคลัง",
+    "restored": "กู้คืนโปรเจกต์ \"{{name}}\""
+  },
+  "task": {
+    "created": "เพิ่มงาน \"{{title}}\"",
+    "deleted": "ลบงาน \"{{title}}\"",
+    "completed": "งาน \"{{title}}\" เสร็จสมบูรณ์",
+    "overdue": "งาน \"{{title}}\" เกินกำหนด",
+    "bulkCompleted": "งานเสร็จสมบูรณ์ (กลุ่ม)"
+  },
+  "file": {
+    "uploaded": "อัปโหลดไฟล์ \"{{name}}\"",
+    "moved": "ย้ายไฟล์ \"{{name}}\"",
+    "deleted": "ลบไฟล์ \"{{name}}\"",
+    "savedViaAI": "บันทึกไฟล์ \"{{name}}\" ลงคลังผ่านแชท AI"
+  },
+  "user": {
+    "signedIn": "เข้าสู่ระบบ",
+    "changedPassword": "เปลี่ยนรหัสผ่านบัญชี",
+    "updatedSettings": "อัปเดตการตั้งค่าบัญชี"
+  },
+  "detail": {
+    "fieldChange": "{{label}}: {{from}} → {{to}}",
+    "fieldValue": "{{label}}: {{value}}",
+    "moreFields": "+{{count}} เพิ่มเติม",
+    "mergedContact": "รวมผู้ติดต่อ: {{name}}",
+    "yes": "ใช่",
+    "no": "ไม่",
+    "empty": "—"
+  }
+}

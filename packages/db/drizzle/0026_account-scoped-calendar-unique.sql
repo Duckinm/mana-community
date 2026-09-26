@@ -1,0 +1,2 @@
+ALTER TABLE "calendar_connections" DROP CONSTRAINT "calendar_connections_user_provider_calendar_idx";--> statement-breakpoint
+ALTER TABLE "calendar_connections" ADD CONSTRAINT "calendar_connections_user_provider_account_calendar_idx" UNIQUE NULLS NOT DISTINCT("user_id","provider","account_id","calendar_id");

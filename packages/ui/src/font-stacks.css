@@ -1,0 +1,13 @@
+/* Font matching is per glyph, so Geist/Geist Mono keep every Latin word, digit and
+   currency mark in the brand face while Thai falls through to IBM Plex Sans Thai. Putting
+   IBM Plex Sans Thai first instead hands it the Latin too — "MANA", "VAT", "฿32,100" stop
+   looking like the rest of the site, and `ch` measures shrink ~15% because they are
+   resolved from the first font in the stack. */
+:root {
+  --font-sans-stack:
+    "Geist", "IBM Plex Sans Thai", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  --font-mono-stack:
+    "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, "IBM Plex Sans Thai",
+    monospace;
+}

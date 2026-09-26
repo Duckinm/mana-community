@@ -1,0 +1,230 @@
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(1deg);
+  }
+}
+
+@keyframes float-x {
+  0%,
+  100% {
+    transform: translateX(0px);
+  }
+  50% {
+    transform: translateX(8px);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.menu-drawer-scrim[data-state="open"] {
+  animation: fade-in 200ms ease both;
+}
+
+.menu-drawer-scrim[data-state="closed"] {
+  animation: fade-out 180ms ease both;
+  /* A dialog opened from a menu item mounts under this fading scrim — don't let
+     it eat the first tap on the confirm button. */
+  pointer-events: none;
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes draw-line {
+  from {
+    stroke-dashoffset: 100;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s ease both;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-float {
+  animation: float-y 6s ease-in-out infinite;
+}
+
+.animate-float-slow {
+  animation: float-y 8s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(216, 212, 204, 0.15) 50%,
+    transparent 100%
+  );
+  background-size: 200% auto;
+  animation: shimmer 2s linear infinite;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 3s linear infinite;
+}
+
+@keyframes accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+.animate-accordion-down {
+  animation: accordion-down 0.2s ease-out;
+}
+
+.animate-accordion-up {
+  animation: accordion-up 0.2s ease-out;
+}
+
+.pulse-ring::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+@keyframes stagger-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stagger-fade > * {
+  animation: stagger-fade-in 250ms ease-out both;
+}
+
+.stagger-fade > *:nth-child(1) {
+  animation-delay: 0ms;
+}
+.stagger-fade > *:nth-child(2) {
+  animation-delay: 30ms;
+}
+.stagger-fade > *:nth-child(3) {
+  animation-delay: 60ms;
+}
+.stagger-fade > *:nth-child(4) {
+  animation-delay: 90ms;
+}
+.stagger-fade > *:nth-child(5) {
+  animation-delay: 120ms;
+}
+.stagger-fade > *:nth-child(6) {
+  animation-delay: 150ms;
+}
+.stagger-fade > *:nth-child(7) {
+  animation-delay: 180ms;
+}
+.stagger-fade > *:nth-child(8) {
+  animation-delay: 210ms;
+}
+.stagger-fade > *:nth-child(9) {
+  animation-delay: 240ms;
+}
+.stagger-fade > *:nth-child(n + 10) {
+  animation-delay: 270ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stagger-fade > * {
+    animation: none;
+  }
+}

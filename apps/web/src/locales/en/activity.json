@@ -1,0 +1,109 @@
+{
+  "fields": {
+    "name": "Name",
+    "role": "Role",
+    "company": "Company",
+    "email": "Email",
+    "phone": "Phone",
+    "website": "Website",
+    "color": "Color",
+    "tags": "Tags",
+    "notes": "Notes",
+    "relationshipLevel": "Relationship",
+    "metVia": "Met via",
+    "imageUrl": "Photo",
+    "stage": "Stage",
+    "dealValue": "Deal value",
+    "dealStatus": "Deal status",
+    "entityType": "Entity type",
+    "nameTh": "Name (TH)",
+    "addressTh": "Address (TH)",
+    "taxId": "Tax ID",
+    "branchNumber": "Branch number",
+    "zip": "ZIP",
+    "country": "Country",
+    "address": "Address",
+    "nationalId": "National ID",
+    "companyNameEn": "Company name (EN)",
+    "companyNameTh": "Company name (TH)",
+    "status": "Status",
+    "dueDate": "Due date",
+    "issueDate": "Issue date",
+    "totalCents": "Total"
+  },
+  "relationshipLevel": {
+    "1": "New Contact",
+    "2": "Acquaintance",
+    "3": "Working Relationship",
+    "4": "Close Collaborator",
+    "5": "Trusted Partner"
+  },
+  "contact": {
+    "created": "Contact {{name}} added",
+    "updatedField": "{{name}} {{field}} updated",
+    "updated": "{{name}} updated",
+    "deleted": "Contact deleted",
+    "merged": "Merged {{mergedName}} into {{name}}",
+    "relationshipSet": "Relationship set to {{level}} for {{name}}",
+    "notesUpdated": "Notes updated for {{name}}",
+    "tagsUpdated": "Tags updated for {{name}}",
+    "photoAdded": "Photo added for {{name}}",
+    "photoRemoved": "Photo removed for {{name}}",
+    "nameChanged": "Name changed to {{value}}",
+    "fieldUpdated": "{{field}} updated for {{name}}",
+    "fieldsUpdated": "{{fields}} updated for {{name}}"
+  },
+  "document": {
+    "created": "{{type}} {{number}} created",
+    "published": "{{type}} {{number}} published",
+    "emailed": "{{type}} {{number}} emailed",
+    "emailedTo": "{{type}} {{number}} emailed to {{email}}",
+    "paid": "{{type}} {{number}} marked paid",
+    "unreconciled": "{{type}} {{number}} unlinked from payment, reverted to published",
+    "generated": "{{type}} {{number}} generated from recurring {{templateNumber}}",
+    "patchedField": "{{label}} {{field}} updated",
+    "patched": "{{label}} updated",
+    "overdue": "{{label}} marked overdue",
+    "linkedToPayment": "{{label}} linked to payment"
+  },
+  "transaction": {
+    "created": "{{type}}: {{description}} — {{amount}}",
+    "updated": "Transaction updated: {{description}}",
+    "deleted": "Transaction deleted: {{description}}",
+    "paid": "Payment recorded: {{description}}"
+  },
+  "project": {
+    "created": "Project \"{{name}}\" started",
+    "updatedField": "Project \"{{name}}\" {{field}} updated",
+    "updated": "Project \"{{name}}\" updated",
+    "archived": "Project \"{{name}}\" archived",
+    "restored": "Project \"{{name}}\" restored"
+  },
+  "task": {
+    "created": "Task \"{{title}}\" added",
+    "deleted": "Task \"{{title}}\" deleted",
+    "completed": "Task \"{{title}}\" completed",
+    "overdue": "Task \"{{title}}\" is overdue",
+    "bulkCompleted": "Task completed (bulk)"
+  },
+  "file": {
+    "uploaded": "File \"{{name}}\" uploaded",
+    "moved": "File \"{{name}}\" moved",
+    "deleted": "File \"{{name}}\" deleted",
+    "savedViaAI": "File \"{{name}}\" saved to storage via AI chat"
+  },
+  "user": {
+    "signedIn": "Signed in",
+    "changedPassword": "Changed account password",
+    "updatedSettings": "Updated account settings"
+  },
+  "detail": {
+    "fieldChange": "{{label}}: {{from}} → {{to}}",
+    "fieldValue": "{{label}}: {{value}}",
+    "moreFields": "+{{count}} more",
+    "mergedContact": "Merged contact: {{name}}",
+    "yes": "Yes",
+    "no": "No",
+    "empty": "—"
+  }
+}

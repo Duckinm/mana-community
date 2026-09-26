@@ -1,0 +1,591 @@
+@utility shadow-popup {
+  box-shadow: var(--shadow-popover);
+}
+
+@utility shadow-popup-filter {
+  filter: var(--shadow-popover-filter);
+}
+
+@utility shadow-modal {
+  box-shadow: var(--shadow-modal);
+}
+
+@utility shadow-card {
+  box-shadow: var(--shadow-card);
+}
+
+/* Clears the fixed mobile dock + home-indicator so scrolled content stays visible. */
+@utility pb-mobile-dock {
+  padding-bottom: calc(var(--mobile-dock-clearance) + env(safe-area-inset-bottom, 0px));
+}
+
+@utility text-2xs {
+  font-size: var(--font-size-2xs);
+  line-height: 1rem;
+}
+
+@utility text-display {
+  font-size: var(--font-size-display);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-weight: 300;
+}
+
+@utility text-title {
+  font-size: var(--text-2xl);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  font-weight: 500;
+}
+
+@utility text-body {
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  letter-spacing: 0;
+}
+
+@utility text-caption {
+  font-size: var(--text-xs);
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+
+@utility text-money {
+  font-family: var(--font-mono-stack);
+  font-variant-numeric: tabular-nums;
+}
+
+@utility duration-fast {
+  transition-duration: var(--duration-fast);
+}
+
+@utility duration-base {
+  transition-duration: var(--duration-base);
+}
+
+@utility duration-slow {
+  transition-duration: var(--duration-slow);
+}
+
+@utility ease-spring {
+  transition-timing-function: var(--ease-spring);
+}
+
+@utility font-serif {
+  font-family: var(--font-serif-stack);
+}
+
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@layer utilities {
+  .surface {
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+  }
+
+  .surface-card {
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-default);
+    box-shadow: var(--shadow-card);
+  }
+
+  .list-shell {
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+  }
+
+  /* Horizontal page gutter — also drives .list-shell full-bleed via --page-inline.
+     Do NOT put overflow-y-auto on the same element: that forces overflow-x and clips the bleed. */
+  .page-pad {
+    --page-inline: 0.75rem;
+    padding-inline: var(--page-inline);
+  }
+
+  @media (min-width: 640px) {
+    .page-pad {
+      --page-inline: 1rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .page-pad {
+      --page-inline: 2.5rem;
+    }
+  }
+
+  /* Vertical page scroll shell — no horizontal padding. */
+  .page-scroll {
+    display: flex;
+    min-height: 0;
+    flex: 1 1 0%;
+    flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  @media (max-width: 1023px) {
+    .menu-drawer-position {
+      position: fixed !important;
+      top: auto !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      min-width: 0 !important;
+      max-width: none !important;
+      max-height: min(70dvh, 32rem) !important;
+      /* No `translate: none` here — the slide below animates that property, and
+         an !important lock would freeze it flat. `transform` stays pinned so
+         Radix's popper offset can't reappear. */
+      transform: none !important;
+      border-bottom-left-radius: 0 !important;
+      border-bottom-right-radius: 0 !important;
+      border-top-left-radius: 1rem !important;
+      border-top-right-radius: 1rem !important;
+    }
+
+    .menu-drawer-position[data-state='open'] {
+      animation: dialog-drawer-in 280ms cubic-bezier(0.16, 1, 0.3, 1) both !important;
+    }
+
+    .menu-drawer-position[data-state='closed'] {
+      animation: dialog-drawer-out 180ms cubic-bezier(0.4, 0, 1, 1) both !important;
+    }
+
+    [data-radix-popper-content-wrapper]:has(.menu-drawer-position) {
+      position: fixed !important;
+      top: auto !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      height: auto !important;
+      max-height: min(70dvh, 32rem) !important;
+      transform: none !important;
+      translate: none !important;
+      margin: 0 !important;
+      z-index: 100 !important;
+      pointer-events: auto !important;
+    }
+
+    .dialog-drawer-position {
+      position: fixed !important;
+      top: auto !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      min-width: 0 !important;
+      max-width: none !important;
+      max-height: 92dvh !important;
+      transform: translate(0, 0) !important;
+      border-bottom-left-radius: 0 !important;
+      border-bottom-right-radius: 0 !important;
+      border-top-left-radius: 1rem !important;
+      border-top-right-radius: 1rem !important;
+      border-left-width: 0 !important;
+      border-right-width: 0 !important;
+      border-bottom-width: 0 !important;
+    }
+
+    .dialog-drawer-position[data-state='open'] {
+      animation: dialog-drawer-in 280ms cubic-bezier(0.16, 1, 0.3, 1) both !important;
+    }
+
+    .dialog-drawer-position[data-state='closed'] {
+      animation: dialog-drawer-out 180ms cubic-bezier(0.4, 0, 1, 1) both !important;
+    }
+  }
+
+  @keyframes dialog-drawer-in {
+    from {
+      translate: 0 100%;
+      opacity: 0.6;
+    }
+    to {
+      translate: 0 0;
+      opacity: 1;
+    }
+  }
+
+  @keyframes dialog-drawer-out {
+    from {
+      translate: 0 0;
+      opacity: 1;
+    }
+    to {
+      translate: 0 100%;
+      opacity: 0;
+    }
+  }
+
+  @media (max-width: 1023px) {
+    .list-shell:not(.list-shell-framed) {
+      /* Only break out when an ancestor sets --page-inline (e.g. .page-pad).
+         Default 0 avoids oversizing already-full-width tables (library). */
+      width: calc(100% + 2 * var(--page-inline, 0px));
+      max-width: none;
+      margin-left: calc(-1 * var(--page-inline, 0px));
+      margin-right: calc(-1 * var(--page-inline, 0px));
+      border: none;
+      border-radius: 0;
+      box-shadow: none;
+      background-color: transparent;
+      overflow: visible;
+    }
+
+    .list-shell :is(.text-sm) {
+      font-size: 1rem;
+      line-height: 1.45;
+    }
+
+    .list-shell :is(.text-xs) {
+      font-size: 0.875rem;
+      line-height: 1.4;
+    }
+
+    .list-shell :is(.text-2xs) {
+      font-size: 0.8125rem;
+      line-height: 1.35;
+    }
+
+    .list-shell :is(.py-1\.5) {
+      padding-block: 0.5rem;
+    }
+
+    .list-shell :is(.py-2) {
+      padding-block: 0.75rem;
+    }
+
+    .list-shell :is(.py-2\.5) {
+      padding-block: 0.875rem;
+    }
+
+    .list-shell :is(.py-3) {
+      padding-block: 1rem;
+    }
+
+    /* Keep a readable content gutter even when the shell is edge-to-edge. */
+    .list-shell :is(.px-1\.5, .px-2, .px-3, .px-4, .px-5) {
+      padding-inline: 1rem;
+    }
+
+    .list-shell :is(.pl-1\.5, .pl-3) {
+      padding-left: 1rem;
+    }
+
+    .list-shell :is(.pr-2, .pr-3) {
+      padding-right: 1rem;
+    }
+
+    /* Square thumbs/avatars carry their own width — growing only the height
+       stretches the image. */
+    .list-shell :is(.h-9):not(.w-9) {
+      height: 2.75rem;
+    }
+
+    .list-shell :is(.size-9) {
+      width: 2.75rem;
+      height: 2.75rem;
+    }
+
+    .list-shell .data-table {
+      font-size: 1rem;
+    }
+
+    .list-shell .data-table th {
+      height: calc(var(--table-header-height) * 1.35);
+      padding-inline: 1rem;
+      font-size: 0.8125rem;
+    }
+
+    .list-shell .data-table td {
+      height: calc(var(--table-row-height) * 1.35);
+      padding-inline: 1rem;
+    }
+  }
+
+  .surface-card-hover {
+    transition:
+      border-color var(--transition-base),
+      box-shadow var(--transition-base);
+  }
+
+  .surface-card-hover:hover {
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .surface-hover {
+    transition:
+      border-color var(--transition-base),
+      transform var(--transition-base);
+  }
+
+  .surface-hover:hover {
+    border-color: var(--border-default);
+    transform: translateY(-1px);
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: var(--nav-item-height);
+    padding-inline: var(--nav-item-padding-x);
+    border-radius: var(--radius-md);
+    font-size: 0.8125rem;
+    font-weight: 400;
+    color: var(--sidebar-foreground);
+    transition:
+      background-color var(--transition-fast),
+      color var(--transition-fast);
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .nav-item:hover {
+    background-color: var(--sidebar-accent);
+    color: var(--sidebar-accent-foreground);
+  }
+
+  .nav-item[data-active="true"],
+  .nav-item.active {
+    background-color: var(--sidebar-accent);
+    color: var(--sidebar-accent-foreground);
+    font-weight: 500;
+  }
+
+  .nav-section-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    padding-inline: var(--nav-item-padding-x);
+    padding-block: 0.375rem 0.125rem;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    height: var(--badge-height);
+    padding-inline: var(--badge-padding-x);
+    border-radius: var(--badge-radius);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .badge-active {
+    color: var(--status-active);
+    background-color: var(--status-active-bg);
+  }
+
+  .badge-warning {
+    color: var(--status-warning);
+    background-color: var(--status-warning-bg);
+  }
+
+  .badge-error {
+    color: var(--status-error);
+    background-color: var(--status-error-bg);
+  }
+
+  .badge-neutral {
+    color: var(--status-neutral);
+    background-color: var(--status-neutral-bg);
+  }
+
+  .badge-info {
+    color: var(--status-info);
+    background-color: var(--status-info-bg);
+  }
+
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8125rem;
+  }
+
+  .data-table th {
+    height: var(--table-header-height);
+    padding-inline: 0.75rem;
+    text-align: left;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    border-bottom: 1px solid var(--border-subtle);
+    white-space: nowrap;
+  }
+
+  .data-table td {
+    height: var(--table-row-height);
+    padding-inline: 0.75rem;
+    border-bottom: 1px solid var(--border-subtle);
+    vertical-align: middle;
+  }
+
+  .data-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .data-table tbody tr {
+    transition: background-color var(--transition-fast);
+  }
+
+  .data-table tbody tr:hover {
+    background-color: var(--surface-raised);
+  }
+
+  .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-block: 1.25rem;
+    padding-inline: var(--content-padding);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .page-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--foreground);
+    line-height: 1.3;
+  }
+
+  .page-subtitle {
+    font-size: 0.8125rem;
+    color: var(--muted-foreground);
+    margin-top: 0.125rem;
+  }
+
+  .page-content {
+    padding: var(--content-padding);
+  }
+
+  .stat-card {
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    padding: 1rem 1.25rem;
+    box-shadow: var(--shadow-card);
+  }
+
+  .stat-header-text {
+    color: var(--text-faint);
+    font-size: 0.625rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+    font-weight: 300;
+    font-family: var(--font-display-stack);
+    color: var(--text-primary);
+    line-height: 1.2;
+    margin-top: 0.25rem;
+  }
+
+  .stat-delta {
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-top: 0.25rem;
+  }
+
+  .stat-delta-up {
+    color: var(--status-active);
+  }
+
+  .stat-delta-down {
+    color: var(--status-error);
+  }
+
+  .filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+  }
+}
+
+/* components layer sits below utilities, so a `justify-between`/`justify-end`
+   applied at a call site always wins over this base alignment — unlike
+   `@layer utilities`, where cascade order (not intent) decides the winner. */
+@layer components {
+  /* Form modal / drawer action bar — larger tap targets below xl. */
+  .drawer-footer {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.375rem;
+    border-top: 1px solid var(--border-subtle);
+    padding: 0.625rem 1rem;
+  }
+
+  @media (max-width: 1023px) {
+    .drawer-footer {
+      gap: 0.5rem;
+      padding: 0.75rem 1rem max(0.75rem, env(safe-area-inset-bottom));
+    }
+
+    /* A Radix Switch is a <button role="switch">, so it would otherwise be
+       inflated into a full-width action button by the rules below. */
+    .drawer-footer button:not([role="switch"]),
+    .drawer-footer [role="button"] {
+      min-height: 2.75rem;
+      font-size: 0.875rem;
+      line-height: 1.25;
+      border-radius: 0.75rem;
+    }
+
+    .drawer-footer > button:not(.mr-auto):not([class*="size-"]):not([role="switch"]),
+    .drawer-footer > [type="submit"]:not([role="switch"]),
+    .drawer-footer > .inline-flex:not([class*="size-"]):not([role="switch"]),
+    .drawer-footer .flex > button:not(.mr-auto):not([class*="size-"]):not([role="switch"]),
+    .drawer-footer .flex > [type="submit"]:not([role="switch"]),
+    .drawer-footer .flex > .inline-flex:not([class*="size-"]):not([role="switch"]) {
+      flex: 1 1 0%;
+      padding-inline: 1rem;
+    }
+
+    .drawer-footer > button.mr-auto,
+    .drawer-footer > button[class*="size-"],
+    .drawer-footer .flex > button.mr-auto,
+    .drawer-footer .flex > button[class*="size-"] {
+      flex: none;
+      width: 2.75rem;
+      min-width: 2.75rem;
+      padding-inline: 0;
+    }
+
+    .drawer-footer .flex.justify-end,
+    .drawer-footer .flex.items-center {
+      width: 100%;
+      gap: 0.5rem;
+    }
+  }
+}

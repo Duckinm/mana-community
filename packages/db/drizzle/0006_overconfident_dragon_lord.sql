@@ -1,0 +1,1 @@
+ALTER TABLE "users" ADD COLUMN "disabled_ai_tools" jsonb DEFAULT '[]'::jsonb NOT NULL;

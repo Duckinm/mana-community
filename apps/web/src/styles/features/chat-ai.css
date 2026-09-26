@@ -1,0 +1,114 @@
+@keyframes chat-history-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ai-dot {
+  0%,
+  80%,
+  100% {
+    transform: scale(0.6);
+    opacity: 0.3;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.ai-dot-1 {
+  animation: ai-dot 1.4s ease infinite;
+}
+.ai-dot-2 {
+  animation: ai-dot 1.4s ease infinite 0.16s;
+}
+.ai-dot-3 {
+  animation: ai-dot 1.4s ease infinite 0.32s;
+}
+
+.ai-chat-trigger {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  min-width: 0;
+  height: 28px;
+  padding-inline: 0.75rem;
+  border-radius: 9999px;
+  text-decoration: none;
+  border: 1px solid var(--primary-border);
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    var(--primary) 0%,
+    #6f7fe8 65%,
+    #8266e0 100%
+  );
+  box-shadow: rgba(95, 150, 245, 0.25) 0 2px 6px 0;
+  transition:
+    filter var(--transition-base),
+    box-shadow var(--transition-base),
+    transform var(--transition-fast);
+}
+
+.ai-chat-trigger__glow {
+  position: absolute;
+  left: -8%;
+  right: -8%;
+  bottom: -50%;
+  height: 85%;
+  border-radius: 50%;
+  background: var(--primary);
+  opacity: 0.35;
+  filter: blur(10px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ai-chat-trigger:hover {
+  filter: brightness(0.96);
+  box-shadow: rgba(95, 150, 245, 0.32) 0 3px 8px 0;
+}
+
+.ai-chat-trigger:active {
+  transform: translateY(0.5px);
+  filter: brightness(0.92);
+  box-shadow: rgba(95, 150, 245, 0.2) 0 1px 3px 0;
+}
+
+.ai-chat-trigger--active {
+  filter: brightness(0.94);
+}
+
+.ai-chat-trigger--icon {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+}
+
+.ai-chat-trigger__icon,
+.ai-chat-trigger__label {
+  position: relative;
+  z-index: 1;
+  color: #ffffff;
+}
+
+.ai-chat-trigger__icon {
+  filter: none;
+}
+
+.ai-chat-trigger__label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  text-shadow: 0 0.5px 0 rgba(55, 110, 200, 0.35);
+}

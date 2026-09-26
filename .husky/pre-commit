@@ -1,0 +1,3 @@
+#!/bin/sh
+cd apps/api && bunx tsc --noEmit
+cd ../web && bunx tsc --noEmit

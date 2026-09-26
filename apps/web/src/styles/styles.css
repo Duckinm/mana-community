@@ -1,0 +1,22 @@
+@import "@mana/ui/fonts.css";
+@import "./fonts.css";
+@import "react-day-picker/style.css";
+@import "tailwindcss";
+@import "streamdown/styles.css";
+@import "@mana/ui/theme.css";
+@import "@mana/ui/tokens.css";
+
+@custom-variant dark (&:where(html:not([data-theme="light"]) *));
+@source "../../node_modules/streamdown/dist/*.js";
+
+@import "./tailwind/theme-inline.css";
+@import "./tailwind/theme.css";
+@import "./tokens/sidebar.css";
+@import "./tailwind/utilities.css";
+@import "./base/root.css";
+@import "./vendor/react-day-picker.css";
+@import "./vendor/streamdown-chat.css";
+@import "./animations.css";
+@import "./components/surfaces.css";
+@import "./features/chat-ai.css";
+@import "./features/tiptap.css";

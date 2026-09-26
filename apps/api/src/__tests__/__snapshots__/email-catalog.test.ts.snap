@@ -1,0 +1,102 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`email catalog keeps subjects and plain-text copy reviewable 1`] = `
+"{
+  "password-reset": {
+    "subject": "Reset your MANA password",
+    "text": "MANA\\n\\n\\nRESET YOUR PASSWORD\\n\\nHi Mina,\\n\\nWe received a request to reset your MANA password.\\n\\nThis link expires in one hour. If you did not request it, you can ignore this email.\\n\\nReset password http://localhost:5173\\n\\n----------------------------------------\\n\\nSent by MANA · Manage notification preferences in Settings."
+  },
+  "verify-email": {
+    "subject": "Verify your MANA email",
+    "text": "MANA\\n\\n\\nVERIFY YOUR EMAIL\\n\\nHi Mina,\\n\\nWelcome to MANA! Confirm this is your email address to activate your account.\\n\\nThis link expires in one hour. If you did not create this account, you can ignore this email.\\n\\nVerify email http://localhost:5173\\n\\n----------------------------------------\\n\\nSent by MANA · Manage notification preferences in Settings."
+  },
+  "password-changed": {
+    "subject": "Your MANA password was changed",
+    "text": "MANA\\n\\n\\nPASSWORD CHANGED\\n\\nHi Mina,\\n\\nYour MANA password was changed successfully.\\n\\nIf this was not you, reset your password immediately.\\n\\nUnexpected change? Act now to protect your account.\\n\\nSecure my account http://localhost:5173\\n\\n----------------------------------------\\n\\nSent by MANA · Manage notification preferences in Settings."
+  },
+  "quotation-sent": {
+    "subject": "Quotation QO-2026-014 from Mina Studio",
+    "text": "MANA\\n\\n\\nNEW QUOTATION FROM MINA STUDIO\\n\\nHi Mina,\\n\\nHi Mina, Mina Studio sent you a quotation.\\n\\nQuotation\\nQO-2026-014\\n\\nAmount\\nTHB 24,000.00\\n\\nValid until\\n31 July 2026\\n\\nView quotation http://localhost:5173\\n\\n----------------------------------------\\n\\nSent by MANA · Manage notification preferences in Settings."
+  },
+  "invoice-sent": {
+    "subject": "Invoice INV-2026-042 from Mina Studio",
+    "text": "MANA\\n\\n\\nNEW INVOICE FROM MINA STUDIO\\n\\nHi Mina,\\n\\nHi Mina, Mina Studio sent you an invoice.\\n\\nInvoice\\nINV-2026-042\\n\\nAmount\\nTHB 24,000.00\\n\\nDue\\n21 July 2026\\n\\nView invoice http://localhost:5173\\n\\n----------------------------------------\\n\\nSent by MANA · Manage notification preferences in Settings."
+  },
+  "receipt-sent": {
+    "subject": "Receipt RC-2026-018 from Mina Studio",
+    "text": "MANA\\n\\n\\nNEW RECEIPT FROM MINA STUDIO\\n\\nHi Mina,\\n\\nHi Mina, Mina Studio sent you a receipt.\\n\\nReceipt\\nRC-2026-018\\n\\nAmount\\nTHB 24,000.00\\n\\nPaid\\n12 July 2026\\n\\nView receipt http://localhost:5173\\n\\n----------------------------------------\\n\\nSent by MANA · Manage notification preferences in Settings."
+  },
+  "payment-reminder": {
+    "subject": "Payment reminder: INV-2026-042",
+    "text": "MANA\\n\\n\\nA FRIENDLY PAYMENT REMINDER\\n\\nHi Mina,\\n\\nHi Mina, Mina Studio is following up about invoice INV-2026-042.\\n\\nThe outstanding balance is THB 24,000.00, due 21 July 2026.\\n\\nView invoice http://localhost:5173\\n\\n----------------------------------------\\n\\nSent by MANA · Manage notification preferences in Settings."
+  },
+  "calendar-reminder": {
+    "subject": "Reminder: Acme kickoff",
+    "text": "MANA\\n\\n\\nACME KICKOFF STARTS SOON\\n\\nHi Mina,\\n\\nHere are the details for your upcoming event.\\n\\nWhen\\n16 July 2026 at 10:00 (Asia/Bangkok)\\n\\nLocation\\nGoogle Meet\\n\\nAttendee\\nNarin at Acme\\n\\nNote\\nBring the revised project plan.\\n\\nOpen calendar http://localhost:5173\\n\\n----------------------------------------\\n\\nSent by MANA · Manage notification preferences in Settings."
+  },
+  "cancellation-scheduled": {
+    "subject": "Your Pro plan will end on 31 July 2026",
+    "text": "MANA\\n\\n\\nCANCELLATION SCHEDULED\\n\\nHi Mina,\\n\\nYour Pro subscription remains active until 31 July 2026.\\n\\nYou can resume it before then without losing access.\\n\\nManage subscription http://localhost:5173\\n\\n----------------------------------------\\n\\nSent by MANA · Manage notification preferences in Settings."
+  },
+  "subscription-started": {
+    "subject": "Your Pro plan is active",
+    "text": "MANA\\n\\n\\nYOUR PRO PLAN IS ACTIVE\\n\\nHi Mina,\\n\\nYour subscription is ready. You now have access to all features included in Pro.\\n\\nOpen MANA http://localhost:5173\\n\\n----------------------------------------\\n\\nSent by MANA · Manage notification preferences in Settings."
+  },
+  "plan-changed": {
+    "subject": "Your plan changed to Pro",
+    "text": "MANA\\n\\n\\nPLAN UPDATED\\n\\nHi Mina,\\n\\nYour plan changed from Starter to Pro.\\n\\nReview billing http://localhost:5173\\n\\n----------------------------------------\\n\\nSent by MANA · Manage notification preferences in Settings."
+  },
+  "payment-action-required": {
+    "subject": "Action required to keep your Pro plan",
+    "text": "MANA\\n\\n\\nCONFIRM YOUR PAYMENT\\n\\nHi Mina,\\n\\nYour bank requires an extra confirmation before we can renew your Pro plan.\\n\\nAccess may be limited if the payment is not completed.\\n\\nComplete payment http://localhost:5173\\n\\n----------------------------------------\\n\\nSent by MANA · Manage notification preferences in Settings."
+  },
+  "payment-failed": {
+    "subject": "Payment failed for your Pro plan",
+    "text": "MANA\\n\\n\\nWE COULD NOT PROCESS YOUR PAYMENT\\n\\nHi Mina,\\n\\nThe latest payment for your Pro plan did not go through.\\n\\nWe will follow Stripe’s retry schedule before access ends.\\n\\nUpdate payment method http://localhost:5173\\n\\n----------------------------------------\\n\\nSent by MANA · Manage notification preferences in Settings."
+  },
+  "payment-recovered": {
+    "subject": "Payment received — your Pro plan is active",
+    "text": "MANA\\n\\n\\nPAYMENT RECEIVED\\n\\nHi Mina,\\n\\nYour payment was successful and your Pro subscription is active.\\n\\nOpen MANA http://localhost:5173\\n\\n----------------------------------------\\n\\nSent by MANA · Manage notification preferences in Settings."
+  },
+  "cancellation-resumed": {
+    "subject": "Your Pro plan will continue",
+    "text": "MANA\\n\\n\\nSUBSCRIPTION RESUMED\\n\\nHi Mina,\\n\\nYour Pro plan will now renew normally.\\n\\nReview billing http://localhost:5173\\n\\n----------------------------------------\\n\\nSent by MANA · Manage notification preferences in Settings."
+  },
+  "subscription-ended": {
+    "subject": "Your Pro subscription has ended",
+    "text": "MANA\\n\\n\\nSUBSCRIPTION ENDED\\n\\nHi Mina,\\n\\nYour Pro subscription has ended and your account has moved to the free plan.\\n\\nYour data remains available.\\n\\nChoose a plan http://localhost:5173\\n\\n----------------------------------------\\n\\nSent by MANA · Manage notification preferences in Settings."
+  },
+  "document-viewed": {
+    "subject": "Your invoice INV-2026-042 was viewed",
+    "text": "MANA\\n\\n\\nDOCUMENT OPENED\\n\\nHi Mina,\\n\\nAcme Corp opened your invoice INV-2026-042.\\n\\nOpen document http://localhost:5173\\n\\n----------------------------------------\\n\\nSent by MANA · Manage notification preferences in Settings."
+  },
+  "document-accepted": {
+    "subject": "Quotation INV-2026-042 was accepted",
+    "text": "MANA\\n\\n\\nDOCUMENT ACCEPTED\\n\\nHi Mina,\\n\\nAcme Corp accepted your invoice INV-2026-042.\\n\\nOpen document http://localhost:5173\\n\\n----------------------------------------\\n\\nSent by MANA · Manage notification preferences in Settings."
+  },
+  "document-rejected": {
+    "subject": "Quotation INV-2026-042 was rejected",
+    "text": "MANA\\n\\n\\nDOCUMENT REJECTED\\n\\nHi Mina,\\n\\nAcme Corp rejected your invoice INV-2026-042.\\n\\nOpen document http://localhost:5173\\n\\n----------------------------------------\\n\\nSent by MANA · Manage notification preferences in Settings."
+  },
+  "delivery-failed": {
+    "subject": "Email delivery failed for INV-2026-042",
+    "text": "MANA\\n\\n\\nDELIVERY FAILED\\n\\nHi Mina,\\n\\nThe email for INV-2026-042 could not be delivered.\\n\\nReason: The recipient address bounced.\\n\\nCheck the client email address before sending again.\\n\\nReview document http://localhost:5173\\n\\n----------------------------------------\\n\\nSent by MANA · Manage notification preferences in Settings."
+  },
+  "task-deadline": {
+    "subject": "Due soon: Finalize brand assets",
+    "text": "MANA\\n\\n\\nA TASK IS DUE SOON\\n\\nHi Mina,\\n\\nFinalize brand assets in Brand refresh is due tomorrow.\\n\\nOpen task http://localhost:5173\\n\\n----------------------------------------\\n\\nSent by MANA · Manage notification preferences in Settings."
+  },
+  "budget-alert": {
+    "subject": "Software reached 80% of budget",
+    "text": "MANA\\n\\n\\nBUDGET ALERT\\n\\nHi Mina,\\n\\nSoftware has used 80% of its budget: THB 8,000 of THB 10,000.\\n\\nReview spending http://localhost:5173\\n\\n----------------------------------------\\n\\nSent by MANA · Manage notification preferences in Settings."
+  },
+  "weekly-summary": {
+    "subject": "Your MANA week: 6–12 July",
+    "text": "MANA\\n\\n\\nYOUR WEEK IN REVIEW\\n\\nHi Mina,\\n\\nHere is what moved this week.\\n\\nRevenue\\nTHB 48,000\\n\\nTasks completed\\n7\\n\\nActive projects\\n3\\n\\nOutstanding invoices\\n2 · THB 24,000\\n\\nOpen dashboard http://localhost:5173\\n\\n----------------------------------------\\n\\nSent by MANA · Manage notification preferences in Settings."
+  },
+  "recurring-draft-ready": {
+    "subject": "Recurring drafts ready: 3",
+    "text": "MANA\\n\\n\\nRECURRING DRAFTS READY\\n\\nHi Mina,\\n\\nMANA created drafts from your recurring schedules — 3 in total.\\n\\nNothing was sent to clients automatically.\\n\\nReview drafts http://localhost:5173\\n\\n----------------------------------------\\n\\nSent by MANA · Manage notification preferences in Settings."
+  }
+}"
+`;

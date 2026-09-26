@@ -1,0 +1,2 @@
+ALTER TABLE "documents" ADD COLUMN "sender_profile_id" text;--> statement-breakpoint
+ALTER TABLE "documents" ADD CONSTRAINT "documents_sender_profile_id_sender_profiles_id_fk" FOREIGN KEY ("sender_profile_id") REFERENCES "public"."sender_profiles"("id") ON DELETE set null ON UPDATE no action;

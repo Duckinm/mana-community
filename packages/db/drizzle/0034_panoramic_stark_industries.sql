@@ -1,0 +1,1 @@
+ALTER TABLE "calendar_events" ADD COLUMN "sync_to_google" boolean DEFAULT true NOT NULL;

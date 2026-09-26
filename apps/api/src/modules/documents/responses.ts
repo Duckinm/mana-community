@@ -1,0 +1,207 @@
+import { t } from 'elysia'
+import { IsoInstant, NullableIsoInstant, NullableString } from '@api/lib/wire-schema'
+import { PaymentSlipWire } from '@api/modules/payment-slips/responses'
+
+const DocumentType = t.String()
+const DocumentStatus = t.String()
+const RecurringInterval = t.String()
+const DocumentLanguage = t.String()
+
+export const DocumentItemWire = t.Object({
+  id: t.String(),
+  documentId: t.String(),
+  description: t.String(),
+  quantity: t.Number(),
+  unitPriceCents: t.Number(),
+  subtotalCents: t.Number(),
+  position: t.Number(),
+})
+
+export const DocumentWire = t.Object({
+  id: t.String(),
+  userId: t.String(),
+  type: DocumentType,
+  status: t.String(),
+  number: t.String(),
+  projectId: NullableString,
+  contactId: NullableString,
+  currency: t.String(),
+  documentLanguage: DocumentLanguage,
+  subtotalCents: t.Number(),
+  discountCents: t.Number(),
+  taxRateBps: t.Number(),
+  taxCents: t.Number(),
+  whtRateBps: t.Number(),
+  whtCents: t.Number(),
+  totalCents: t.Number(),
+  amountDueCents: t.Number(),
+  issueDate: NullableString,
+  dueDate: NullableString,
+  validUntilDate: NullableString,
+  paymentTermsText: NullableString,
+  sentAt: NullableIsoInstant,
+  clientStatus: NullableString,
+  clientApprovedAt: NullableIsoInstant,
+  clientApprovalIp: NullableString,
+  paidAt: NullableString,
+  whtCertNumber: NullableString,
+  senderProfileId: NullableString,
+  vatRegistered: t.Boolean(),
+  registeredName: NullableString,
+  registeredNameEn: NullableString,
+  yourEmail: NullableString,
+  yourPhone: NullableString,
+  registeredAddress: NullableString,
+  registeredAddressEn: NullableString,
+  yourCountry: NullableString,
+  yourZip: NullableString,
+  yourTaxId: NullableString,
+  yourBranchNumber: NullableString,
+  yourLogo: NullableString,
+  signatureImage: NullableString,
+  signatureEnabled: t.Boolean(),
+  signaturePlacement: NullableString,
+  clientName: NullableString,
+  clientNameTh: NullableString,
+  clientEmail: NullableString,
+  clientPhone: NullableString,
+  clientAddress: NullableString,
+  clientAddressTh: NullableString,
+  clientCountry: NullableString,
+  clientZip: NullableString,
+  clientTaxId: NullableString,
+  clientBranchNumber: NullableString,
+  bankName: NullableString,
+  accountNumber: NullableString,
+  accountName: NullableString,
+  swiftCode: NullableString,
+  promptPayId: NullableString,
+  cardNumber: NullableString,
+  cardExpiry: NullableString,
+  cardholderName: NullableString,
+  remark: NullableString,
+  pdfR2Key: NullableString,
+  pdfFailedAt: NullableIsoInstant,
+  publicToken: NullableString,
+  publicAccessRevokedAt: NullableIsoInstant,
+  publicAccessRotatedAt: NullableIsoInstant,
+  viewedAt: NullableIsoInstant,
+  parentDocumentId: NullableString,
+  isRecurring: t.Boolean(),
+  recurringInterval: NullableString,
+  nextGenerationDate: NullableString,
+  createdAt: IsoInstant,
+  updatedAt: IsoInstant,
+  deletedAt: NullableIsoInstant,
+  items: t.Array(DocumentItemWire),
+  paymentSlips: t.Array(PaymentSlipWire),
+  latestPaymentSlipStatus: t.Union([
+    t.Literal('proposed'),
+    t.Literal('mismatched'),
+    t.Literal('confirmed'),
+    t.Literal('dismissed'),
+    t.Literal('failed'),
+    t.Null(),
+  ]),
+})
+
+export const GuestDocumentItemWire = t.Object({
+  id: t.String(),
+  description: t.String(),
+  quantity: t.Number(),
+  unitPriceCents: t.Number(),
+  subtotalCents: t.Number(),
+})
+
+// Guest-facing projection of DocumentWire — only fields the public /view/:token
+// page renders or needs to derive display state. Never add a field here without
+// checking apps/web guest-document-view.tsx + routes/_guest/view/$token.tsx first.
+export const GuestDocumentWire = t.Object({
+  id: t.String(),
+  type: DocumentType,
+  status: t.String(),
+  number: t.String(),
+  currency: t.String(),
+  documentLanguage: DocumentLanguage,
+  subtotalCents: t.Number(),
+  discountCents: t.Number(),
+  taxRateBps: t.Number(),
+  taxCents: t.Number(),
+  whtRateBps: t.Number(),
+  whtCents: t.Number(),
+  totalCents: t.Number(),
+  amountDueCents: t.Number(),
+  issueDate: NullableString,
+  dueDate: NullableString,
+  paidAt: NullableString,
+  clientStatus: NullableString,
+  clientApprovedAt: NullableIsoInstant,
+  registeredName: NullableString,
+  yourEmail: NullableString,
+  yourPhone: NullableString,
+  registeredAddress: NullableString,
+  yourCountry: NullableString,
+  yourZip: NullableString,
+  yourTaxId: NullableString,
+  yourBranchNumber: NullableString,
+  yourLogo: NullableString,
+  signatureImage: NullableString,
+  signatureEnabled: t.Boolean(),
+  signaturePlacement: NullableString,
+  clientName: NullableString,
+  clientEmail: NullableString,
+  clientPhone: NullableString,
+  clientAddress: NullableString,
+  clientCountry: NullableString,
+  clientZip: NullableString,
+  clientTaxId: NullableString,
+  clientBranchNumber: NullableString,
+  bankName: NullableString,
+  accountNumber: NullableString,
+  accountName: NullableString,
+  swiftCode: NullableString,
+  promptPayId: NullableString,
+  cardNumber: NullableString,
+  cardExpiry: NullableString,
+  cardholderName: NullableString,
+  remark: NullableString,
+  items: t.Array(GuestDocumentItemWire),
+  paymentSlips: t.Array(PaymentSlipWire),
+  latestPaymentSlipStatus: t.Union([
+    t.Literal('proposed'),
+    t.Literal('mismatched'),
+    t.Literal('confirmed'),
+    t.Literal('dismissed'),
+    t.Literal('failed'),
+    t.Null(),
+  ]),
+  isOwner: t.Boolean(),
+  showBranding: t.Boolean(),
+})
+
+export const DocumentListRowWire = t.Composite([
+  DocumentWire,
+  t.Object({ contactExists: t.Boolean() }),
+])
+
+export const DocumentListResponse = t.Object({
+  data: t.Array(DocumentListRowWire),
+  total: t.Number(),
+  page: t.Number(),
+  limit: t.Number(),
+  totalPages: t.Number(),
+})
+
+export const DocumentVersionWire = t.Object({
+  id: t.String(),
+  documentId: t.String(),
+  version: t.Number(),
+  snapshotJson: t.String(),
+  createdAt: IsoInstant,
+})
+
+export const DocumentVersionsListResponse = t.Array(DocumentVersionWire)
+
+export const DocumentsByProjectResponse = t.Array(DocumentWire)
+
+export { DocumentStatus, DocumentType, RecurringInterval }

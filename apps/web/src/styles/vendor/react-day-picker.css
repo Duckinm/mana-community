@@ -1,0 +1,26 @@
+.rdp-root {
+  --rdp-accent-color: var(--primary);
+  --rdp-accent-background-color: var(--primary-soft);
+  --rdp-range_middle-background-color: var(--primary-soft);
+  --rdp-range_start-color: var(--primary-foreground);
+  --rdp-range_end-color: var(--primary-foreground);
+  --rdp-range_start-date-background-color: var(--primary);
+  --rdp-range_end-date-background-color: var(--primary);
+  --rdp-today-color: var(--warning);
+  --rdp-day-height: 2.25rem;
+  --rdp-day-width: 2.25rem;
+  --rdp-day_button-height: 2rem;
+  --rdp-day_button-width: 2rem;
+  --rdp-day_button-border-radius: 0.5rem;
+  --rdp-day_button-border: 2px solid transparent;
+  --rdp-selected-border: 2px solid var(--primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+[data-slot="popover-content"] .rdp-root {
+  background: transparent;
+}

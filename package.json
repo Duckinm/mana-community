@@ -1,0 +1,70 @@
+{
+  "name": "mana",
+  "license": "AGPL-3.0-only",
+  "private": true,
+  "type": "module",
+  "packageManager": "bun@1.3.10",
+  "workspaces": [
+    "apps/api",
+    "apps/web",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:web": "turbo run dev --filter=@mana/web",
+    "dev:api": "turbo run dev --filter=@mana/api",
+    "dev": "docker compose up -d --wait db && turbo run dev --filter=@mana/web --filter=@mana/api",
+    "db": "docker compose up -d",
+    "db:down": "docker compose down",
+    "db:generate": "bun run --cwd packages/db db:generate",
+    "db:migrate": "bun run --cwd packages/db db:migrate",
+    "build": "turbo run build --filter=@mana/web... --filter=@mana/api...",
+    "test": "turbo run test --filter=@mana/web... --filter=@mana/api...",
+    "test:e2e": "bun --no-env-file tests/self-host/smoke.ts",
+    "test:api": "bun run --cwd apps/api test",
+    "prepare": "husky"
+  },
+  "catalog": {
+    "@elysiajs/eden": "^1.4.9",
+    "@phosphor-icons/react": "^2.1.10",
+    "@tailwindcss/vite": "^4.1.18",
+    "elysia": "1.4.28",
+    "@tanstack/react-query": "^5.99.2",
+    "@tanstack/react-router": "1.168.4",
+    "@tanstack/router-core": "1.168.4",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^5.1.4",
+    "drizzle-orm": "0.45.2",
+    "drizzle-typebox": "0.3.3",
+    "postgres": "3.4.9",
+    "better-auth": "1.6.6",
+    "clsx": "^2.1.1",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "tailwind-merge": "^3.5.0",
+    "tailwindcss": "^4.1.18",
+    "typescript": "^7.0.2",
+    "vite": "^7.3.1",
+    "vite-tsconfig-paths": "^5.1.4",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^20.5.0",
+    "@commitlint/config-conventional": "^20.5.0",
+    "@commitlint/types": "^20.5.0",
+    "@playwright/test": "^1.59.1",
+    "@types/node": "^22.10.2",
+    "dotenv": "^17.4.2",
+    "husky": "^9.1.7",
+    "turbo": "^2.10.1",
+    "typescript": "catalog:"
+  },
+  "dependencies": {
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Duckinm/mana-community.git"
+  }
+}

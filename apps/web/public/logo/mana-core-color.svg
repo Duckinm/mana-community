@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" role="img" aria-label="MANA recovery potion">
+  <defs>
+    <clipPath id="mana-potion-cavity">
+      <path d="M402 120H598C628 120 652 144 652 174C652 201 632 224 605 228V318C605 354 623 381 657 399C775 462 840 566 840 682C840 825 724 930 580 930H420C276 930 160 825 160 682C160 566 225 462 343 399C377 381 395 354 395 318V228C368 224 348 201 348 174C348 144 372 120 402 120Z"/>
+    </clipPath>
+    <linearGradient id="mana-breath" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#C1DCFA"/>
+      <stop offset="0.58" stop-color="#EEF6FF"/>
+      <stop offset="1" stop-color="#FFFFFF"/>
+    </linearGradient>
+  </defs>
+  <path clip-path="url(#mana-potion-cavity)" d="M120 610C224 553 314 560 399 596C478 629 548 622 626 591C711 557 795 560 880 608V1000H120Z" fill="#C1DCFA"/>
+  <path clip-path="url(#mana-potion-cavity)" d="M120 622C225 582 294 587 367 617C439 646 511 648 592 619C690 584 768 590 880 627V1000H120Z" fill="#5F96F5"/>
+  <path d="M402 120H598C628 120 652 144 652 174C652 201 632 224 605 228V318C605 354 623 381 657 399C775 462 840 566 840 682C840 825 724 930 580 930H420C276 930 160 825 160 682C160 566 225 462 343 399C377 381 395 354 395 318V228C368 224 348 201 348 174C348 144 372 120 402 120Z" fill="none" stroke="#5F96F5" stroke-width="32" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M536 444C485 475 472 518 491 553C509 587 548 603 556 641C568 697 511 741 505 793C501 825 514 849 530 866C516 830 520 800 539 773C569 730 590 694 579 642C569 594 527 574 513 544C496 507 506 474 536 444Z" fill="url(#mana-breath)"/>
+</svg>

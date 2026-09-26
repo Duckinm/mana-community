@@ -1,0 +1,1 @@
+ALTER TABLE "users" ADD COLUMN "hide_branding" boolean DEFAULT false NOT NULL;
