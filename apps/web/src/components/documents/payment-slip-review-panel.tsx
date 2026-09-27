@@ -168,8 +168,8 @@ export function PaymentSlipReviewPanel({
         </p>
       </div>
 
-      {!slip.apiVerified && <CapabilityNotice available={capabilities.data?.paymentSlipVerification} unavailableKey="paymentSlipVerificationUnavailable" />}
-      {isFailed && <CapabilityNotice available={capabilities.data?.ai} unavailableKey="paymentSlipExtractionUnavailable" />}
+      {!slip.apiVerified && <CapabilityNotice available={capabilities.data?.paymentSlipVerification} unavailableKey="paymentSlipVerificationUnavailable" availableKey={canVerify ? "verificationCost" : undefined} />}
+      {isFailed && <CapabilityNotice available={capabilities.data?.ai} unavailableKey="paymentSlipExtractionUnavailable" availableKey={capabilities.data?.paymentSlipVerification ? "slipCost" : "aiCost"} />}
       {!slip.apiVerified && (
         <div className="flex items-center justify-between gap-3 rounded-xl border border-border-subtle bg-surface-raised p-3">
           <p className="text-xs text-muted-foreground">

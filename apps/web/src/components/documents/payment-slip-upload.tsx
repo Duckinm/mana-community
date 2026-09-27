@@ -98,8 +98,8 @@ export function PaymentSlipUpload({
           ? t("paymentSlip.guestUploadHint")
           : t("paymentSlip.ownerUploadHint")}
       </p>
-      <CapabilityNotice available={capabilities.data?.ai} unavailableKey="paymentSlipExtractionUnavailable" />
-      <CapabilityNotice available={capabilities.data?.paymentSlipVerification} unavailableKey="paymentSlipVerificationUnavailable" />
+      <CapabilityNotice available={capabilities.data?.ai} unavailableKey="paymentSlipExtractionUnavailable" availableKey={capabilities.data?.paymentSlipVerification ? "slipCost" : "aiCost"} />
+      <CapabilityNotice available={capabilities.data?.paymentSlipVerification} unavailableKey="paymentSlipVerificationUnavailable" availableKey={capabilities.data?.ai ? undefined : "verificationCost"} />
       <Button
         type="button"
         variant="outline"

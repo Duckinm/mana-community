@@ -86,6 +86,8 @@ No paid account is needed for the core preview. This is not an offline distribut
 
 The core installation needs none. The app checks server configuration before offering AI, voice input, social sign-in, calendar sync, LINE, push notifications, receipt extraction, and bank slip verification. Missing services show a persistent explanation; contacts, projects, tasks, native calendar, manual accounting, document editing, and file storage stay available. Mailpit notices explicitly identify local email capture.
 
+Configured AI, voice transcription, receipt/slip processing and bank verification show an inline reminder that the connected provider account may be charged. Missing services keep their setup explanation and manual fallback.
+
 These checks report configuration, not provider health. Invalid keys, expired access, and provider outages can still fail; chat keeps the error visible and releases the composer. A silent stream times out after 60 seconds, and a complete request has a two-minute limit even if keep-alive messages continue. Review any changes already made by AI before sending again. If the configuration check fails, use **Try again** beside its message. The public `/api/capabilities` endpoint contains flags only, never credentials.
 
 To add your own AI or OAuth credentials later:
