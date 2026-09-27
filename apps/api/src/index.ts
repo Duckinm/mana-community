@@ -9,6 +9,7 @@ import { auth } from "@api/auth";
 import { betterAuthPlugin } from "@api/lib/auth-plugin";
 import { corsOrigin } from "@api/lib/cors-origins";
 import { AppError } from "@api/lib/errors";
+import { capabilitiesModule } from "@api/modules/capabilities";
 import { healthModule } from "@api/modules/health/index";
 import { landingSessionModule } from "@api/modules/landing-session/index";
 import { landingContactFormModule } from "@api/modules/landing-contact-form/index";
@@ -81,6 +82,7 @@ const appRoutes = new Elysia()
     }),
   )
   .use(betterAuthPlugin)
+  .use(capabilitiesModule)
   .use(healthModule)
   .use(landingSessionModule)
   .use(landingContactFormModule)

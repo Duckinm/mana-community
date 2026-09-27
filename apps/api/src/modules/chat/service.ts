@@ -10,7 +10,7 @@ import { displayRowsFor, type DisplayRow } from '@api/utils/mcp-tools/display'
 import { env } from '@api/env'
 import { todayCalendarDate } from '@api/lib/calendar-date'
 import { claimAiAction, nextResetAt, type Plan } from '@api/modules/billing/usage'
-import { trackedCreate, trackedStream } from '@api/modules/ai/client'
+import { assertAiConfigured, trackedCreate, trackedStream } from '@api/modules/ai/client'
 import { buildPlanContextLine } from '@api/modules/billing/entitlements'
 import { settleAiAction } from '@api/modules/chat/ai-action'
 import { extractImageText } from '@api/modules/chat/ocr'
@@ -221,6 +221,7 @@ export async function buildChatStream(
   locale?: string,
   signal?: AbortSignal,
 ): Promise<ReadableStream> {
+  assertAiConfigured()
   const chatLocale = resolveChatLocale(locale)
   const [user] = await db.select().from(users).where(eq(users.id, userId))
   if (!user) throw new Error('User not found')
@@ -341,6 +342,7 @@ export async function buildChatStream(
         }
       }, 20_000)
 
+      let streamError: string | undefined
       try {
         let continueLoop = true
         let toolRounds = 0
@@ -423,18 +425,8 @@ export async function buildChatStream(
           }
         }
 
-        if (!signal?.aborted) {
-          enqueue({
-            type: 'done',
-            toolCalls: usedToolCalls.map((t) => t.name),
-            toolResults: usedToolCalls,
-            sessionId,
-          })
-        }
-      } catch (err) {
-        if (!signal?.aborted) {
-          enqueue({ type: 'error', message: err instanceof Error ? err.message : 'Stream error' })
-        }
+      } catch {
+        streamError = 'AI request failed. Check the provider configuration and try again.'
       } finally {
         try {
           await settleAiAction({
@@ -452,10 +444,18 @@ export async function buildChatStream(
             generateSessionTitle(userId, sessionId, message, chatLocale)
           }
         } catch {
-          // swallowed: response was already streamed to the client
+          streamError = 'Could not save chat. Please try again.'
         }
 
         clearInterval(heartbeat)
+        if (!signal?.aborted) {
+          enqueue(streamError ? { type: 'error', message: streamError } : {
+            type: 'done',
+            toolCalls: usedToolCalls.map((t) => t.name),
+            toolResults: usedToolCalls,
+            sessionId,
+          })
+        }
         controller.close()
       }
     },

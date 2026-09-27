@@ -1,3 +1,5 @@
+import { useCapabilities } from "@/hooks/use-capabilities";
+import { EmailCapabilityNotice } from "@/components/capability-notice";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
@@ -25,6 +27,9 @@ export function PublishDialog({
   onSuccess?: (doc: Document) => void;
 }) {
   const { t } = useTranslation("documents");
+  const { t: tCapabilities } = useTranslation("capabilities");
+  const capabilities = useCapabilities();
+  const emailAvailable = !capabilities.isError && !!capabilities.data && capabilities.data.email !== 'disabled';
   const { publishDocument } = useDocuments();
   const [sendEmail, setSendEmail] = useState(!!doc.clientEmail);
   const [submitting, setSubmitting] = useState(false);
@@ -36,10 +41,10 @@ export function PublishDialog({
   async function handleConfirm() {
     setSubmitting(true);
     try {
-      const { document, emailStatus } = await publishDocument(doc.id, sendEmail && hasClientEmail);
+      const { document, emailStatus } = await publishDocument(doc.id, sendEmail && hasClientEmail && emailAvailable);
 
       if (emailStatus === "sent") {
-        toast.success(t("publishDialog.publishedEmailSent", { email: doc.clientEmail }));
+        toast.success(capabilities.data?.email === "local" ? tCapabilities("localEmail") : t("publishDialog.publishedEmailSent", { email: doc.clientEmail }));
       } else if (emailStatus === "failed") {
         toast.warning(t("publishDialog.publishedEmailFailed"));
       } else if (emailStatus === "blocked") {
@@ -70,11 +75,12 @@ export function PublishDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="px-4 py-3">
+        <div className="space-y-2 px-4 py-3">
+          <EmailCapabilityNotice />
           <label className="flex items-start gap-3">
             <Checkbox
-              checked={hasClientEmail ? sendEmail : false}
-              disabled={!hasClientEmail}
+              checked={hasClientEmail && emailAvailable ? sendEmail : false}
+              disabled={!hasClientEmail || !emailAvailable}
               onCheckedChange={(checked) => setSendEmail(checked === true)}
               className="mt-0.5"
             />

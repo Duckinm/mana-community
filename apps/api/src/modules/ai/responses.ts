@@ -34,3 +34,8 @@ export const FinanceNarrativeResponse = t.Object({
 })
 
 export { MessageResponse }
+
+export const AiUnavailableResponse = t.Object({
+  code: t.Literal('AI_NOT_CONFIGURED'),
+  message: t.String(),
+})

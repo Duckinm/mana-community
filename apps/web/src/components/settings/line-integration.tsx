@@ -1,3 +1,4 @@
+import { useCapabilities } from '@/hooks/use-capabilities'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
@@ -36,6 +37,7 @@ function LineHeader({ icon, name, sub }: { icon: React.ReactNode; name: string; 
 }
 
 export function LineIntegration() {
+  const capabilities = useCapabilities()
   const { t } = useTranslation('settings')
   const { connection, isLoading, connect, disconnect, isPending } = useLineConnection()
   const { user, patchUser, saveFnRef } = useSettings()
@@ -74,7 +76,7 @@ export function LineIntegration() {
 
   const connected = !!connection?.connected
   const pending = !connected && !!connection?.pending
-  const lineConfigured = connection?.lineConfigured ?? true
+  const lineConfigured = !capabilities.isError && capabilities.data?.line === true && connection?.lineConfigured === true
   if (connected) {
     return (
       <Accordion type="single" collapsible className="rounded-xl border border-border-default bg-surface-card transition-colors duration-base hover:border-border-strong">
@@ -109,7 +111,7 @@ export function LineIntegration() {
     )
   }
 
-  if (pending && connection?.linkCode) {
+  if (pending && lineConfigured && connection?.linkCode) {
     return (
       <div className="rounded-xl border border-border-default bg-surface-card">
         <div className="flex items-start gap-3 px-4 py-4 sm:gap-4">
@@ -146,14 +148,14 @@ export function LineIntegration() {
       </div>
 
       <div className="col-start-2 flex flex-wrap items-center gap-2 sm:col-start-3 sm:row-start-1 sm:justify-end">
-        {!lineConfigured ? (
+        {!lineConfigured && capabilities.data && !capabilities.isError ? (
           <Badge variant="muted" size="pill" className="gap-1.5">
             {t('integrations.line.notConfigured')}
           </Badge>
         ) : (
           <button
             type="button"
-            disabled={isPending || isLoading}
+            disabled={isPending || isLoading || !lineConfigured}
             onClick={() => void handleConnect()}
             className="min-h-9 rounded-lg border border-primary-border bg-primary-soft px-3 py-1.5 text-xs font-medium text-primary transition-colors duration-base hover:bg-primary-hover hover:text-primary-foreground disabled:opacity-60 sm:min-h-8"
           >

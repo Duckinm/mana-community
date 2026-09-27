@@ -1,3 +1,5 @@
+import { useCapabilities } from "@/hooks/use-capabilities";
+import { CapabilityNotice } from "@/components/capability-notice";
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { Loader2 } from '@/components/icons'
@@ -6,6 +8,7 @@ import { AiNarrativeCardSkeleton } from '@/components/finance/ai-narrative-card-
 import { useFinanceNarrative } from './use-finance-narrative'
 
 export function AiNarrativeCard() {
+ const capabilities = useCapabilities()
  const { t } = useTranslation('accounting')
  const { data, loading, error, refetch } = useFinanceNarrative()
 
@@ -30,7 +33,7 @@ export function AiNarrativeCard() {
  <button
  type="button"
  onClick={() => void refetch()}
- disabled={loading}
+ disabled={loading || capabilities.isError || !capabilities.data?.ai}
  className="text-xs font-semibold px-3 py-1.5 rounded-lg transition-opacity disabled:opacity-50 bg-primary-soft text-primary"
  >
  {loading ? (
@@ -43,6 +46,7 @@ export function AiNarrativeCard() {
  )}
  </button>
  </div>
+ <CapabilityNotice available={capabilities.data?.ai} unavailableKey="aiUnavailable" />
  {error && (
  <p className="text-xs text-red-400/90">{error}</p>
  )}

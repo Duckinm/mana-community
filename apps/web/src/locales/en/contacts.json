@@ -176,14 +176,14 @@
     "importButton_plural": "Import {{count}} contacts"
   },
   "briefing": {
-    "title": "AI Briefing",
+    "title": "Relationship summary",
     "regenerate": "Regenerate",
     "generate": "Generate",
     "refreshing": "Refreshing insight…",
     "loading": "Loading…",
-    "loadFailed": "AI briefing couldn't load.",
+    "loadFailed": "Relationship summary couldn't load.",
     "retry": "Retry",
-    "failed": "AI briefing couldn't be generated.",
+    "failed": "Relationship summary couldn't be refreshed.",
     "empty": "No briefing yet — generate one to see a recommended action.",
     "stage": "Stage",
     "last": "Last",

@@ -8,7 +8,7 @@ The supplied setup listens only on your computer. It does not deliver email to r
 
 ## First start
 
-Install Git and [Docker Desktop with Compose](https://docs.docker.com/desktop/) and start Docker. Compose 2.24 or newer is required. On Linux, Docker Engine with the Compose plugin also supplies the required commands. The current local rehearsal covers Apple Silicon; Linux x64 is included in CI but needs a successful hosted run before claiming platform verification. Bun is included in the containers.
+Install Git and [Docker Desktop with Compose](https://docs.docker.com/desktop/) and start Docker. Compose 2.24 or newer is required. On Linux, Docker Engine with the Compose plugin also supplies the required commands. The preview has passed local acceptance on Apple Silicon and [hosted acceptance on Linux x64](https://github.com/Duckinm/mana-community/actions/runs/36264810058). Windows installation has not yet been verified. Bun is included in the containers.
 
 From a terminal:
 
@@ -84,7 +84,11 @@ No paid account is needed for the core preview. This is not an offline distribut
 
 ## Optional integrations
 
-The core installation needs none. To add your own AI or OAuth credentials later:
+The core installation needs none. The app checks server configuration before offering AI, voice input, social sign-in, calendar sync, LINE, push notifications, receipt extraction, and bank slip verification. Missing services show a persistent explanation; contacts, projects, tasks, native calendar, manual accounting, document editing, and file storage stay available. Mailpit notices explicitly identify local email capture.
+
+These checks report configuration, not provider health. Invalid keys, expired access, and provider outages can still fail; chat keeps the error visible and releases the composer. A silent stream times out after 60 seconds, and a complete request has a two-minute limit even if keep-alive messages continue. Review any changes already made by AI before sending again. If the configuration check fails, use **Try again** beside its message. The public `/api/capabilities` endpoint contains flags only, never credentials.
+
+To add your own AI or OAuth credentials later:
 
 ```sh
 cp self-host/integrations.env.example .env.selfhost.integrations
@@ -105,7 +109,7 @@ sh scripts/self-host-backup.sh backup "$HOME/mana-backup-$(date +%Y%m%d-%H%M%S)"
 
 The backup briefly stops the installation, copies all three volumes at the same point, records checksums and the database image, and restarts it. The directory includes account data, inbox messages, and secrets. Keep an encrypted copy on a different device; the script itself does not encrypt it. Only a directory with a `complete` marker is a completed backup.
 
-Restore into a separate checkout of the **same source version**, on the same CPU architecture and exact database image. Keep that version's source with your backup until a tagged release is available. Do not initialize the destination with `self-host.sh` first. Choose an unused Compose project name; stop the source installation before starting the restored copy, because the restored configuration uses the same ports.
+Restore into a separate checkout of the **same source version**, on the same CPU architecture and exact database image. Keep that version's source or exact release tag with your backup. Do not initialize the destination with `self-host.sh` first. Choose an unused Compose project name; stop the source installation before starting the restored copy, because the restored configuration uses the same ports.
 
 ```sh
 export COMPOSE_PROJECT_NAME=mana-selfhost-restored

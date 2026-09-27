@@ -1,4 +1,7 @@
 import Elysia, { t } from 'elysia'
+import { env } from '@api/env'
+import { AI_UNAVAILABLE } from '@api/modules/ai/client'
+import { AiUnavailableResponse } from '@api/modules/ai/responses'
 import { betterAuthPlugin } from '@api/lib/auth-plugin'
 import { generateTasksFromBrief, generateOutreachDraft, generateFinanceNarrative, breakDownTask, queryContacts, aiErrorMessage } from '@api/modules/ai/service'
 import {
@@ -16,6 +19,7 @@ export const aiModule = new Elysia({ name: 'ai', prefix: '/api/ai' })
   .post(
     '/generate-tasks',
     async ({ user, body, status }) => {
+      if (!env.ANTHROPIC_API_KEY) return status(503, AI_UNAVAILABLE)
       try {
         const tasks = await generateTasksFromBrief(user.id, body.projectId, body.brief)
         return tasks
@@ -31,7 +35,7 @@ export const aiModule = new Elysia({ name: 'ai', prefix: '/api/ai' })
         projectId: t.String(),
         brief: t.String({ minLength: 10 }),
       }),
-      response: { 200: GenerateTasksResponse, 404: MessageResponse, 500: MessageResponse },
+      response: { 200: GenerateTasksResponse, 404: MessageResponse, 500: MessageResponse, 503: AiUnavailableResponse },
       detail: { tags: ['AI'], summary: 'Generate tasks from a project brief' },
     },
   )
@@ -39,6 +43,7 @@ export const aiModule = new Elysia({ name: 'ai', prefix: '/api/ai' })
   .post(
     '/outreach-draft',
     async ({ user, body, status }) => {
+      if (!env.ANTHROPIC_API_KEY) return status(503, AI_UNAVAILABLE)
       try {
         const draft = await generateOutreachDraft(user.id, body.contactName, body.purpose, body.context ?? '')
         return draft
@@ -53,7 +58,7 @@ export const aiModule = new Elysia({ name: 'ai', prefix: '/api/ai' })
         purpose: t.String({ minLength: 5 }),
         context: t.Optional(t.String()),
       }),
-      response: { 200: OutreachDraftResponse, 500: MessageResponse },
+      response: { 200: OutreachDraftResponse, 500: MessageResponse, 503: AiUnavailableResponse },
       detail: { tags: ['AI'], summary: 'Generate an outreach email draft for a contact' },
     },
   )
@@ -61,6 +66,7 @@ export const aiModule = new Elysia({ name: 'ai', prefix: '/api/ai' })
   .post(
     '/break-down-task',
     async ({ user, body, status }) => {
+      if (!env.ANTHROPIC_API_KEY) return status(503, AI_UNAVAILABLE)
       try {
         const items = await breakDownTask(user.id, body.taskTitle, body.taskDescription ?? '')
         return items
@@ -74,7 +80,7 @@ export const aiModule = new Elysia({ name: 'ai', prefix: '/api/ai' })
         taskTitle: t.String({ minLength: 2 }),
         taskDescription: t.Optional(t.String()),
       }),
-      response: { 200: BreakDownTaskResponse, 500: MessageResponse },
+      response: { 200: BreakDownTaskResponse, 500: MessageResponse, 503: AiUnavailableResponse },
       detail: { tags: ['AI'], summary: 'Break a task into subtask checklist items' },
     },
   )
@@ -82,6 +88,7 @@ export const aiModule = new Elysia({ name: 'ai', prefix: '/api/ai' })
   .post(
     '/contacts-query',
     async ({ body, user, status }) => {
+      if (!env.ANTHROPIC_API_KEY) return status(503, AI_UNAVAILABLE)
       try {
         const answer = await queryContacts(user.id, body.question)
         return { answer }
@@ -92,7 +99,7 @@ export const aiModule = new Elysia({ name: 'ai', prefix: '/api/ai' })
     {
       auth: true,
       body: t.Object({ question: t.String() }),
-      response: { 200: ContactsQueryResponse, 500: MessageResponse },
+      response: { 200: ContactsQueryResponse, 500: MessageResponse, 503: AiUnavailableResponse },
       detail: { tags: ['AI'], summary: 'Query contacts using natural language' },
     },
   )
@@ -100,6 +107,7 @@ export const aiModule = new Elysia({ name: 'ai', prefix: '/api/ai' })
   .get(
     '/finance-narrative',
     async ({ user, status }) => {
+      if (!env.ANTHROPIC_API_KEY) return status(503, AI_UNAVAILABLE)
       try {
         const narrative = await generateFinanceNarrative(user.id)
         return narrative
@@ -109,7 +117,7 @@ export const aiModule = new Elysia({ name: 'ai', prefix: '/api/ai' })
     },
     {
       auth: true,
-      response: { 200: FinanceNarrativeResponse, 500: MessageResponse },
+      response: { 200: FinanceNarrativeResponse, 500: MessageResponse, 503: AiUnavailableResponse },
       detail: { tags: ['AI'], summary: 'Generate AI financial health narrative' },
     },
   )

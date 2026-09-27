@@ -1,3 +1,5 @@
+import { useCapabilities } from '@/hooks/use-capabilities'
+import { CapabilityNotice, EmailCapabilityNotice } from '@/components/capability-notice'
 import { Link } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -83,7 +85,10 @@ function BrowserPushUnavailable({
 }
 
 export function NotificationsPanel() {
+  const capabilities = useCapabilities()
+  const pushConfigured = !capabilities.isError && capabilities.data?.push === true && !!import.meta.env.VITE_VAPID_PUBLIC_KEY
   const { t } = useTranslation('settings')
+  const { t: tCapabilities } = useTranslation('capabilities')
   const { user, saveFnRef, patchUser } = useSettings()
   const { connection } = useLineConnection()
   const [preferences, setPreferences] = useState<NotificationPreferences>(
@@ -143,7 +148,11 @@ export function NotificationsPanel() {
 
   const pushBlocked =
     typeof Notification === 'undefined' ? false : Notification.permission === 'denied'
-  const lineConnected = !!connection?.connected
+  const lineConnected = !!connection?.connected && !capabilities.isError && capabilities.data?.line === true
+  const lockedChannels: NotificationChannel[] = []
+  if (!lineConnected) lockedChannels.push('line')
+  if (!pushConfigured) lockedChannels.push('push')
+  if (capabilities.isError || !capabilities.data || capabilities.data.email === 'disabled') lockedChannels.push('email')
 
   return (
     <div className="space-y-6">
@@ -199,7 +208,8 @@ export function NotificationsPanel() {
           title={t('notifications.browser.title')}
           description={t('notifications.browser.description')}
         />
-        {pushSupported() && !pushBlocked ? (
+        <CapabilityNotice available={capabilities.data ? pushConfigured : undefined} unavailableKey="pushUnavailable" />
+        {pushSupported() && !pushBlocked ? (desktopPush || pushConfigured) && (
           <BrowserPushRow
             label={t('notifications.browser.master')}
             description={t('notifications.browser.masterDescription')}
@@ -220,6 +230,7 @@ export function NotificationsPanel() {
       </section>
 
       <section aria-label={t('notifications.eventsTitle')}>
+        <EmailCapabilityNotice />
         <p className="mb-3 max-w-[65ch] text-xs leading-relaxed text-muted-foreground">
           {t('notifications.eventsDescription')}
         </p>
@@ -229,8 +240,8 @@ export function NotificationsPanel() {
           channelLabels={channelLabels}
           preferences={preferences}
           soonLabel={t('notifications.soon')}
-          lockedChannels={lineConnected ? [] : ['line']}
-          lockedHint={t('notifications.lineRequired')}
+          lockedChannels={lockedChannels}
+          lockedHint={tCapabilities('channelUnavailable')}
           onChange={(key, checked) =>
             setPreferences((current) => ({ ...current, [key]: checked }))
           }

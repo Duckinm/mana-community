@@ -1,3 +1,5 @@
+import { env } from '@api/env'
+import { AppError } from '@api/lib/errors'
 import { eq } from 'drizzle-orm'
 import { db } from '@api/db'
 import { lineConnections } from '@mana/db'
@@ -18,7 +20,7 @@ export type LineConnectionDto = {
 }
 
 function toDto(connection: typeof lineConnections.$inferSelect | undefined): LineConnectionDto {
-  const lineConfigured = isLineConfigured()
+  const lineConfigured = isLineConfigured() && Boolean(env.LINE_OA_ID)
   if (!connection) {
     return { connected: false, displayName: null, pending: false, addFriendUrl: null, sendCodeUrl: null, linkCode: null, expiresAt: null, lineConfigured }
   }
@@ -41,6 +43,7 @@ export async function getLineConnection(userId: string): Promise<LineConnectionD
 }
 
 export async function startLineConnection(userId: string): Promise<LineConnectionDto> {
+  if (!isLineConfigured() || !env.LINE_OA_ID) throw new AppError('LINE is not configured', 503)
   const linkCode = generateLinkCode()
   const linkCodeExpiresAt = new Date(Date.now() + LINK_CODE_TTL_MS)
   const [connection] = await db

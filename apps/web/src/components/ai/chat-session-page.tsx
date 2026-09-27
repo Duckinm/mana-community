@@ -230,13 +230,12 @@ export function ChatSessionPage() {
     [navigate],
   );
 
-  const onStreamSettled = useCallback(async () => {
-    await new Promise((resolve) => setTimeout(resolve, 150));
+  const onStreamSettled = useCallback(async (isCurrent: () => boolean) => {
     try {
       const result = await client.api.chat
         .sessions({ sessionId })
         .messages.get();
-      if (result.error) return;
+      if (result.error || !isCurrent()) return;
       if (result.data) {
         setSessionMessages(mapApiMessages(result.data as ApiChatMessage[]));
       }
@@ -253,6 +252,7 @@ export function ChatSessionPage() {
 
   const {
     messages: streamingMessages,
+    error: streamError,
     isStreaming,
     toolStatus,
     sendMessage,
@@ -456,6 +456,11 @@ export function ChatSessionPage() {
         </div>
 
         <div className="flex shrink-0 flex-col items-center px-3 pt-3 pb-3 max-xl:pb-mobile-dock sm:px-4 xl:pb-6">
+          {streamError && (
+            <p role="alert" className="mb-3 w-full max-w-2xl rounded-xl border border-danger/30 bg-card p-3 text-sm text-danger">
+              {streamError}
+            </p>
+          )}
           <CommandInput
             ref={inputRef}
             onSubmit={(text, files) => sendMessage(text, files)}

@@ -38,27 +38,24 @@ export function AuthOAuthSocialButton({
   label,
   onClick,
   accent,
+  disabled,
 }: {
   icon: ReactNode;
   label: string;
   onClick?: () => void;
+  disabled?: boolean;
   accent?: string;
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className="w-full flex items-center justify-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-base active:scale-[0.98] [&>svg]:shrink-0"
+      disabled={disabled}
+      className="enabled:hover:opacity-88 disabled:cursor-not-allowed disabled:opacity-50 w-full flex items-center justify-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-base active:scale-[0.98] [&>svg]:shrink-0"
       style={{
         background: accent ?? "var(--surface-raised)",
         border: "1px solid var(--border-default)",
         color: accent ? "#fff" : "var(--text-primary)",
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.opacity = "0.88";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.opacity = "1";
       }}
     >
       {icon}
@@ -73,19 +70,22 @@ export function AuthOAuthGhostButton({
   discord,
   accent,
   onClick,
+  disabled,
 }: {
   icon: ReactNode;
   label: string;
   discord?: boolean;
   accent?: string;
   onClick?: () => void;
+  disabled?: boolean;
 }) {
   const accentColor = accent ?? (discord ? "#5865F2" : undefined);
   return (
     <button
       type="button"
       onClick={onClick}
-      className="w-full flex items-center justify-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-base active:scale-[0.98] hover:opacity-88 bg-card border border-border text-foreground [&>svg]:shrink-0"
+      disabled={disabled}
+      className="enabled:hover:opacity-88 disabled:cursor-not-allowed disabled:opacity-50 w-full flex items-center justify-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-base active:scale-[0.98] bg-card border border-border text-foreground [&>svg]:shrink-0"
       style={
         accentColor
           ? {
@@ -95,12 +95,6 @@ export function AuthOAuthGhostButton({
             }
           : undefined
       }
-      onMouseEnter={(e) => {
-        e.currentTarget.style.opacity = "0.88";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.opacity = "1";
-      }}
     >
       {icon}
       {label}

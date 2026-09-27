@@ -1,3 +1,5 @@
+import { useCapabilities } from '@/hooks/use-capabilities';
+import { CapabilityNotice } from '@/components/capability-notice';
 import { ArrowUp, File, Mic, Paperclip, Stop, X } from "@/components/icons";
 import { useSettings } from "@/context/settings";
 import {
@@ -39,7 +41,7 @@ export type AttachedFile = {
 };
 
 type CommandInputProps = {
-  onSubmit: (text: string, files: AttachedFile[]) => void;
+  onSubmit: (text: string, files: AttachedFile[]) => void | boolean | Promise<void | boolean>;
   hasMessages: boolean;
   disabled?: boolean;
   isStreaming?: boolean;
@@ -63,6 +65,10 @@ export const CommandInput = forwardRef<HTMLTextAreaElement, CommandInputProps>(
   ) {
     const { t, i18n } = useTranslation("chat");
     const { user } = useSettings();
+    const capabilities = useCapabilities();
+    const [submitting, setSubmitting] = useState(false);
+    disabled = disabled || submitting || capabilities.data?.ai !== true;
+
     const [input, setInput] = useState("");
     const [voiceStatus, setVoiceStatus] =
       useState<VoiceRecordingStatus>("idle");
@@ -118,13 +124,21 @@ export const CommandInput = forwardRef<HTMLTextAreaElement, CommandInputProps>(
       };
     }, []);
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
       if (!input.trim() && attachedFiles.length === 0) return;
       if (disabled) return;
       recordingRef.current?.stop();
       recordingRef.current = null;
       setVoiceStatus("idle");
-      onSubmit(input.trim(), attachedFiles);
+      setSubmitting(true);
+      try {
+        if (await onSubmit(input.trim(), attachedFiles) === false) return;
+      } catch {
+        toast.error(t("errorRetry"));
+        return;
+      } finally {
+        setSubmitting(false);
+      }
       setInput("");
       for (const f of attachedFiles) {
         if (f.preview) URL.revokeObjectURL(f.preview);
@@ -198,6 +212,8 @@ export const CommandInput = forwardRef<HTMLTextAreaElement, CommandInputProps>(
         return;
       }
 
+      if (capabilities.data?.transcription !== true) return;
+
       if (!isVoiceRecordingSupported()) {
         setVoiceStatus("unsupported");
         toast.error(t("input.voiceUnsupported"));
@@ -216,6 +232,8 @@ export const CommandInput = forwardRef<HTMLTextAreaElement, CommandInputProps>(
 
     return (
       <div className="w-full max-w-2xl">
+        <CapabilityNotice available={capabilities.data?.ai} unavailableKey="aiUnavailable" />
+        {voiceEnabled && capabilities.data?.ai && <CapabilityNotice available={capabilities.data?.transcription} unavailableKey="transcriptionUnavailable" />}
         <div className="flex min-w-0 flex-col overflow-hidden rounded-xl border border-input bg-card">
           {attachedFiles.length > 0 && (
             <div className="flex flex-wrap gap-2 px-3 pt-3">
@@ -290,6 +308,7 @@ export const CommandInput = forwardRef<HTMLTextAreaElement, CommandInputProps>(
             />
             <button
               type="button"
+              disabled={disabled || isStreaming}
               onClick={() => fileInputRef.current?.click()}
               className="flex h-9 w-9 items-center justify-center rounded-xl transition-all duration-base"
               style={{
@@ -318,7 +337,7 @@ export const CommandInput = forwardRef<HTMLTextAreaElement, CommandInputProps>(
                   onMouseEnter={() => setMicHovered(true)}
                   onMouseLeave={() => setMicHovered(false)}
                   disabled={
-                    disabled || isStreaming || voiceStatus === "transcribing"
+                    disabled || isStreaming || capabilities.data?.transcription !== true || voiceStatus === "transcribing"
                   }
                   aria-label={
                     listening ? t("input.voiceStop") : t("input.voiceStart")
@@ -395,7 +414,7 @@ export const CommandInput = forwardRef<HTMLTextAreaElement, CommandInputProps>(
           </div>
         </div>
 
-        {!hasMessages && (
+        {!hasMessages && !disabled && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

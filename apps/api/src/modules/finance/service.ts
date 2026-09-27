@@ -8,6 +8,7 @@ import { logActivity } from '@api/lib/activity'
 import { activityScopeForProject, buildPatchActivity } from '@api/lib/activity-helpers'
 import { reconcile, resyncReconciliation } from '@api/modules/reconciliation/service'
 import { aggregateWithConverter, convertTransactionAmounts } from '@api/lib/accounting-aggregation'
+import { assertAiConfigured } from '@api/modules/ai/client'
 import { extractReceiptTransaction, type ReceiptFlag } from '@api/modules/ai/service'
 import { uploadFile } from '@api/modules/storage/service'
 import { createNotification } from '@api/modules/notifications/create'
@@ -316,6 +317,7 @@ export async function patchTransaction(
 }
 
 export async function importReceiptTransaction(userId: string, file: File) {
+  assertAiConfigured()
   const baseCurrency = await getUserBaseCurrency(userId)
   const draft = await extractReceiptTransaction(userId, file, baseCurrency)
   const stored = await uploadFile(userId, file, { kind: 'image' })

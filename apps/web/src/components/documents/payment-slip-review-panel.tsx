@@ -1,3 +1,5 @@
+import { useCapabilities } from "@/hooks/use-capabilities";
+import { CapabilityNotice } from "@/components/capability-notice";
 import { BadgeCheck, CheckCircle2, RotateCw, TriangleAlert, XCircle } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -55,6 +57,7 @@ export function PaymentSlipReviewPanel({
   onVerified,
   onRetried,
 }: PaymentSlipReviewPanelProps) {
+  const capabilities = useCapabilities();
   const { t } = useTranslation("documents");
   const [confirming, setConfirming] = useState(false);
   const [dismissing, setDismissing] = useState(false);
@@ -150,8 +153,8 @@ export function PaymentSlipReviewPanel({
   const quotaExhausted = slipVerifyCap !== undefined && !quotaAvailable;
   const verifyEligible =
     !slip.apiVerified && slip.qrFound && !isResolved && !isFailed;
-  const canVerify = verifyEligible && quotaAvailable;
-  const showVerifyUpsell = verifyEligible && quotaExhausted;
+  const canVerify = verifyEligible && quotaAvailable && !capabilities.isError && capabilities.data?.paymentSlipVerification === true;
+  const showVerifyUpsell = verifyEligible && quotaExhausted && capabilities.data?.paymentSlipVerification === true;
 
   return (
     <div className="rounded-xl border border-border p-4 space-y-3">
@@ -177,6 +180,8 @@ export function PaymentSlipReviewPanel({
         </p>
       </div>
 
+      {!slip.apiVerified && <CapabilityNotice available={capabilities.data?.paymentSlipVerification} unavailableKey="paymentSlipVerificationUnavailable" />}
+      {isFailed && <CapabilityNotice available={capabilities.data?.ai} unavailableKey="paymentSlipExtractionUnavailable" />}
       {!slip.apiVerified && (
         <div className="flex items-center justify-between gap-3 rounded-xl border border-border-subtle bg-surface-raised p-3">
           <p className="text-xs text-muted-foreground">
@@ -339,7 +344,7 @@ export function PaymentSlipReviewPanel({
             variant="secondary"
             size="sm"
             onClick={() => fileInputRef.current?.click()}
-            disabled={busy}
+            disabled={busy || capabilities.isError || !capabilities.data?.ai}
           >
             <RotateCw size={14} />
             {retrying ? t("paymentSlip.retrying") : t("paymentSlip.retry")}

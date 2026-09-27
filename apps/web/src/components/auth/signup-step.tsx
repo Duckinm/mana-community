@@ -1,3 +1,5 @@
+import { useCapabilities } from "@/hooks/use-capabilities";
+import { CapabilityNotice } from "@/components/capability-notice";
 import {
   AuthDiscordIcon,
   AuthFacebookIcon,
@@ -35,6 +37,8 @@ export function SignupStep({
   const { refetch } = useSessionContext();
   const { t } = useTranslation("auth");
   const { t: tOnboarding } = useTranslation("onboarding");
+  const capabilities = useCapabilities();
+  const socialProviders = capabilities.data?.socialProviders;
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   async function handleSocialSignUp(
@@ -95,22 +99,26 @@ export function SignupStep({
         <AuthOAuthGhostButton
           icon={<AuthGoogleIcon />}
           label={t("register.google")}
+          disabled={capabilities.isError || !socialProviders?.google}
           onClick={() => void handleSocialSignUp("google")}
         />
         <AuthOAuthGhostButton
           icon={<AuthDiscordIcon />}
           label={t("register.discord")}
+          disabled={capabilities.isError || !socialProviders?.discord}
           discord
           onClick={() => void handleSocialSignUp("discord")}
         />
         <AuthOAuthGhostButton
           icon={<AuthFacebookIcon />}
           label={t("register.facebook")}
+          disabled={capabilities.isError || !socialProviders?.facebook}
           accent="#1877F2"
           onClick={() => void handleSocialSignUp("facebook")}
         />
       </div>
 
+      <CapabilityNotice available={!!socialProviders && Object.values(socialProviders).every(Boolean)} unavailableKey="socialUnavailable" />
       <AuthOrDivider />
 
       <form
