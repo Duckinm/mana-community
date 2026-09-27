@@ -1,3 +1,5 @@
+import { useCapabilities } from "@/hooks/use-capabilities";
+import { CapabilityNotice } from "@/components/capability-notice";
 import {
   AuthDiscordIcon,
   AuthFacebookIcon,
@@ -23,6 +25,8 @@ export const Route = createFileRoute("/_auth/login")({
 });
 
 function LoginPage() {
+  const capabilities = useCapabilities();
+  const socialProviders = capabilities.data?.socialProviders;
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const { t } = useTranslation("auth");
   const { error } = Route.useSearch();
@@ -63,23 +67,27 @@ function LoginPage() {
             <AuthOAuthSocialButton
               icon={<AuthGoogleIcon />}
               label={t("login.google")}
+              disabled={capabilities.isError || !socialProviders?.google}
               onClick={() => void handleSocialSignIn("google")}
             />
             <AuthOAuthSocialButton
               icon={<AuthDiscordIcon />}
               label={t("login.discord")}
+              disabled={capabilities.isError || !socialProviders?.discord}
               accent="#5865F2"
               onClick={() => void handleSocialSignIn("discord")}
             />
             <AuthOAuthSocialButton
               icon={<AuthFacebookIcon />}
               label={t("login.facebook")}
+              disabled={capabilities.isError || !socialProviders?.facebook}
               accent="#1877F2"
               onClick={() => void handleSocialSignIn("facebook")}
             />
           </div>
 
-          <AuthOrDivider />
+          <CapabilityNotice available={!!socialProviders && Object.values(socialProviders).every(Boolean)} unavailableKey="socialUnavailable" />
+      <AuthOrDivider />
 
           {(errorMsg ?? callbackError) && (
             <p role="alert" className="text-xs text-danger text-center">

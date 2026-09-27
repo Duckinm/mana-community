@@ -1,3 +1,5 @@
+import { useCapabilities } from '@/hooks/use-capabilities';
+import { toast } from 'sonner';
 import { ChatHistorySidebar } from "@/components/ai/chat-history-sidebar";
 import { CookbookDialog } from "@/components/ai/cookbook-dialog";
 import { AutoModelChip } from "@/components/ai/auto-model-chip";
@@ -19,6 +21,8 @@ export const Route = createFileRoute("/_app/chat/")({
 function ChatHome() {
   const { t, i18n } = useTranslation("chat");
   const navigate = useNavigate();
+  const { data: capabilities } = useCapabilities();
+  const [submitting, setSubmitting] = useState(false);
   const { userId } = useRouteContext({ from: "/_app" });
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -56,18 +60,26 @@ function ChatHome() {
   const handleNewChat = useCallback(() => {}, []);
 
   async function handleSubmit(text: string, files: AttachedFile[] = []) {
-    if (!text.trim() && files.length === 0) return;
-    const result = await client.api.chat.sessions.post({});
-    if (result.error) return;
-    const { id } = expectEden(result);
-    await navigate({
-      to: "/chat/$sessionId",
-      params: { sessionId: id },
-      state: { pendingMessage: text, pendingFiles: files } as Record<
-        string,
-        unknown
-      >,
-    });
+    if ((!text.trim() && files.length === 0) || submitting) return false;
+    if (!capabilities?.ai) {
+      toast.error(t("aiUnavailable", { ns: "capabilities" }));
+      return false;
+    }
+    setSubmitting(true);
+    try {
+      const { id } = expectEden(await client.api.chat.sessions.post({}));
+      await navigate({
+        to: "/chat/$sessionId",
+        params: { sessionId: id },
+        state: { pendingMessage: text, pendingFiles: files } as Record<string, unknown>,
+      });
+      return true;
+    } catch {
+      toast.error(t("errorRetry"));
+      return false;
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   useEffect(() => {
@@ -145,8 +157,9 @@ function ChatHome() {
         <div className="flex shrink-0 flex-col items-center px-3 pt-3 pb-3 max-xl:pb-mobile-dock sm:px-4 xl:pb-6">
           <CommandInput
             ref={inputRef}
-            onSubmit={(text, files) => void handleSubmit(text, files)}
+            onSubmit={handleSubmit}
             hasMessages={false}
+            disabled={submitting}
             onSuggestionClick={(text) => void handleSubmit(text)}
             leftSlot={<AutoModelChip />}
           />

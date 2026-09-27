@@ -1,6 +1,7 @@
+import { consumeSseJsonEvents } from '@/lib/chat-stream'
 import { resolveApiBaseUrl } from "@/lib/api-base-url";
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react'
-import { useRef, useState, useCallback } from 'react'
+import { useRef, useState, useCallback, useEffect } from 'react'
 import i18next from '@/lib/i18n'
 import type { AttachedFile } from '@/components/command-input'
 import type { ChatToolResult } from '@/components/ai/chat-tool-result'
@@ -65,6 +66,7 @@ const WRITE_TOOLS = new Set([
 
 type StreamEventDeps = {
   assistantId: string
+  isCurrent: () => boolean
   setMessages: Dispatch<SetStateAction<ChatMessage[]>>
   setToolStatus: (v: string | null) => void
   setIsStreaming: (v: boolean) => void
@@ -73,49 +75,14 @@ type StreamEventDeps = {
   onMutationRef: MutableRefObject<((toolCalls: string[]) => void) | undefined>
   onDoneRef: MutableRefObject<((toolResults: ChatToolResult[]) => void) | undefined>
   onSessionRef: MutableRefObject<((sessionId: string) => void) | undefined>
-  onStreamSettledRef: MutableRefObject<(() => void) | undefined>
+  onStreamSettledRef: MutableRefObject<((isCurrent: () => boolean) => void) | undefined>
   onUiActionRef: MutableRefObject<((overlay: ChatUiOverlay) => void) | undefined>
   pendingToolResultsRef: MutableRefObject<ChatToolResult[]>
+  setError: (message: string | null) => void
   setCapped: Dispatch<SetStateAction<boolean>>
   cappedResetAtRef: MutableRefObject<string | null>
 }
 
-async function consumeSseJsonEvents(
-  stream: ReadableStream<Uint8Array>,
-  onEvent: (event: Record<string, unknown>) => void,
-  signal?: AbortSignal,
-): Promise<void> {
-  const reader = stream.getReader()
-  const decoder = new TextDecoder()
-  let buffer = ''
-  try {
-    while (true) {
-      if (signal?.aborted) {
-        await reader.cancel()
-        break
-      }
-      const { done, value } = await reader.read()
-      if (done) break
-      buffer += decoder.decode(value, { stream: true })
-      const lines = buffer.split('\n')
-      buffer = lines.pop() ?? ''
-      for (const line of lines) {
-        if (!line.startsWith('data: ')) continue
-        const raw = line.slice(6).trim()
-        if (!raw) continue
-        let event: Record<string, unknown>
-        try {
-          event = JSON.parse(raw)
-        } catch {
-          continue
-        }
-        onEvent(event)
-      }
-    }
-  } finally {
-    reader.releaseLock()
-  }
-}
 
 function isAbortError(err: unknown): boolean {
   return err instanceof DOMException && err.name === 'AbortError'
@@ -176,22 +143,16 @@ function applyChatStreamEvent(event: Record<string, unknown>, d: StreamEventDeps
       d.setToolStatus(null)
       d.streamingIdRef.current = null
       d.isStreamingRef.current = false
-      d.onStreamSettledRef.current?.()
       return
     }
     case 'error': {
-      const errMsg =
-        (event.message as string) ?? i18next.t('errorRetry', { ns: 'chat' })
-      d.setMessages((prev) =>
-        prev.map((m) =>
-          m.id === d.assistantId ? { ...m, content: errMsg, isStreaming: false } : m,
-        ),
-      )
+      const errMsg = i18next.t('streamFailed', { ns: 'chat' })
+      d.setError(errMsg)
+      d.setMessages((prev) => prev.map((m) => m.id === d.assistantId ? { ...m, isStreaming: false } : m))
       d.setIsStreaming(false)
       d.setToolStatus(null)
       d.streamingIdRef.current = null
       d.isStreamingRef.current = false
-      d.onStreamSettledRef.current?.()
       return
     }
     case 'done': {
@@ -216,7 +177,7 @@ function applyChatStreamEvent(event: Record<string, unknown>, d: StreamEventDeps
         d.onSessionRef.current?.(returnedSessionId)
       }
       d.onDoneRef.current?.(toolResults)
-      d.onStreamSettledRef.current?.()
+      d.onStreamSettledRef.current?.(d.isCurrent)
       return
     }
     default:
@@ -238,12 +199,17 @@ export function useChatStream(
   onMutation?: (toolCalls: string[]) => void,
   onDone?: (toolResults: ChatToolResult[]) => void,
   onSession?: (sessionId: string) => void,
-  onStreamSettled?: () => void,
+  onStreamSettled?: (isCurrent: () => boolean) => void,
   onUiAction?: (overlay: ChatUiOverlay) => void,
 ) {
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [isStreaming, setIsStreaming] = useState(false)
   const [toolStatus, setToolStatus] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  useEffect(() => {
+    setError(null)
+    return () => { abortControllerRef.current?.abort() }
+  }, [sessionId])
   const [capped, setCapped] = useState(false)
   const cappedResetAtRef = useRef<string | null>(null)
   const streamingIdRef = useRef<string | null>(null)
@@ -302,9 +268,11 @@ export function useChatStream(
       { id: userId, role: 'user', content: displayContent },
       { id: assistantId, role: 'assistant', content: '', isStreaming: true },
     ])
+    setError(null)
     setIsStreaming(true)
     setToolStatus(null)
 
+    const requestTimer = setTimeout(() => abortController.abort(new Error('CHAT_STREAM_TIMEOUT')), 120_000)
     try {
       let apiFiles: Array<{ name: string; mediaType: string; data: string; isImage: boolean }> = []
       if (files?.length) {
@@ -332,11 +300,15 @@ export function useChatStream(
       })
 
       if (!res.ok || !res.body) {
-        throw new Error(res.statusText || 'Request failed')
+        const detail = await res.json().catch(() => null)
+        throw new Error(detail?.code === 'AI_NOT_CONFIGURED'
+          ? i18next.t('aiUnavailable', { ns: 'capabilities' })
+          : i18next.t('errorRetry', { ns: 'chat' }))
       }
 
       const deps: StreamEventDeps = {
         assistantId,
+        isCurrent: () => abortControllerRef.current === abortController && !abortController.signal.aborted,
         setMessages,
         setToolStatus,
         setIsStreaming,
@@ -348,36 +320,34 @@ export function useChatStream(
         onStreamSettledRef,
         onUiActionRef,
         pendingToolResultsRef,
+        setError,
         setCapped,
         cappedResetAtRef,
       }
-      await consumeSseJsonEvents(res.body, (ev) => applyChatStreamEvent(ev, deps), abortController.signal)
+      await consumeSseJsonEvents(res.body, (ev) => {
+        if (abortControllerRef.current === abortController) applyChatStreamEvent(ev, deps)
+      }, abortController.signal)
+      return true
     } catch (err) {
-      if (isAbortError(err)) {
-        setMessages((prev) =>
-          prev.map((m) =>
-            m.id === assistantId ? { ...m, isStreaming: false } : m,
-          ),
-        )
-        setIsStreaming(false)
-        setToolStatus(null)
-        streamingIdRef.current = null
-        isStreamingRef.current = false
-        onStreamSettledRef.current?.()
-        return
+      if (abortControllerRef.current === abortController && !isAbortError(err)) {
+        const message = err instanceof Error && err.message === 'CHAT_STREAM_TIMEOUT'
+          ? i18next.t('streamTimeout', { ns: 'chat' })
+          : err instanceof Error && err.message === 'CHAT_STREAM_INTERRUPTED'
+            ? i18next.t('streamInterrupted', { ns: 'chat' })
+            : err instanceof Error && err.message === i18next.t('aiUnavailable', { ns: 'capabilities' })
+              ? err.message
+              : i18next.t('errorRetry', { ns: 'chat' })
+        setError(message)
       }
-      setMessages((prev) =>
-        prev.map((m) =>
-          m.id === assistantId
-            ? { ...m, content: i18next.t('errorRetry', { ns: 'chat' }), isStreaming: false }
-            : m
-        )
-      )
+      return false
+    } finally {
+      clearTimeout(requestTimer)
+      if (abortControllerRef.current !== abortController) return
+      setMessages((prev) => prev.map((m) => m.id === assistantId ? { ...m, isStreaming: false } : m))
       setIsStreaming(false)
       setToolStatus(null)
       streamingIdRef.current = null
       isStreamingRef.current = false
-      onStreamSettledRef.current?.()
     }
   }, [sessionId])
 
@@ -394,6 +364,7 @@ export function useChatStream(
 
   return {
     messages,
+    error,
     isStreaming,
     toolStatus,
     sendMessage,

@@ -1,14 +1,30 @@
 import Anthropic from '@anthropic-ai/sdk'
 import type { MessageCreateParamsBase } from '@anthropic-ai/sdk/resources/messages/messages.js'
+import { AppError } from '@api/lib/errors'
 import { env } from '@api/env'
 import { recordAiTokens } from '@api/modules/billing/usage'
 
 let anthropic: Anthropic | undefined
 
-function getAnthropic() {
-  if (!env.ANTHROPIC_API_KEY) {
-    throw new Error('AI is not configured. Set ANTHROPIC_API_KEY to enable AI features.')
+export const AI_UNAVAILABLE = {
+  code: 'AI_NOT_CONFIGURED' as const,
+  message: 'AI is not configured. Ask your administrator to configure an AI provider.',
+}
+
+export class AiNotConfiguredError extends AppError {
+  readonly code = AI_UNAVAILABLE.code
+
+  constructor() {
+    super(AI_UNAVAILABLE.message, 503)
   }
+}
+
+export function assertAiConfigured() {
+  if (!env.ANTHROPIC_API_KEY) throw new AiNotConfiguredError()
+}
+
+function getAnthropic() {
+  assertAiConfigured()
   anthropic ??= new Anthropic({
     apiKey: env.ANTHROPIC_API_KEY,
     baseURL: env.ANTHROPIC_BASE_URL,

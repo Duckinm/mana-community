@@ -19,7 +19,7 @@ cd mana-community
 sh scripts/self-host.sh
 ```
 
-Open [MANA](http://localhost:3300/register), create an account, and follow the verification link in the [local inbox](http://localhost:38025). Self-hosting includes the web app and API, with local database, file storage, and mail capture. The marketing site and MANA Cloud control panel are excluded. Core workflows have no Cloud subscription limits; AI and external integrations are optional. This is a localhost preview; email stays in the local inbox. See [self-hosting](docs/self-hosting.md) for setup and troubleshooting.
+Open [MANA](http://localhost:3300/register), create an account, and follow the verification link in the [local inbox](http://localhost:38025). Self-hosting includes the web app and API, with local database, file storage, and mail capture. The marketing site and MANA Cloud control panel are excluded. Core workflows have no Cloud subscription limits; AI and external integrations are optional. Unconfigured integrations show an explanation and keep their actions disabled; manual workflows remain available. This is a localhost preview; email stays in the local inbox. See [self-hosting](docs/self-hosting.md) for setup and troubleshooting.
 
 ## How it works
 

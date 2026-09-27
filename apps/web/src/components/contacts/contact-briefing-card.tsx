@@ -1,7 +1,6 @@
 import { formatCurrency } from "@/components/documents/utils";
 import { ProjectLinkBadge } from "@/components/projects/project-badge";
-import { Loader2, RotateCw } from "@/components/icons";
-import { ManaSparkle } from "@/components/icons/mana-sparkle";
+import { Loader2, RotateCw, Users } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { useProjects } from "@/context/projects";
 import { client, expectEden } from "@/lib/eden";
@@ -87,7 +86,7 @@ export function ContactBriefingCard({
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <div className="flex items-center gap-1.5">
-            <ManaSparkle size={15} className="text-primary" />
+            <Users size={15} className="text-primary" />
             <span className="text-sm font-medium text-primary">
               {t("briefing.title")}
             </span>
@@ -157,7 +156,7 @@ export function ContactBriefingCard({
         <div className="mt-3 flex flex-wrap items-center gap-3">
           <p className="text-sm text-primary/80">{t("briefing.empty")}</p>
           <Button type="button" size="sm" onClick={() => regenerate.mutate()}>
-            <ManaSparkle size={13} aria-hidden="true" />
+            <Users size={13} aria-hidden="true" />
             {t("briefing.generate")}
           </Button>
         </div>

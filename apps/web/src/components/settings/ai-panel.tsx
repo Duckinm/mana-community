@@ -1,3 +1,5 @@
+import { useCapabilities } from "@/hooks/use-capabilities";
+import { CapabilityNotice } from "@/components/capability-notice";
 import { resolveApiBaseUrl } from "@/lib/api-base-url";
 import { Row, Toggle } from "@/components/settings/shared";
 import { Button } from "@/components/ui/button";
@@ -11,6 +13,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export function AIPanel() {
+  const capabilities = useCapabilities();
   const queryClient = useQueryClient();
   const { t } = useTranslation("settings");
   const { user, saveFnRef, patchUser } = useSettings();
@@ -86,6 +89,8 @@ export function AIPanel() {
 
   return (
     <div>
+      <CapabilityNotice available={capabilities.data?.ai} unavailableKey="aiUnavailable" />
+      <CapabilityNotice available={capabilities.data?.transcription} unavailableKey="transcriptionUnavailable" />
       <Row label={t("ai.model")} sub={t("ai.modelSub")}>
         <span
           className="text-xs px-3 py-1.5 max-w-max rounded-full flex items-center gap-1.5"
@@ -126,7 +131,7 @@ export function AIPanel() {
         <Toggle on={proactive} onChange={setProactive} />
       </Row>
       <Row label={t("ai.voiceInput")} sub={t("ai.voiceInputSub")}>
-        <Toggle on={voiceEnabled} onChange={setVoiceEnabled} />
+        <Toggle on={voiceEnabled} onChange={setVoiceEnabled} disabled={capabilities.isError || !capabilities.data?.transcription} />
       </Row>
       <div
         className="mt-6 rounded-xl p-4"

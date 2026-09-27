@@ -1,3 +1,5 @@
+import { useCapabilities } from "@/hooks/use-capabilities";
+import { CapabilityNotice } from "@/components/capability-notice";
 import {
   STATUS_COLOR,
   STATUS_COLOR_SOFT,
@@ -84,6 +86,7 @@ export function TransactionsPage() {
   const [walletSheetOpen, setWalletSheetOpen] = useState(false);
   const [viewTxId, setViewTxId] = useState<string | null>(null);
   const [deleteTx, setDeleteTx] = useState<Transaction | null>(null);
+  const capabilities = useCapabilities();
   const [receiptImporting, setReceiptImporting] = useState(false);
   const [approvingReview, setApprovingReview] = useState(false);
   const receiptInputRef = useRef<HTMLInputElement>(null);
@@ -366,6 +369,7 @@ export function TransactionsPage() {
     <div className="page-scroll pb-6 pt-5 max-xl:pb-mobile-dock xl:pb-8 xl:pt-8">
       <div className="page-pad mx-auto w-full max-w-3xl">
         <motion.div {...fadeUp} className="mb-5 max-xl:mb-3">
+          <CapabilityNotice available={capabilities.data?.ai} unavailableKey="receiptUnavailable" />
           <div className="flex items-center justify-between gap-3">
             <div className="min-w-0 flex flex-wrap items-baseline gap-x-3 gap-y-1">
               <h1 className="text-xl font-semibold text-foreground tracking-tight">
@@ -402,7 +406,7 @@ export function TransactionsPage() {
                     variant="outline"
                     size="sm"
                     onClick={() => receiptInputRef.current?.click()}
-                    disabled={receiptImporting}
+                    disabled={receiptImporting || capabilities.isError || !capabilities.data?.ai}
                     aria-label={t("transactions.importReceipt")}
                     className="size-9 shrink-0 px-0 [@media(pointer:coarse)]:size-9 sm:h-8 sm:w-auto sm:gap-1.5 sm:px-3 [@media(pointer:coarse)]:sm:h-8 [@media(pointer:coarse)]:sm:w-auto"
                   >

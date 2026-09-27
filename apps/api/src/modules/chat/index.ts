@@ -1,4 +1,6 @@
-import Elysia from 'elysia'
+import Elysia, { t } from 'elysia'
+import { AiNotConfiguredError } from '@api/modules/ai/client'
+import { AiUnavailableResponse } from '@api/modules/ai/responses'
 import { betterAuthPlugin } from '@api/lib/auth-plugin'
 import {
   buildChatStream,
@@ -124,6 +126,7 @@ export const chatModule = new Elysia({ name: 'chat', prefix: '/api/chat' })
         request.signal,
       )
     } catch (err) {
+      if (err instanceof AiNotConfiguredError) return status(503, { code: err.code, message: err.message })
       const msg = err instanceof Error ? err.message : 'Unknown error'
       if (msg === 'Session not found') return status(404, { message: msg })
       return status(500, { message: msg })
@@ -139,5 +142,6 @@ export const chatModule = new Elysia({ name: 'chat', prefix: '/api/chat' })
   }, {
     auth: true,
     body: SendMessageBody,
+    response: { 200: t.Any(), 404: NotFoundResponse, 500: NotFoundResponse, 503: AiUnavailableResponse },
     detail: { tags: ['Chat'], summary: 'Send message (SSE streaming)' },
   })

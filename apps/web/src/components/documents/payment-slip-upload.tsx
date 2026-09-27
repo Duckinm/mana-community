@@ -1,3 +1,5 @@
+import { useCapabilities } from "@/hooks/use-capabilities";
+import { CapabilityNotice } from "@/components/capability-notice";
 import { resolveApiBaseUrl } from "@/lib/api-base-url";
 import { Clock, Loader2, Upload } from "@/components/icons";
 import { Button } from "@/components/ui/button";
@@ -47,20 +49,14 @@ export function PaymentSlipUpload({
   variant = "owner",
 }: PaymentSlipUploadProps) {
   const { t } = useTranslation("documents");
+  const capabilities = useCapabilities();
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
-  const [stage, setStage] = useState<"uploading" | "reading" | "verifying">(
-    "uploading",
-  );
   const [error, setError] = useState<string | null>(null);
 
   async function handleFile(file: File) {
     setUploading(true);
-    setStage("uploading");
     setError(null);
-    // ponytail: simulated stage timings, not real progress events — upgrade to SSE if this misleads users
-    const readingTimer = setTimeout(() => setStage("reading"), 1500);
-    const verifyingTimer = setTimeout(() => setStage("verifying"), 3500);
     try {
       const { paymentSlip } = await postPaymentSlip(target, file);
       onUploaded(paymentSlip);
@@ -69,19 +65,9 @@ export function PaymentSlipUpload({
         err instanceof Error ? err.message : t("paymentSlip.uploadFailed"),
       );
     } finally {
-      clearTimeout(readingTimer);
-      clearTimeout(verifyingTimer);
-      setStage("uploading");
       setUploading(false);
     }
   }
-
-  const stageLabel =
-    stage === "reading"
-      ? t("paymentSlip.readingSlip")
-      : stage === "verifying"
-        ? t("paymentSlip.verifyingWithBank")
-        : t("paymentSlip.uploading");
 
   return (
     <div
@@ -112,6 +98,8 @@ export function PaymentSlipUpload({
           ? t("paymentSlip.guestUploadHint")
           : t("paymentSlip.ownerUploadHint")}
       </p>
+      <CapabilityNotice available={capabilities.data?.ai} unavailableKey="paymentSlipExtractionUnavailable" />
+      <CapabilityNotice available={capabilities.data?.paymentSlipVerification} unavailableKey="paymentSlipVerificationUnavailable" />
       <Button
         type="button"
         variant="outline"
@@ -124,7 +112,7 @@ export function PaymentSlipUpload({
         ) : (
           <Upload size={14} />
         )}
-        {uploading ? stageLabel : t("paymentSlip.uploadButton")}
+        {uploading ? t("paymentSlip.uploading") : t("paymentSlip.uploadButton")}
       </Button>
       {error && <p className="text-xs text-danger">{error}</p>}
     </div>

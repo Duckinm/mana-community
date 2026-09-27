@@ -1,3 +1,5 @@
+import { AppError } from '@api/lib/errors'
+import { ErrorResponse } from '@api/lib/wire-schema'
 import Elysia, { t } from 'elysia'
 import { betterAuthPlugin } from '@api/lib/auth-plugin'
 import { verifyLineSignature, isLineConfigured } from '@api/lib/line/client'
@@ -16,11 +18,16 @@ export const lineModule = new Elysia({ name: 'line', prefix: '/api/line' })
     detail: { tags: ['LINE'], summary: 'Get LINE connection status' },
   })
 
-  .post('/connect', async ({ user }) => {
-    return startLineConnection(user.id)
+  .post('/connect', async ({ user, status }) => {
+    try {
+      return await startLineConnection(user.id)
+    } catch (error) {
+      if (error instanceof AppError && error.statusCode === 503) return status(503, { error: error.message })
+      throw error
+    }
   }, {
     auth: true,
-    response: { 200: LineConnectionResponse },
+    response: { 200: LineConnectionResponse, 503: ErrorResponse },
     detail: { tags: ['LINE'], summary: 'Start LINE connection — generates a link code to send to the OA' },
   })
 

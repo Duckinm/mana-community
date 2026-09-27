@@ -1,3 +1,5 @@
+import enCapabilities from '@/locales/en/capabilities.json'
+import thCapabilities from '@/locales/th/capabilities.json'
 import i18next from 'i18next'
 import { initReactI18next } from 'react-i18next'
 
@@ -51,11 +53,11 @@ i18next.use(initReactI18next).init({
   // to the detected locale after mount.
   lng: 'en',
   fallbackLng: 'en',
-  ns: ['common', 'nav', 'settings', 'chat', 'accounting', 'contacts', 'projects', 'documents', 'storage', 'activity', 'calendar', 'auth', 'onboarding'],
+  ns: ['capabilities', 'common', 'nav', 'settings', 'chat', 'accounting', 'contacts', 'projects', 'documents', 'storage', 'activity', 'calendar', 'auth', 'onboarding'],
   defaultNS: 'common',
   resources: {
-    en: { common: enCommon, nav: enNav, settings: enSettings, chat: enChat, accounting: enAccounting, contacts: enContacts, projects: enProjects, documents: enDocuments, storage: enStorage, activity: enActivity, calendar: enCalendar, auth: enAuth, onboarding: enOnboarding },
-    th: { common: thCommon, nav: thNav, settings: thSettings, chat: thChat, accounting: thAccounting, contacts: thContacts, projects: thProjects, documents: thDocuments, storage: thStorage, activity: thActivity, calendar: thCalendar, auth: thAuth, onboarding: thOnboarding },
+    en: { capabilities: enCapabilities, common: enCommon, nav: enNav, settings: enSettings, chat: enChat, accounting: enAccounting, contacts: enContacts, projects: enProjects, documents: enDocuments, storage: enStorage, activity: enActivity, calendar: enCalendar, auth: enAuth, onboarding: enOnboarding },
+    th: { capabilities: thCapabilities, common: thCommon, nav: thNav, settings: thSettings, chat: thChat, accounting: thAccounting, contacts: thContacts, projects: thProjects, documents: thDocuments, storage: thStorage, activity: thActivity, calendar: thCalendar, auth: thAuth, onboarding: thOnboarding },
   },
   interpolation: { escapeValue: false },
 })

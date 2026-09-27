@@ -1,0 +1,19 @@
+{
+  "aiUnavailable": "AI is not configured on this server. You can still use projects, contacts, documents and accounting manually.",
+  "transcriptionUnavailable": "Voice input is not configured. You can type your message instead.",
+  "loading": "Checking available services…",
+  "loadFailed": "Could not check available services. Try again.",
+  "retry": "Try again",
+  "setupHint": "Ask your server administrator to configure the optional provider, then refresh this page.",
+  "localEmail": "Email stays in the local Mailpit inbox. It is not delivered to external recipients.",
+  "socialUnavailable": "Some social sign-in options are not configured. Use an available option or your email and password.",
+  "googleCalendarUnavailable": "Google Calendar sync is not configured. Your MANA calendar still works.",
+  "lineUnavailable": "LINE is not configured on this server.",
+  "pushUnavailable": "Browser push is not configured. You can still read notifications in MANA.",
+  "paymentSlipVerificationUnavailable": "Bank verification is not configured. Check the payment yourself; uploaded slips are not bank-verified.",
+  "receiptUnavailable": "AI receipt import is not configured. Add a transaction manually instead.",
+  "emailUnavailable": "Email delivery is not configured on this server.",
+  "aiOff": "AI unavailable",
+  "paymentSlipExtractionUnavailable": "Automatic slip reading is not configured. You can still upload the image for the document owner to review and record the payment manually.",
+  "channelUnavailable": "This notification channel is unavailable or not connected."
+}

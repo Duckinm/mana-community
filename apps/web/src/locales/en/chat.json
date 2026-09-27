@@ -132,7 +132,7 @@
     "get_projects": "Checking your projects…",
     "get_tasks": "Checking your tasks…",
     "get_financial_summary": "Reviewing your finances…",
-    "get_contacts": "Looking up your contacts…",
+    "get_contacts": "Looking up contacts…",
     "get_transactions": "Pulling your transactions…",
     "get_user_context": "Loading your profile…",
     "get_plan_usage": "Checking your plan limits…",
@@ -163,7 +163,6 @@
     "get_overdue_invoices": "Checking overdue invoices…",
     "summarize_contact": "Summarizing contact…",
     "get_transaction": "Looking up transaction…",
-    "get_contacts": "Looking up contacts…",
     "search_contacts": "Searching contacts…",
     "get_dashboard_snapshot": "Loading business overview…",
     "get_item_templates": "Checking your template library…",
@@ -209,5 +208,8 @@
     "transaction": "Transaction",
     "openFull": "Open full page",
     "notFound": "Not found"
-  }
+  },
+  "streamTimeout": "AI stopped responding. Your message is still here. Check any changes before sending again.",
+  "streamInterrupted": "The AI connection ended before the reply finished. Check any changes before sending again.",
+  "streamFailed": "AI could not complete the request. Check the provider configuration and any changes already made before trying again."
 }

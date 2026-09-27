@@ -1,3 +1,4 @@
+import { useCapabilities } from '@/hooks/use-capabilities'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { Badge, StatusDot } from '@/components/ui/badge'
@@ -37,6 +38,8 @@ function GoogleCalendarIcon() {
 }
 
 export function GoogleCalendarIntegration() {
+  const capabilities = useCapabilities()
+  const providerAvailable = !capabilities.isError && capabilities.data?.googleCalendar === true
   const { t } = useTranslation('settings')
   const { user } = useSettings()
   const plan = (user?.plan as PlanId | undefined) ?? 'free'
@@ -205,7 +208,7 @@ export function GoogleCalendarIntegration() {
                             <button
                               type="button"
                               aria-label={t('integrations.googleCalendar.removeCalendar')}
-                              disabled={isPending}
+                              disabled={isPending || !providerAvailable}
                               onClick={() => void handleRemoveCalendar(calendar.id)}
                               className="shrink-0 rounded-md p-1 text-muted-foreground transition-colors duration-base hover:bg-surface-overlay hover:text-foreground disabled:opacity-60"
                             >
@@ -225,7 +228,7 @@ export function GoogleCalendarIntegration() {
                 {t('integrations.googleCalendar.listFailed')}
               </p>
             ) : !atLimit && (isCalendarsLoading || hasAnyAvailable) ? (
-              <Select value="" disabled={isPending} onValueChange={handleAddCalendar}>
+              <Select value="" disabled={isPending || !providerAvailable} onValueChange={handleAddCalendar}>
                 <SelectTrigger>
                   <SelectValue placeholder={t('integrations.googleCalendar.addCalendar')} />
                 </SelectTrigger>
@@ -275,7 +278,7 @@ export function GoogleCalendarIntegration() {
                 {t('integrations.googleCalendar.accountUnavailable', { account: group.accountEmail })}{' '}
                 <button
                   type="button"
-                  disabled={isPending}
+                  disabled={isPending || !providerAvailable}
                   onClick={() => void handleConnect()}
                   className="text-primary hover:underline disabled:opacity-60"
                 >
@@ -287,7 +290,7 @@ export function GoogleCalendarIntegration() {
             {!atLimit ? (
               <button
                 type="button"
-                disabled={isPending}
+                disabled={isPending || !providerAvailable}
                 onClick={() => void handleConnect()}
                 className="block text-2xs text-muted-foreground transition-colors duration-base hover:text-foreground disabled:opacity-60"
               >
@@ -314,7 +317,7 @@ export function GoogleCalendarIntegration() {
             {syncedCalendars.length > 0 && !syncLocked ? (
               <button
                 type="button"
-                disabled={isPending || isLoading}
+                disabled={isPending || isLoading || !providerAvailable}
                 onClick={() => void handleSync()}
                 className="min-h-9 rounded-lg border border-border-subtle px-3 py-1.5 text-xs text-muted-foreground transition-colors duration-base hover:border-border-default hover:text-foreground disabled:opacity-60 sm:min-h-8"
               >
@@ -341,7 +344,7 @@ export function GoogleCalendarIntegration() {
         ) : (
           <button
             type="button"
-            disabled={isPending || isLoading}
+            disabled={isPending || isLoading || !providerAvailable}
             onClick={() => void handleConnect()}
             className="min-h-9 rounded-lg border border-primary-border bg-primary-soft px-3 py-1.5 text-xs font-medium text-primary transition-colors duration-base hover:bg-primary-hover hover:text-primary-foreground disabled:opacity-60 sm:min-h-8"
           >

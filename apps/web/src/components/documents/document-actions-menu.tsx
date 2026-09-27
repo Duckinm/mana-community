@@ -1,3 +1,5 @@
+import { useCapabilities } from '@/hooks/use-capabilities'
+import { EmailCapabilityNotice } from '@/components/capability-notice'
 import { useState, type ReactNode } from 'react'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
@@ -301,6 +303,8 @@ function DocumentActionDialogs({
   deleteDocument: (id: string) => void
 }) {
   const { t } = useTranslation('documents')
+  const capabilities = useCapabilities()
+  const emailAvailable = !capabilities.isError && !!capabilities.data && capabilities.data.email !== 'disabled'
 
   return (
     <>
@@ -342,10 +346,11 @@ function DocumentActionDialogs({
                 : t('actionsMenu.noClientEmail')}
             </AlertDialogDescription>
           </AlertDialogHeader>
+          <EmailCapabilityNotice />
           <AlertDialogFooter>
             <AlertDialogCancel disabled={sending}>{t('actionsMenu.cancel')}</AlertDialogCancel>
             <AlertDialogAction
-              disabled={sending || !doc.clientEmail}
+              disabled={sending || !doc.clientEmail || !emailAvailable}
               onClick={(e) => {
                 e.preventDefault()
                 void handleSendEmail()
@@ -367,10 +372,11 @@ function DocumentActionDialogs({
               {t('actionsMenu.sendEtaxDescription')}
             </AlertDialogDescription>
           </AlertDialogHeader>
+          <EmailCapabilityNotice />
           <AlertDialogFooter>
             <AlertDialogCancel disabled={sendingEtax}>{t('actionsMenu.cancel')}</AlertDialogCancel>
             <AlertDialogAction
-              disabled={sendingEtax}
+              disabled={sendingEtax || !emailAvailable}
               onClick={(e) => {
                 e.preventDefault()
                 void handleSendEtax()
@@ -444,6 +450,8 @@ function DocumentActionsHost({
   }) => ReactNode
 }) {
   const { t } = useTranslation('documents')
+  const { t: tCapabilities } = useTranslation('capabilities')
+  const capabilities = useCapabilities()
   const {
     deleteDocument,
     sendDocumentEmail,
@@ -468,7 +476,7 @@ function DocumentActionsHost({
     try {
       const { emailStatus } = await sendDocumentEmail(doc.id)
       if (emailStatus === 'sent') {
-        toast.success(t('actionsMenu.emailSent', { email: doc.clientEmail }))
+        toast.success(capabilities.data?.email === 'local' ? tCapabilities('localEmail') : t('actionsMenu.emailSent', { email: doc.clientEmail }))
       } else if (emailStatus === 'blocked') {
         toast.warning(t('actionsMenu.emailBlocked'))
       } else {
@@ -492,7 +500,7 @@ function DocumentActionsHost({
     try {
       const { emailStatus } = await sendDocumentEtax(doc.id)
       if (emailStatus === 'sent') {
-        toast.success(t('actionsMenu.etaxSent'))
+        toast.success(capabilities.data?.email === 'local' ? tCapabilities('localEmail') : t('actionsMenu.etaxSent'))
       } else if (emailStatus === 'blocked') {
         toast.warning(t('actionsMenu.etaxBlocked'))
       } else {

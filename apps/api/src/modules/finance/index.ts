@@ -1,3 +1,5 @@
+import { AiNotConfiguredError } from '@api/modules/ai/client'
+import { AiUnavailableResponse } from '@api/modules/ai/responses'
 import Elysia, { t } from 'elysia'
 import { betterAuthPlugin } from '@api/lib/auth-plugin'
 import {
@@ -79,12 +81,13 @@ export const financeModule = new Elysia({ name: 'finance', prefix: '/api/finance
       const imported = await importReceiptTransaction(user.id, body.file)
       return status(201, imported)
     } catch (err) {
+      if (err instanceof AiNotConfiguredError) return status(503, { code: err.code, message: err.message })
       return status(400, { error: err instanceof Error ? err.message : 'Could not import receipt' })
     }
   }, {
     auth: true,
     body: ImportReceiptBody,
-    response: { 201: ImportedReceiptTransactionResponse, 400: ErrorResponse },
+    response: { 201: ImportedReceiptTransactionResponse, 400: ErrorResponse, 503: AiUnavailableResponse },
     detail: { tags: ['Finance'], summary: 'Import receipt as transaction' },
   })
 
