@@ -118,11 +118,6 @@
   "copyMessage": "Copy message",
   "copy": "Copy",
   "errorRetry": "Something went wrong. Please try again.",
-  "capReached": {
-    "title": "You've used all your AI actions this month",
-    "resetsAt": "Resets on {{date}}",
-    "upgrade": "Upgrade plan"
-  },
   "export": {
     "title": "# Chat Export — {{title}}",
     "user": "User",
@@ -135,7 +130,6 @@
     "get_contacts": "Looking up contacts…",
     "get_transactions": "Pulling your transactions…",
     "get_user_context": "Loading your profile…",
-    "get_plan_usage": "Checking your plan limits…",
     "get_storage_summary": "Checking your storage…",
     "create_task": "Creating a task…",
     "create_project": "Creating a project…",
@@ -172,7 +166,8 @@
     "get_sender_profiles": "Loading your business profiles…",
     "get_remark_templates": "Checking your remark templates…",
     "create_remark_template": "Creating a remark template…",
-    "fallback": "Using {{tool}}…"
+    "fallback": "Using {{tool}}…",
+    "get_usage": "Checking resource usage…"
   },
   "widget": {
     "contacts": "{{count}} contacts",

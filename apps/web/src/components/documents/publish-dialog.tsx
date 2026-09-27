@@ -49,8 +49,6 @@ export function PublishDialog({
         toast.warning(t("publishDialog.publishedEmailFailed"));
       } else if (emailStatus === "blocked") {
         toast.warning(t("publishDialog.publishedEmailBlocked"));
-      } else if (emailStatus === "plan_limit") {
-        toast.warning(t("publishDialog.publishedEmailPlanLimit"));
       } else {
         toast.success(t("publishDialog.published"));
       }

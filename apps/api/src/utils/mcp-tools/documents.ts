@@ -191,14 +191,7 @@ async function sendDocumentEmailTool(userId: string, documentId: string) {
   if (result.status === 'no_client_email') {
     return { message: 'This document has no client email on file' }
   }
-  if (result.status === 'plan_limit') {
-    return {
-      error: 'PLAN_LIMIT_DOCS_SENT',
-      message: `Monthly document-send limit reached (${result.used}/${result.cap} on Free). Upgrade to Mana or Aether for unlimited sends — the cap resets at the start of next month.`,
-      used: result.used,
-      cap: result.cap,
-    }
-  }
+
   return { status: result.status, sentAt: result.sentAt }
 }
 

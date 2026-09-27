@@ -36,7 +36,7 @@ const variants = {
 };
 
 function StepDots({ current, label }: { current: number; label: string }) {
-  const percent = Math.min(100, (current + 1) * 40);
+  const percent = Math.round(((current + 1) / TOTAL_STEPS) * 100);
   return (
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-1.5">

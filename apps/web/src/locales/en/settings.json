@@ -27,10 +27,6 @@
       "label": "AI & Automation",
       "sub": "Model, memory, tone"
     },
-    "billing": {
-      "label": "Usage & Billing",
-      "sub": "AI usage, plan, invoices, cancellation"
-    },
     "integrations": {
       "label": "Integrations",
       "sub": "Google Calendar"
@@ -42,6 +38,10 @@
     "privacy": {
       "label": "Privacy",
       "sub": "Delete account"
+    },
+    "usage": {
+      "label": "Usage",
+      "sub": "Activity and storage on your server"
     }
   },
   "appearance": {
@@ -61,16 +61,10 @@
     "animationsSub": "Disable if you experience motion sickness.",
     "brandingLabel": "Hide Mana branding",
     "brandingSub": "Remove the \"Powered by Mana\" mark from documents you send.",
-    "brandingUpgrade": "Available on Mana and Aether plans.",
     "languageLabel": "Language",
     "languageSub": "Choose your interface language",
     "english": "English",
     "thai": "ไทย"
-  },
-  "usageNudge": {
-    "title": "You're close to your monthly AI Action limit",
-    "description": "You've used {{used}} of {{cap}} AI actions. Mana includes {{manaCap}} / month.",
-    "upgrade": "Upgrade to Mana"
   },
   "saveChanges": "Save changes",
   "saving": "Saving…",
@@ -163,8 +157,6 @@
       "disconnectFailed": "Could not disconnect Google Calendar",
       "selectFailed": "Could not select calendar",
       "oauthNotConfigured": "Google OAuth is not configured on the server",
-      "upgradeRequired": "Upgrade to enable",
-      "syncPaused": "Sync paused",
       "addCalendar": "Add calendar",
       "calendarCount": "{{count}} of {{limit}} calendars",
       "removeCalendar": "Remove calendar",
@@ -172,7 +164,6 @@
       "removeFailed": "Could not remove calendar",
       "notSynced": "Not synced yet",
       "lastSynced": "Last synced {{time}}",
-      "upgradeForMore": "Sync more calendars with Mana",
       "listFailed": "Could not load your Google calendars — try disconnecting and reconnecting.",
       "connectAnotherAccount": "Connect another Google account",
       "accountUnavailable": "Could not read calendars from {{account}}.",
@@ -242,10 +233,10 @@
     "exportAllData": "Export all data",
     "exporting": "Exporting…",
     "deleteAccount": "Delete account",
-    "deleteAccountDescription": "Permanently deletes your account and associated records and starts removal of stored files. Cancel any active paid subscription in Billing first—account deletion does not cancel Stripe.",
+    "deleteAccountDescription": "Permanently deletes your account and associated records and starts removal of stored files.",
     "deleting": "Deleting…",
     "confirmDelete": "Click again to confirm",
-    "deleteWarning": "This cannot be undone. Confirm that you canceled any active paid subscription first."
+    "deleteWarning": "This cannot be undone."
   },
   "notifications": {
     "eventsTitle": "Event notifications",
@@ -416,144 +407,9 @@
     }
   },
   "billing": {
-    "providerNotConfigured": "Not configured",
     "selfHostedTitle": "Self-hosted MANA",
-    "selfHostedDescription": "Core features have no subscription limits. Storage depends on your server capacity. AI and other integrations require your own provider configuration.",
-    "planNames": {
-      "free": "Free",
-      "mana": "Mana",
-      "aether": "Aether"
-    },
-    "planDetailFree": "One active project and limited AI — upgrade when you grow",
-    "planPitches": {
-      "mana": "Your whole freelance OS — projects, docs, finance, and AI",
-      "aether": "AI that keeps up with you — higher caps for power users"
-    },
-    "privilege": {
-      "caption": "Plan privileges comparison",
-      "privilege": "Privilege",
-      "soon": "Soon",
-      "soonNote": "Values marked Soon are planned limits — not enforced yet.",
-      "unlimited": "Unlimited",
-      "locked": "Locked",
-      "none": "—",
-      "count": "{{value}}",
-      "rows": {
-        "projects": "Active projects",
-        "ai": "AI actions / mo",
-        "contacts": "Contacts",
-        "coreTools": "Core business tools",
-        "storage": "Storage",
-        "docsSent": "Documents sent / mo",
-        "slipVerify": "Bank-verified slip checks / mo",
-        "calendarSync": "Calendar sync",
-        "branding": "Document branding"
-      },
-      "rowTooltip": {
-        "slipVerify": "Free checks the slip's QR code for consistency. Paid plans additionally verify directly with the bank via Thunder Solution — verified slips get a \"Bank-verified\" badge on the invoice."
-      },
-      "cell": {
-        "included": "Included",
-        "standard": "Standard",
-        "storageFree": "1 GB",
-        "storageMana": "10 GB",
-        "storageAether": "50 GB",
-        "brandingOn": "Mana badge on documents",
-        "brandingOff": "Removable Mana badge"
-      },
-      "feature": {
-        "projects": "{{count}} active projects",
-        "projectsUnlimited": "Unlimited active projects",
-        "ai": "{{count}} AI actions / month",
-        "coreTools": "All core business tools"
-      }
-    },
-    "intervalLabels": {
-      "monthly": "Billed monthly",
-      "annual": "Billed annually"
-    },
-    "priceMonthly": "{{price}}/mo",
-    "priceAnnual": "{{price}}/yr",
-    "switchPlanMonthly": "Switch (monthly)",
-    "switchPlanAnnual": "Switch (annually)",
-    "adjustPlan": "Adjust plan",
-    "upgradePlan": "Upgrade",
-    "currentPlanBadge": "Current plan",
-    "alreadyOnPlan": "You're already on this plan",
-    "annualUpsell": "Switch to annual billing and get 2 months free",
-    "twoMonthsFree": "2 months free",
-    "annualUpsellCta": "Upgrade Now",
-    "autoRenewOn": "Your subscription will auto renew on {{date}}.",
-    "payment": "Payment",
-    "paymentSub": "Update your payment details",
-    "manageInStripe": "Manage in Stripe",
-    "changePlanDialogTitle": "Confirm plan change",
-    "choosePlanDialogTitle": "Choose your plan",
-    "subtotal": "Subtotal",
-    "tax": "Tax",
-    "totalDueToday": "Total due today",
-    "nextRenewal": "Plan price at renewal",
-    "estimatedRenewalTotal": "Estimated renewal total",
-    "scheduledChangeStartsOn": "Your {{currentPlan}} plan remains active until {{date}}. {{newPlan}} starts then, with no charge or credit today.",
-    "changePlanScheduled": "Your change to {{plan}} is scheduled for {{date}}.",
-    "changePlanApplied": "Your plan has been updated.",
-    "pendingChangeTitle": "Change to {{plan}} scheduled",
-    "pendingChangeDescription": "{{currentPlan}} remains active until {{date}}. {{newPlan}} ({{interval}}) starts then.",
-    "keepCurrentPlan": "Keep current plan",
-    "changeRestored": "The pending change was removed.",
-    "changeRestoreError": "Couldn't restore the subscription. Please try again.",
-    "alreadyScheduled": "This change is already scheduled",
-    "unrecognizedPlan": "Stripe has an active subscription whose price is not recognized by MANA. Billing changes are paused to prevent duplicate charges; manage it in Stripe or contact support.",
-    "changePlanConfirm": "Confirm change",
-    "scheduleChangeConfirm": "Schedule change",
-    "changeNowConfirm": "Pay & change now",
-    "continueToCheckout": "Continue to checkout",
-    "changePlanCancel": "Cancel",
-    "changePlanError": "Couldn't change your plan. Please try again.",
-    "checkoutError": "Couldn't start checkout. Please try again.",
-    "checkoutSuccess": "Your subscription is active.",
-    "checkoutProcessing": "Payment received — Stripe is finishing your subscription update.",
-    "checkoutCanceled": "Checkout canceled.",
-    "notConfigured": "Billing isn't set up yet. Please check back soon.",
-    "overviewError": "We couldn't load the current subscription from Stripe. Your plan has not been changed. Try again shortly or manage billing in Stripe.",
-    "manageBillingError": "Couldn't open the billing portal. Please try again.",
-    "paymentRequired": "Complete the pending payment in Stripe before the plan can change.",
-    "paymentPendingTitle": "Payment needed to finish this change",
-    "paymentPendingDescription": "Your current plan stays active until Stripe completes the pending invoice.",
-    "paymentRetryTitle": "Stripe is retrying your payment",
-    "paymentRetryDescription": "Your paid access remains active during the retry period. Update the payment method to avoid interruption.",
-    "accessPausedTitle": "Paid access is paused",
-    "accessPausedDescription": "Resolve the outstanding payment in Stripe to restore paid-plan access.",
-    "resolvePayment": "Resolve payment",
-    "invoicesTitle": "Invoice history",
-    "invoicesEmpty": "No invoices yet",
-    "viewInvoice": "View",
-    "cancellationTitle": "Cancellation",
-    "cancelPlan": "Cancel plan",
-    "cancelPlanScheduled": "Your plan will end on {{date}}",
-    "resumePlan": "Resume subscription",
-    "cancelDialogTitle": "Cancel subscription?",
-    "cancelDialogDescription": "Your current plan stays fully active until {{date}}. After that your account moves to Free.",
-    "cancelDialogConfirm": "Continue to cancel",
-    "impact": {
-      "willTitle": "Moving to {{plan}} will affect your account",
-      "nowTitle": "{{plan}} plan limits now apply to your account",
-      "nothingAffected": "Nothing on your account exceeds the {{plan}} limits — everything stays as it is.",
-      "projectsWill": "{{count}} of your {{used}} active projects will be archived (limit {{cap}}). The most recently updated stay active; archived projects are restored when you upgrade.",
-      "projectsNow": "{{count}} of your projects were archived by your plan change — upgrade to restore them.",
-      "projectsRestorable": "{{count}} of your projects were archived by an earlier plan change. Your current plan has room for them again.",
-      "restoreProjects": "Restore projects",
-      "projectsRestored": "{{count}} projects restored",
-      "projectsRestoreError": "Could not restore your archived projects",
-      "aiWill": "AI actions drop to {{cap}}/month — you've already used {{used}} this month, so they pause until the monthly reset.",
-      "aiNow": "AI actions are paused ({{used}}/{{cap}} used this month).",
-      "docsSentWill": "Document sending drops to {{cap}}/month — you've already sent {{used}} this month, so sending pauses until the monthly reset.",
-      "docsSentNow": "Document sending is paused ({{used}}/{{cap}} sent this month).",
-      "storageWill": "You're using {{used}} of storage, over the {{cap}} limit — new uploads will be blocked until you free up space.",
-      "storageNow": "Storage is over the limit ({{used}} of {{cap}}) — new uploads are blocked until you free up space.",
-      "calendarWill": "Google Calendar sync will stop. Your events stay in MANA, but changes no longer sync.",
-      "calendarNow": "Google Calendar sync is paused on your plan. Your events stay in MANA, but changes no longer sync."
-    },
+    "selfHostedDescription": "All core features are free to use, with no MANA subscription or usage limits. Your server capacity and any connected AI or third-party provider costs still apply.",
+    "providerNotConfigured": "Not configured",
     "usage": {
       "title": "This month's usage",
       "ai": "AI actions",
@@ -561,7 +417,6 @@
       "count": "{{used}} / {{cap}}",
       "unlimited": "Unlimited",
       "lastUpdated": "Updated {{time}}",
-      "resetsOn": "AI resets {{date}} (UTC)",
       "never": "never",
       "justNow": "just now",
       "secondsAgo": "{{count}}s ago",
@@ -582,22 +437,16 @@
         "tooltipNone": "No actions on {{date}}",
         "empty": "No activity yet",
         "trackingNew": "Daily tracking just started — earlier usage this month is included in the totals above but won't appear on the map."
-      }
+      },
+      "storage": "Storage",
+      "docsSent": "Documents sent / mo",
+      "slipVerify": "Bank-verified slip checks / mo"
     }
   },
   "community": {
-    "discord": "DISCORD",
-    "communityName": "MANA Community",
-    "members": "{{count}} members",
-    "online": "{{count}} online",
-    "join": "Join",
-    "referralProgram": "REFERRAL PROGRAM",
-    "earnFreeMonths": "Earn 2 months free",
-    "earnFreeMonthsDescription": "For every friend who subscribes, you both get 2 months on us.",
-    "referrals": "{{count}} referrals",
-    "copy": "Copy",
-    "copied": "Copied!",
-    "whatsNew": "WHAT'S NEW"
+    "description": "MANA is built in the open. Share feedback, report a bug, or contribute.",
+    "source": "Source code and contribution guide",
+    "feedback": "Feedback and issues"
   },
   "saved": "Saved"
 }

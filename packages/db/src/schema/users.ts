@@ -132,7 +132,7 @@ export const users = pgTable('users', {
   mcpToken: text('mcp_token').$defaultFn(() => crypto.randomUUID()),
   mcpTokenRotatedAt: instant('mcp_token_rotated_at'),
 
-  // Billing / Stripe subscription
+  // Retained for existing databases; community runtime does not use subscription fields.
   plan: text('plan').notNull().default('free'), // free | mana | aether
   billingInterval: text('billing_interval'), // monthly | annual
   stripeCustomerId: text('stripe_customer_id'),
@@ -140,7 +140,7 @@ export const users = pgTable('users', {
   subscriptionStatus: text('subscription_status'), // mirrors Stripe subscription.status
   currentPeriodEnd: instant('current_period_end'),
   cancelAtPeriodEnd: boolean('cancel_at_period_end').notNull().default(false),
-  // Legacy reconciliation timestamp. Stripe's live subscription state is authoritative.
+  // Legacy Cloud event timestamp, preserved without reconciliation in community.
   stripeEventAt: instant('stripe_event_at'),
 }, (t) => [
   uniqueIndex('users_mcp_token_idx').on(t.mcpToken),

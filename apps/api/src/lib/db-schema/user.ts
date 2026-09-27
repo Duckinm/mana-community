@@ -37,7 +37,15 @@ export const UserResponse = t.Composite([t.Omit(_userSelect, [
   'role',
   'stripeCustomerId',
   'stripeSubscriptionId',
-]), t.Object({ deploymentMode: t.Union([t.Literal('cloud'), t.Literal('self-hosted')]) })])
+  'plan',
+  'billingInterval',
+  'subscriptionStatus',
+  'currentPeriodEnd',
+  'cancelAtPeriodEnd',
+  'stripeEventAt',
+  'profileAiActionCredits',
+  'profileAiRewardClaimedAt',
+]), t.Object({ deploymentMode: t.Literal('self-hosted') })])
 
 const _userUpdate = createUpdateSchema(users, {
   disabledAiTools: t.Optional(t.Array(t.String())),

@@ -12,7 +12,6 @@ import {
 import { googleCalendarFetchForAccount, hasGoogleCalendarScope, type GoogleAccountRow } from '@api/lib/google-calendar/tokens'
 import { addExdate, instanceKey, parseExdates, serializeExdates } from '@api/lib/calendar-recurrence'
 import {
-  calendarSyncAllowed,
   getDefaultOutboundConnection,
   getGoogleConnectionRows,
   updateConnectionSyncState,
@@ -178,9 +177,6 @@ async function syncConnectionInbound(userId: string, connection: CalendarConnect
 }
 
 export async function syncGoogleCalendarInbound(userId: string) {
-  if (!(await calendarSyncAllowed(userId))) {
-    return { imported: 0, skipped: true }
-  }
   const connections = await getGoogleConnectionRows(userId)
   if (connections.length === 0) {
     return { imported: 0, skipped: true }
@@ -220,7 +216,6 @@ async function findInstanceId(
 /** Google-sourced rows push too: PATCH by externalId. Read-only calendars 403 — caller swallows it. */
 export async function pushEventToGoogle(userId: string, row: CalendarEventRow) {
   if (!row.syncToGoogle) return null
-  if (!(await calendarSyncAllowed(userId))) return null
 
   const series = row.recurringEventId ? await getRow(row.recurringEventId) : null
   const connectionId = row.calendarConnectionId ?? series?.calendarConnectionId
@@ -278,7 +273,6 @@ export async function pushEventToGoogle(userId: string, row: CalendarEventRow) {
 
 export async function deleteGoogleEvent(userId: string, row: CalendarEventRow) {
   if (!row.externalId) return
-  if (!(await calendarSyncAllowed(userId))) return
 
   const connections = await getGoogleConnectionRows(userId)
   const connection = row.calendarConnectionId
@@ -302,7 +296,6 @@ export async function cancelGoogleOccurrence(
   instanceAt: Date,
 ) {
   if (!series.externalId) return
-  if (!(await calendarSyncAllowed(userId))) return
 
   const connections = await getGoogleConnectionRows(userId)
   const connection = series.calendarConnectionId

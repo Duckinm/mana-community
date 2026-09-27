@@ -10,10 +10,12 @@ import { trustedWebOrigins } from '@api/lib/cors-origins'
 const MCP_TOKEN_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 
 export function allowedMcpHosts() {
-  if (env.NODE_ENV === 'production') return ['mana-api.fly.dev']
-
-  const port = String(env.PORT)
-  return [`localhost:${port}`, `127.0.0.1:${port}`, `[::1]:${port}`, 'localhost', '127.0.0.1', '[::1]']
+  const hosts = [new URL(env.BETTER_AUTH_URL).host, new URL(env.WEB_URL).host]
+  if (env.NODE_ENV !== 'production') {
+    const port = String(env.PORT)
+    hosts.push(`localhost:${port}`, `127.0.0.1:${port}`, `[::1]:${port}`, 'localhost', '127.0.0.1', '[::1]')
+  }
+  return [...new Set(hosts)]
 }
 
 function errorResponse(status: number, error: 'Forbidden' | 'Unauthorized') {

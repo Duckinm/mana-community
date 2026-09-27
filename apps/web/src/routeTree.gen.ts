@@ -17,6 +17,7 @@ import { Route as AuthResetPasswordRouteImport } from './routes/_auth/reset-pass
 import { Route as AuthRegisterRouteImport } from './routes/_auth/register'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as AuthForgotPasswordRouteImport } from './routes/_auth/forgot-password'
+import { Route as AppHomeRouteImport } from './routes/_app/home'
 import { Route as AppStorageRouteRouteImport } from './routes/_app/storage/route'
 import { Route as AppSettingsRouteRouteImport } from './routes/_app/settings/route'
 import { Route as AppProjectsRouteRouteImport } from './routes/_app/projects/route'
@@ -108,6 +109,11 @@ const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
   id: '/forgot-password',
   path: '/forgot-password',
   getParentRoute: () => AuthRouteRoute,
+} as any)
+const AppHomeRoute = AppHomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => AppRouteRoute,
 } as any)
 const AppStorageRouteRoute = AppStorageRouteRouteImport.update({
   id: '/storage',
@@ -412,6 +418,7 @@ export interface FileRoutesByFullPath {
   '/projects': typeof AppProjectsRouteRouteWithChildren
   '/settings': typeof AppSettingsRouteRouteWithChildren
   '/storage': typeof AppStorageRouteRouteWithChildren
+  '/home': typeof AppHomeRoute
   '/forgot-password': typeof AuthForgotPasswordRoute
   '/login': typeof AuthLoginRoute
   '/register': typeof AuthRegisterRoute
@@ -468,6 +475,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/home': typeof AppHomeRoute
   '/forgot-password': typeof AuthForgotPasswordRoute
   '/login': typeof AuthLoginRoute
   '/register': typeof AuthRegisterRoute
@@ -529,6 +537,7 @@ export interface FileRoutesById {
   '/_app/projects': typeof AppProjectsRouteRouteWithChildren
   '/_app/settings': typeof AppSettingsRouteRouteWithChildren
   '/_app/storage': typeof AppStorageRouteRouteWithChildren
+  '/_app/home': typeof AppHomeRoute
   '/_auth/forgot-password': typeof AuthForgotPasswordRoute
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/register': typeof AuthRegisterRoute
@@ -592,6 +601,7 @@ export interface FileRouteTypes {
     | '/projects'
     | '/settings'
     | '/storage'
+    | '/home'
     | '/forgot-password'
     | '/login'
     | '/register'
@@ -648,6 +658,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/home'
     | '/forgot-password'
     | '/login'
     | '/register'
@@ -708,6 +719,7 @@ export interface FileRouteTypes {
     | '/_app/projects'
     | '/_app/settings'
     | '/_app/storage'
+    | '/_app/home'
     | '/_auth/forgot-password'
     | '/_auth/login'
     | '/_auth/register'
@@ -827,6 +839,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/forgot-password'
       preLoaderRoute: typeof AuthForgotPasswordRouteImport
       parentRoute: typeof AuthRouteRoute
+    }
+    '/_app/home': {
+      id: '/_app/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof AppHomeRouteImport
+      parentRoute: typeof AppRouteRoute
     }
     '/_app/storage': {
       id: '/_app/storage'
@@ -1431,6 +1450,7 @@ interface AppRouteRouteChildren {
   AppProjectsRouteRoute: typeof AppProjectsRouteRouteWithChildren
   AppSettingsRouteRoute: typeof AppSettingsRouteRouteWithChildren
   AppStorageRouteRoute: typeof AppStorageRouteRouteWithChildren
+  AppHomeRoute: typeof AppHomeRoute
   AppAccountingBudgetsRoute: typeof AppAccountingBudgetsRoute
   AppAccountingTransactionsRoute: typeof AppAccountingTransactionsRoute
   AppChatSessionIdRoute: typeof AppChatSessionIdRoute
@@ -1445,6 +1465,7 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppProjectsRouteRoute: AppProjectsRouteRouteWithChildren,
   AppSettingsRouteRoute: AppSettingsRouteRouteWithChildren,
   AppStorageRouteRoute: AppStorageRouteRouteWithChildren,
+  AppHomeRoute: AppHomeRoute,
   AppAccountingBudgetsRoute: AppAccountingBudgetsRoute,
   AppAccountingTransactionsRoute: AppAccountingTransactionsRoute,
   AppChatSessionIdRoute: AppChatSessionIdRoute,

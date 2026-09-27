@@ -99,7 +99,6 @@
     "emailSent": "ส่งอีเมลไปยัง {{email}} แล้ว",
     "emailBlocked": "อีเมลถูกบล็อก (sandbox)",
     "emailFailed": "ส่งอีเมลไม่สำเร็จ",
-    "emailPlanLimit": "ครบจำนวนการส่งต่อเดือนของแพ็กเกจฟรีแล้ว — อัปเกรดเพื่อส่งเอกสารได้ไม่จำกัด",
     "sendEtax": "ส่งใบกำกับภาษี e-Tax",
     "sendEtaxTitle": "ส่งใบกำกับภาษี e-Tax {{number}}?",
     "sendEtaxDescription": "การดำเนินการนี้จะส่งใบกำกับภาษีไปยังอีเมล e-Tax ที่ลงทะเบียนไว้เพื่อประทับเวลา ผู้ซื้อจะได้รับต้นฉบับที่ประทับเวลาโดยตรงจาก ETDA",
@@ -124,8 +123,7 @@
     "publishedEmailSent": "ออกเอกสารแล้ว — ส่งอีเมลไปยัง {{email}}",
     "publishedEmailFailed": "ออกเอกสารแล้ว — ส่งอีเมลไม่สำเร็จ",
     "publishedEmailBlocked": "ออกเอกสารแล้ว — อีเมลถูกบล็อก (sandbox)",
-    "published": "ออกเอกสารแล้ว",
-    "publishedEmailPlanLimit": "ออกเอกสารแล้ว — ยังไม่ได้ส่งอีเมล: ครบจำนวนการส่งต่อเดือนของแพ็กเกจฟรีแล้ว"
+    "published": "ออกเอกสารแล้ว"
   },
   "preview": {
     "invoice": "ใบแจ้งหนี้",
@@ -769,7 +767,6 @@
     "verifiedBadgeTooltip": "ยืนยันโดยตรงกับธนาคารผ่าน Thunder Solution",
     "verifyButton": "ยืนยันใหม่",
     "verifyingButton": "กำลังยืนยันใหม่...",
-    "verifyQuotaExceeded": "อัปเกรดเพื่อปลดล็อกการยืนยันกับธนาคาร",
     "qrNotFound": "ไม่พบ QR code ในรูปสลิปนี้ — ไม่สามารถตรวจสอบได้",
     "qrReused": "QR code นี้ตรงกับสลิปที่เคยส่งมาแล้ว — โปรดใช้ความระมัดระวัง",
     "confirmAnywayTitle": "ยืนยันแม้มีคำเตือนนี้หรือไม่?",

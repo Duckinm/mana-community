@@ -11,7 +11,6 @@ import {
 import { useLanguage } from "@/context/language";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "@tanstack/react-router";
 
 export function AppearancePanel() {
   const { t } = useTranslation("settings");
@@ -21,8 +20,6 @@ export function AppearancePanel() {
 
   const [animationsOn, setAnimationsOn] = useState(user?.animationsOn ?? true);
   const [hideBranding, setHideBranding] = useState(user?.hideBranding ?? false);
-
-  const canHideBranding = user?.deploymentMode === "self-hosted" || user?.plan === "mana" || user?.plan === "aether";
 
   useEffect(() => {
     if (!user) return;
@@ -116,24 +113,9 @@ export function AppearancePanel() {
       </Row>
       <Row
         label={t("appearance.brandingLabel")}
-        sub={
-          canHideBranding ? (
-            t("appearance.brandingSub")
-          ) : (
-            <>
-              {t("appearance.brandingUpgrade")}{" "}
-              <Link
-                to="/settings/billing"
-                search={{ success: false, canceled: false }}
-                className="text-primary hover:underline"
-              >
-                {t("billing.upgradePlan")}
-              </Link>
-            </>
-          )
-        }
+        sub={t("appearance.brandingSub")}
       >
-        <Toggle on={hideBranding} onChange={setHideBranding} disabled={!canHideBranding} />
+        <Toggle on={hideBranding} onChange={setHideBranding} />
       </Row>
     </div>
   );

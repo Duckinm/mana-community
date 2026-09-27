@@ -37,7 +37,7 @@ export function LoginForm() {
         return
       }
       await refetch()
-      navigate({ to: '/chat' })
+      navigate({ to: '/home' })
     },
   })
 
@@ -45,7 +45,7 @@ export function LoginForm() {
     if (!unverifiedEmail) return
     const { error } = await sendVerificationEmail({
       email: unverifiedEmail,
-      callbackURL: `${window.location.origin}/chat`,
+      callbackURL: `${window.location.origin}/home`,
     })
     if (!error) start()
   }

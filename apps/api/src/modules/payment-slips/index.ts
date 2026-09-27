@@ -109,7 +109,7 @@ export const paymentSlipsModule = new Elysia({ name: 'payment-slips', prefix: '/
     auth: true,
     params: t.Object({ id: t.String(), slipId: t.String() }),
     response: { 200: PaymentSlipDismissResponse, 400: MessageResponse, 404: NotFoundResponse, 409: MessageResponse },
-    detail: { tags: ['Documents'], summary: 'Run a real bank-side verification (Thunder Solution) against a proposed payment slip — paid plans only' },
+    detail: { tags: ['Documents'], summary: 'Run a real bank-side verification (Thunder Solution) against a proposed payment slip — requires a configured provider' },
   })
 
   .post('/:id/payment-slip/:slipId/dismiss', async ({ user, status, params }) => {

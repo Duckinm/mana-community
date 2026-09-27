@@ -1,9 +1,7 @@
 import { zipSync } from 'fflate'
 import { eq, and, isNull, isNotNull, ilike, inArray, sum, count, gt, lte } from 'drizzle-orm'
 import { db } from '@api/db'
-import { env } from '@api/env'
-import { storageFolders, storageFiles, fileLinks, users } from '@mana/db'
-import { getCoreEntitlements, type PlanId } from '@mana/db/plan-entitlements'
+import { storageFolders, storageFiles, fileLinks } from '@mana/db'
 import { logFileUploaded } from '@api/lib/activity'
 import { activityScopeForProject } from '@api/lib/activity-helpers'
 import { storageTrashCutoffDate } from '@api/lib/storage-trash'
@@ -149,7 +147,6 @@ export function createStorageObjectOperations(
     file: File,
     body: { kind: string; folderId?: string; entityType?: string; entityId?: string },
   ) {
-    await assertStorageQuotaAvailable(userId, file.size)
 
     const fileId = createFileId()
     const key = `files/${userId}/${fileId}/${file.name}`
@@ -317,28 +314,14 @@ export async function bulkMoveFiles(userId: string, fileIds: string[], folderId:
 }
 
 export async function getStorageQuota(userId: string) {
-  const [[result], [user]] = await Promise.all([
-    db
-      .select({
-        usedBytes: sum(storageFiles.sizeBytes),
-        fileCount: count(storageFiles.id),
-      })
-      .from(storageFiles)
-      .where(and(eq(storageFiles.userId, userId), isNull(storageFiles.deletedAt))),
-    db.select({ plan: users.plan }).from(users).where(eq(users.id, userId)),
-  ])
-
+  const [result] = await db
+    .select({ usedBytes: sum(storageFiles.sizeBytes), fileCount: count(storageFiles.id) })
+    .from(storageFiles)
+    .where(and(eq(storageFiles.userId, userId), isNull(storageFiles.deletedAt)))
   return {
     usedBytes: Number(result?.usedBytes ?? 0),
     fileCount: Number(result?.fileCount ?? 0),
-    limitBytes: getCoreEntitlements((user?.plan ?? 'free') as PlanId, env.DEPLOYMENT_MODE).storageBytes,
-  }
-}
-
-export async function assertStorageQuotaAvailable(userId: string, additionalBytes: number): Promise<void> {
-  const quota = await getStorageQuota(userId)
-  if (quota.limitBytes !== null && quota.usedBytes + additionalBytes > quota.limitBytes) {
-    throw new Error('QUOTA_EXCEEDED')
+    limitBytes: null,
   }
 }
 

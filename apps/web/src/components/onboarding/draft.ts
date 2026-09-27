@@ -50,17 +50,3 @@ export async function saveOnboardingProfile(data: Partial<OnboardingData>, name?
     }),
   )
 }
-
-export async function completeProfileForAiCredit(data: OnboardingData) {
-  return expectEden(
-    await client.api.users.me["complete-profile"].post({
-      freelancerType: resolveFreelancerTypeLabel(data) ?? "",
-      hourlyRate: data.hourlyRate || null,
-      currency: data.currency || null,
-      revenueGoal: data.revenueGoal || null,
-      activeProjects: data.activeProjects || null,
-      painPoint: serializePainPoints(data),
-      heardFrom: data.heardFrom || null,
-    }),
-  )
-}

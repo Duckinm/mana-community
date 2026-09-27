@@ -1,8 +1,7 @@
+import { QueryErrorPanel } from "@/components/ui/query-error-panel";
 import { Check, CheckCircle2, ListBullets, Sparkle } from "@/components/icons";
 import { GetStartedChecklistSkeleton } from "@/components/onboarding/get-started-checklist-skeleton";
 import { OnboardingFlow } from "@/components/onboarding/onboarding-flow";
-import { ProfileRewardFinish } from "@/components/onboarding/profile-reward-finish";
-import { completeProfileForAiCredit } from "@/components/onboarding/draft";
 import {
   STEP_ICONS,
   STEP_KEYS,
@@ -209,11 +208,7 @@ function ChecklistPanel({
               {t("getStarted.profile.description")}
             </span>
           </span>
-          {!hasProfile && (
-            <span className="mt-0.5 rounded-full border border-primary-border bg-primary-soft px-1.5 py-0.5 text-2xs font-semibold text-primary">
-              {t("getStarted.profile.credit")}
-            </span>
-          )}
+
         </button>
       </div>
       <div className="flex items-center justify-end border-t border-border px-3.5 py-2">
@@ -245,9 +240,9 @@ export function GetStartedChecklist({ collapsed }: { collapsed: boolean }) {
   const [celebrating, setCelebrating] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
 
-  const { data, isPending, done, completed } = useGetStarted(!dismissed);
+  const { data, isPending, isError, refetch, done, completed } = useGetStarted(!dismissed);
   const alreadyShownBefore = localStorage.getItem(shownKey) === "1";
-  const checklistComplete = completed === TOTAL_STEPS && Boolean(data?.hasProfile);
+  const checklistComplete = completed === TOTAL_STEPS;
   const hideSilently = !dismissed && !!data && checklistComplete && !alreadyShownBefore;
 
   useEffect(() => {
@@ -284,7 +279,6 @@ export function GetStartedChecklist({ collapsed }: { collapsed: boolean }) {
     setProfileOpen(false);
     void queryClient.invalidateQueries({ queryKey: queryKeys.getStarted });
     void queryClient.invalidateQueries({ queryKey: queryKeys.user });
-    void queryClient.invalidateQueries({ queryKey: ["billing", "usage"] });
   }
 
   if (dismissed || hideSilently) return null;
@@ -385,6 +379,8 @@ export function GetStartedChecklist({ collapsed }: { collapsed: boolean }) {
       <PopoverContent side="right" align="start" sideOffset={8} className="w-80 p-0">
         {isPending ? (
           <GetStartedChecklistSkeleton />
+        ) : isError ? (
+          <QueryErrorPanel onRetry={() => void refetch()} />
         ) : (
           <ChecklistPanel
             done={done}
@@ -405,11 +401,7 @@ export function GetStartedChecklist({ collapsed }: { collapsed: boolean }) {
       {profileOpen && (
         <OnboardingFlow
           onDismiss={() => setProfileOpen(false)}
-          finalStep={(profile) => <ProfileRewardFinish data={profile} />}
-          onSubmit={completeProfileForAiCredit}
           onComplete={handleProfileComplete}
-          submitLabel={t("profileReward.claim")}
-          canSubmit={(profile) => Boolean(profile.freelancerType)}
         />
       )}
     </>

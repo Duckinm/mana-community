@@ -16,7 +16,7 @@ import {
 } from "@/lib/calendar-date";
 import { client, expectEden } from "@/lib/eden";
 import { formatBytes } from "@/lib/format-bytes";
-import { formatTimestamp, formatTimestampDistance } from "@/lib/timestamp";
+import { formatTimestampDistance } from "@/lib/timestamp";
 
 const WEEKS = 53;
 const CELL_PX = 11;
@@ -203,7 +203,7 @@ export function UsageHeatmap({ className = "" }: { className?: string }) {
 
   const ai = usage.ai;
   const pct =
-    ai.cap > 0 ? Math.min(100, Math.round((ai.used / ai.cap) * 100)) : 0;
+    ai.cap !== null && ai.cap > 0 ? Math.min(100, Math.round((ai.used / ai.cap) * 100)) : 0;
   const nearCap = pct >= 90;
   const hasCost =
     ai.inputTokens !== undefined &&
@@ -248,20 +248,20 @@ export function UsageHeatmap({ className = "" }: { className?: string }) {
         )}
 
         <UsageRow
-          label={t("billing.privilege.rows.storage")}
+          label={t("billing.usage.storage")}
           used={usage.storage.usedBytes}
           cap={usage.storage.capBytes}
           format={formatBytes}
         />
 
         <UsageRow
-          label={t("billing.privilege.rows.docsSent")}
+          label={t("billing.usage.docsSent")}
           used={usage.docsSent.used}
           cap={usage.docsSent.cap}
         />
 
         <UsageRow
-          label={t("billing.privilege.rows.slipVerify")}
+          label={t("billing.usage.slipVerify")}
           used={usage.slipVerify.used}
           cap={usage.slipVerify.cap}
         />
@@ -274,14 +274,6 @@ export function UsageHeatmap({ className = "" }: { className?: string }) {
                     includeSeconds: true,
                   })
                 : t("billing.usage.never"),
-            })}
-          </span>
-          <span aria-hidden className="text-xs text-muted-foreground">
-            ·
-          </span>
-          <span className="text-xs text-muted-foreground">
-            {t("billing.usage.resetsOn", {
-              date: formatTimestamp(usage.resetAt, "MMM d"),
             })}
           </span>
           <button

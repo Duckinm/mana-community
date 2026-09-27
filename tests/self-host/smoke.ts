@@ -63,6 +63,7 @@ async function login(email: string, password: string, client = context) {
     assert(response.ok(), `Browser login failed: ${response.status()} ${await response.text()}`)
     const session = await api('auth/get-session', undefined, 'GET', client)
     assert.equal(session.user.email, email)
+    await loginPage.waitForURL((url) => url.pathname === '/home')
   } finally {
     if (loginPage !== page) await loginPage.close()
   }
@@ -123,7 +124,9 @@ try {
     await verifyEmail(email, context)
     await login(email, password)
     await saveState({ email, password })
-    console.log('PASS: browser signup → captured email → real verification → fresh browser login')
+    await page.getByRole('button', { name: 'Next: Add your first contact', exact: true }).waitFor()
+    assert.equal(await page.getByText('+5 AI', { exact: true }).count(), 0)
+    console.log('PASS: browser signup → captured email → real verification → manual workspace Home')
 
     const contact = await api('contacts', { name: `Self-host client ${suffix}`, email: 'client@example.test', phone: '0800000000', initials: 'SC', color: '#6366f1' })
     const project = await api('projects', { name: `Self-host project ${suffix}`, color: '#6366f1', contactId: contact.id })

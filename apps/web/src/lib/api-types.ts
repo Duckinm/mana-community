@@ -45,7 +45,6 @@ export type ApiGetStartedStatus = Treaty.Data<
 export type ApiAiUsage = Treaty.Data<typeof client.api.billing.usage.get>
 export type ApiAiUsageBucket = ApiAiUsage['ai']
 export type ApiAiUsageDaily = Treaty.Data<typeof client.api.billing.usage.daily.get>
-export type ApiInvoiceSummary = Treaty.Data<typeof client.api.billing.invoices.get>[number]
 
 export type ApiCalendarEvent = Treaty.Data<typeof client.api.calendar.events.get>[number]
 export type ApiCalendarEventCreateBody = Parameters<typeof client.api.calendar.events.post>[0]

@@ -1,7 +1,6 @@
 import type { ChatMessage } from "@/components/ai/use-chat-stream";
 import type { ChatUiOverlay } from "@/components/ai/chat-ui-action";
 import { ChatToolWidgets } from "@/components/ai/chat-tool-widgets";
-import { ChatCapReachedCard } from "@/components/ai/chat-cap-reached-card";
 import { motion, AnimatePresence } from "framer-motion";
 import { Copy } from "@/components/icons";
 import { ManaSparkle } from "@/components/icons/mana-sparkle";
@@ -44,9 +43,6 @@ export function ChatMessages({ messages, toolStatus, onOpenOverlay }: Props) {
                 <ManaSparkle size={20} className="text-primary" />
               </div>
             )}
-            {msg.role === "assistant" && msg.capReached ? (
-              <ChatCapReachedCard capReached={msg.capReached} />
-            ) : (
             <div
               className="min-w-0 max-w-full rounded-2xl px-4 py-3 text-sm leading-relaxed"
               style={
@@ -107,7 +103,6 @@ export function ChatMessages({ messages, toolStatus, onOpenOverlay }: Props) {
                 msg.content
               )}
             </div>
-            )}
           </motion.div>
         ))}
 

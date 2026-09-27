@@ -6,7 +6,7 @@ export const Route = createFileRoute('/_auth')({
  beforeLoad: async () => {
  const session = await getSession()
  if (session?.data?.user) {
- throw redirect({ to: '/chat' })
+ throw redirect({ to: '/home' })
  }
  },
  component: AuthLayout,

@@ -11,15 +11,14 @@ export interface AiActionSettleParams {
   toolCalls: { name: string; result: unknown }[]
   aborted: boolean
   actionBucket: ActionBucket
-  usedBonusCredit: boolean
 }
 
 /**
- * Persists one completed AI Action turn after its quota slot has been reserved.
- * An aborted or failed turn releases that reservation so it does not consume quota.
+ * Persists one completed AI Action turn after recording its usage.
+ * An aborted or failed turn releases that reservation so it is not counted as a completed action.
  */
 export async function settleAiAction(params: AiActionSettleParams): Promise<void> {
-  const { userId, sessionId, userMessage, assistantText, toolCalls, aborted, actionBucket, usedBonusCredit } = params
+  const { userId, sessionId, userMessage, assistantText, toolCalls, aborted, actionBucket } = params
   const completed = !aborted && Boolean(assistantText || toolCalls.length > 0)
 
   try {
@@ -41,6 +40,6 @@ export async function settleAiAction(params: AiActionSettleParams): Promise<void
       .set({ updatedAt: sql`NOW()` })
       .where(eq(chatSessions.id, sessionId))
   } finally {
-    if (!completed) await releaseAiAction(userId, actionBucket, usedBonusCredit)
+    if (!completed) await releaseAiAction(userId, actionBucket)
   }
 }

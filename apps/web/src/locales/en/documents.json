@@ -99,7 +99,6 @@
     "emailSent": "Email sent to {{email}}",
     "emailBlocked": "Email blocked (sandbox)",
     "emailFailed": "Email failed to send",
-    "emailPlanLimit": "Monthly send limit reached on the Free plan — upgrade for unlimited document sending",
     "sendEtax": "Send e-Tax invoice",
     "sendEtaxTitle": "Send e-Tax invoice {{number}}?",
     "sendEtaxDescription": "This will email the invoice to your registered e-Tax address for time-stamping. The buyer will then receive the stamped original from ETDA directly.",
@@ -124,8 +123,7 @@
     "publishedEmailSent": "Published — email sent to {{email}}",
     "publishedEmailFailed": "Published — email failed to send",
     "publishedEmailBlocked": "Published — email blocked (sandbox)",
-    "published": "Published",
-    "publishedEmailPlanLimit": "Published — not emailed: monthly send limit reached on the Free plan"
+    "published": "Published"
   },
   "preview": {
     "invoice": "INVOICE",
@@ -769,7 +767,6 @@
     "verifiedBadgeTooltip": "Confirmed directly with the bank via Thunder Solution.",
     "verifyButton": "Re-verify",
     "verifyingButton": "Re-verifying...",
-    "verifyQuotaExceeded": "Upgrade to unlock bank verification",
     "qrNotFound": "No QR code was detected in this slip image — this could not be checked.",
     "qrReused": "This QR code matches a slip already submitted elsewhere — treat with caution.",
     "confirmAnywayTitle": "Confirm despite the warning?",

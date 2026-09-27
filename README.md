@@ -18,7 +18,7 @@ The first run downloads and builds the app. Wait for **“MANA is ready”**. No
 
 1. Open [MANA](http://localhost:3300/register) and create an account.
 2. Verify it through the [local email inbox](http://localhost:38025). Emails stay here; they are not sent to real recipients.
-3. **Try your first workflow:** add a contact → create a project → add a task. Then make an invoice and record a payment manually.
+3. **Start from Home:** add a contact → create a project → add a task. Then make an invoice and record a payment manually.
 
 [Setup help, backups and updates →](docs/self-hosting.md)
 
@@ -30,7 +30,7 @@ The first run downloads and builds the app. Wait for **“MANA is ready”**. No
 - Create quotations and invoices, download PDFs, and track income and expenses.
 - Keep files alongside your work. Add [AI and integrations](docs/self-hosting.md#optional-integrations) when you need them.
 
-Self-hosted core features have no Cloud subscription limits. Prefer managed hosting? Try [MANA Cloud](https://app.heymana.app).
+All community features are free to use, with no plans or MANA usage quotas. Prefer managed hosting? Try [MANA Cloud](https://app.heymana.app).
 
 ## Help shape MANA
 

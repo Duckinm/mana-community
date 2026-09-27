@@ -10,7 +10,7 @@ const DATABASE_URL =
   process.env.DATABASE_URL ?? 'postgresql://postgres:postgres@localhost:5432/mana'
 
 export default defineConfig({
-  schema: './src/schema/index.ts',
+  schema: ['./src/schema/index.ts', './src/legacy-schema/*.ts'],
   out: './drizzle',
   dialect: 'postgresql',
   dbCredentials: {

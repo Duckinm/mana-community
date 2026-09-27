@@ -1,6 +1,7 @@
 import { FeedbackModal } from "@/components/feedback/feedback-modal";
 import {
   BookOpen,
+  Home,
   ChevronDown,
   ChevronRight,
   CircleHelp,
@@ -245,7 +246,7 @@ export function MobileNavigation() {
   return (
     <>
       <MobileDock
-        isOnChat={isOnChat}
+        isOnHome={pathname === "/home"}
         isOnProjects={isOnProjectsSection}
         isOnDocuments={
           isActive("/documents") && !isActive("/documents/library")
@@ -285,6 +286,8 @@ export function MobileNavigation() {
 
         <div className="mx-auto w-full max-w-lg space-y-6 px-4 py-5 sm:px-6">
           <MenuSection title={t("workspace")}>
+            <MenuLink to="/home" icon={Home} label={t("home")} isActive={isActive("/home")} onNavigate={closeMenu} />
+            <MenuLink to="/chat" icon={MessageSquare} label={t("chatWithAi")} isActive={isOnChat} onNavigate={closeMenu} showBorder />
             <MenuButton
               icon={TrendingUp}
               label={t("accounting")}

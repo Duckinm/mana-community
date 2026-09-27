@@ -14,7 +14,6 @@ import { ProjectsProvider } from "@/context/projects";
 import { useSessionContext } from "@/context/session";
 import { SettingsProvider } from "@/context/settings";
 import { SidebarProvider } from "@/context/sidebar";
-import { useAiUsageNudge } from "@/hooks/use-ai-usage-nudge";
 import { getSession, getSessionCached } from "@/lib/auth-client";
 import { client } from "@/lib/eden";
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
@@ -47,8 +46,6 @@ export const Route = createFileRoute("/_app")({
 });
 
 function AppLayoutInner() {
-  useAiUsageNudge();
-
   return (
     <SidebarProvider>
       {/* Chrome/Android keeps 100dvh above the gesture bar but paints fixed
@@ -93,11 +90,11 @@ function AppLayout() {
         }
         const draft = loadOnboardingDraft();
         if (draft) {
-          await saveOnboardingProfile(draft).catch(() => {});
+          await saveOnboardingProfile(draft);
           clearOnboardingDraft();
           localStorage.setItem(onboardedKey, "1");
         } else if (localStorage.getItem(fastLaneKey)) {
-          await saveOnboardingProfile({}).catch(() => {});
+          await saveOnboardingProfile({});
           localStorage.removeItem(fastLaneKey);
           localStorage.setItem(onboardedKey, "1");
         }
