@@ -20,10 +20,9 @@ it('settles successful and failed turns before terminal events and reports save 
         },
       } }))
       mock.module('@api/modules/billing/usage', () => ({
-        claimAiAction: async () => ({ blocked: false, bucket: 'daily', usedBonusCredit: false }),
+        claimAiAction: async () => {},
         nextResetAt: () => new Date(),
       }))
-      mock.module('@api/modules/billing/entitlements', () => ({ buildPlanContextLine: async () => null }))
       mock.module('@api/modules/chat/sessions', () => ({ verifySessionOwnership: async () => true }))
       mock.module('@api/utils/mcp-tools', () => ({ mcpToolDefinitions: [], executeToolCall: async () => ({}) }))
       mock.module('@api/modules/accounting/service', () => ({ getCashFlowForecast: async () => ({}) }))

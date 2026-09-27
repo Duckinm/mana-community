@@ -37,10 +37,10 @@ export async function getDocumentByPublicToken(token: string, viewerId?: string 
   ])
 
   const [owner] = await db
-    .select({ plan: users.plan, hideBranding: users.hideBranding })
+    .select({ hideBranding: users.hideBranding })
     .from(users)
     .where(eq(users.id, document.userId))
-  const showBranding = !owner || (env.DEPLOYMENT_MODE !== 'self-hosted' && owner.plan === 'free') || !owner.hideBranding
+  const showBranding = !owner || !owner.hideBranding
 
   return documentToGuestWire(
     document,

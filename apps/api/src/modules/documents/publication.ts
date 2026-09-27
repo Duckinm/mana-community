@@ -121,7 +121,7 @@ export async function publishDocument(userId: string, id: string, opts: { sendEm
   })
 
   let document = updated
-  let emailStatus: 'sent' | 'blocked' | 'failed' | 'plan_limit' | undefined
+  let emailStatus: 'sent' | 'blocked' | 'failed' | undefined
 
   if (opts.sendEmail && doc.clientEmail) {
     const result = await sendDocumentEmail(userId, id)

@@ -455,19 +455,7 @@ export const storageHandlers: Record<string, McpToolHandler> = {
       folderId: resolvedFolderId,
       entityType: typeof args.contactId === 'string' ? 'contact' : undefined,
       entityId: typeof args.contactId === 'string' ? args.contactId : undefined,
-    }).catch((err: unknown) => {
-      if (err instanceof Error && err.message === 'QUOTA_EXCEEDED') {
-        return null
-      }
-      throw err
     })
-
-    if (!record) {
-      return {
-        success: false,
-        error: 'Storage quota exceeded. Limit is 1 GB.',
-      }
-    }
 
     logFileSavedViaAI(record, userId, typeof args.contactId === 'string' ? args.contactId : null)
     return {

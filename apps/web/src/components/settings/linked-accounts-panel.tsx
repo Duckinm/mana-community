@@ -1,3 +1,5 @@
+import { CapabilityNotice } from '@/components/capability-notice'
+import { useCapabilities } from '@/hooks/use-capabilities'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { Badge, StatusDot } from '@/components/ui/badge'
@@ -16,9 +18,12 @@ const PROVIDERS: { id: LinkedProvider; icon: () => React.JSX.Element }[] = [
 
 export function LinkedAccountsPanel() {
   const { t } = useTranslation('settings')
+  const capabilities = useCapabilities()
+  const socialProviders = capabilities.data?.socialProviders
   const { accounts, isLoading, connect, disconnect, isPending } = useLinkedAccounts()
 
   async function handleConnect(provider: LinkedProvider) {
+    if (capabilities.isError || !socialProviders?.[provider]) return
     try {
       await connect(provider)
     } catch {
@@ -45,6 +50,7 @@ export function LinkedAccountsPanel() {
       <p className="text-sm font-semibold text-foreground mb-1">{t('linkedAccounts.title')}</p>
       <p className="text-xs text-muted-foreground mb-4">{t('linkedAccounts.description')}</p>
 
+      <CapabilityNotice available={socialProviders ? PROVIDERS.every(({ id }) => socialProviders[id]) : undefined} unavailableKey="socialUnavailable" />
       <div className="space-y-2">
         {PROVIDERS.map(({ id, icon: Icon }) => {
           const connected = accounts.some((account) => account.providerId === id)
@@ -79,7 +85,7 @@ export function LinkedAccountsPanel() {
               ) : (
                 <button
                   type="button"
-                  disabled={isPending || isLoading}
+                  disabled={isPending || isLoading || capabilities.isError || !socialProviders?.[id]}
                   onClick={() => void handleConnect(id)}
                   className="shrink-0 text-xs px-3 py-1.5 rounded-lg bg-primary-soft border border-primary-border text-primary font-medium hover:bg-primary-hover hover:text-primary-foreground transition-colors duration-base disabled:opacity-60"
                 >

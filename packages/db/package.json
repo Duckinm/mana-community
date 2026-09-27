@@ -13,7 +13,6 @@
     "./quantity": "./src/lib/quantity.ts",
     "./rich-text": "./src/lib/rich-text.ts",
     "./task-status": "./src/task-status.ts",
-    "./plan-entitlements": "./src/lib/plan-entitlements.ts",
     "./private-network": "./src/lib/private-network.ts",
     "./google-scopes": "./src/lib/google-scopes.ts"
   },
@@ -21,7 +20,6 @@
     "test": "bun test",
     "typecheck": "tsc --noEmit",
     "seed": "bun run src/seed.ts",
-    "seed:cms": "bun run src/seed-cms.ts",
     "db:generate": "bunx drizzle-kit generate --config drizzle.config.ts",
     "db:migrate": "bun run migrate.ts",
     "db:studio": "bunx drizzle-kit studio --config drizzle.config.ts"

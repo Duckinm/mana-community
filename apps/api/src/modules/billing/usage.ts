@@ -1,21 +1,13 @@
-import { aiActionDaily, aiActionUsage, slipVerifyUsage, users } from '@mana/db'
-import {
-  ACTION_CAPS,
-  getCoreEntitlements,
-  SLIP_VERIFY_CAPS,
-  type PlanId,
-} from '@mana/db/plan-entitlements'
-import { and, asc, eq, gt, gte, lt, sql } from 'drizzle-orm'
+import { aiActionDaily, aiActionUsage, slipVerifyUsage } from '@mana/db'
+import { and, asc, eq, gte, sql } from 'drizzle-orm'
 import { db } from '@api/db'
 import { env } from '@api/env'
 import { countDocumentsSentThisMonth } from '@api/modules/documents/send-email'
 import { getStorageQuota } from '@api/modules/storage/service'
-import { getProjectEntitlement } from '@api/modules/billing/entitlements'
+import { countActiveProjects } from '@api/modules/billing/entitlements'
 
-export type Plan = PlanId
 export type ActionBucket = 'ai'
 
-export { ACTION_CAPS }
 
 function currentYearMonth(): string {
   const now = new Date()
@@ -32,7 +24,7 @@ export function nextResetAt(): Date {
   return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 1))
 }
 
-export async function recordAiAction(
+export async function claimAiAction(
   userId: string,
   bucket: ActionBucket = 'ai',
 ): Promise<void> {
@@ -117,9 +109,9 @@ export async function getDailyAiUsage(userId: string, days = 365) {
   return { days: rows }
 }
 
-export async function getCurrentMonthUsage(userId: string, plan: Plan) {
+export async function getCurrentMonthUsage(userId: string) {
   const yearMonth = currentYearMonth()
-  const [rows, slipVerifyRows, docsUsed, quota, projects, userRows] = await Promise.all([
+  const [rows, slipVerifyRows, docsUsed, quota, projects] = await Promise.all([
     db
       .select({
         count: aiActionUsage.count,
@@ -145,12 +137,7 @@ export async function getCurrentMonthUsage(userId: string, plan: Plan) {
       ),
     countDocumentsSentThisMonth(userId),
     getStorageQuota(userId),
-    getProjectEntitlement(userId, plan),
-    db
-      .select({ profileAiActionCredits: users.profileAiActionCredits })
-      .from(users)
-      .where(eq(users.id, userId))
-      .limit(1),
+    countActiveProjects(userId),
   ])
 
   let used = 0
@@ -164,117 +151,31 @@ export async function getCurrentMonthUsage(userId: string, plan: Plan) {
     if (!lastUsedAt || row.updatedAt > lastUsedAt) lastUsedAt = row.updatedAt
   }
 
-  const baseCap = ACTION_CAPS[plan]
-  const bonusRemaining = userRows[0]?.profileAiActionCredits ?? 0
-  const bonusUsed = Math.max(0, used - baseCap)
-
   return {
     ai: {
       enabled: Boolean(env.ANTHROPIC_API_KEY),
       used,
-      cap: baseCap + bonusRemaining + bonusUsed,
-      bonusRemaining,
+      cap: null,
       inputTokens,
       outputTokens,
       costUsd: estimateAiCostUsd(inputTokens, outputTokens),
     },
-    projects,
+    projects: { used: projects, cap: null },
     slipVerify: {
       used: slipVerifyRows[0]?.count ?? 0,
-      cap: SLIP_VERIFY_CAPS[plan],
+      cap: null,
     },
-    docsSent: { used: docsUsed, cap: getCoreEntitlements(plan, env.DEPLOYMENT_MODE).docsSent },
-    storage: { usedBytes: quota.usedBytes, capBytes: getCoreEntitlements(plan, env.DEPLOYMENT_MODE).storageBytes },
+    docsSent: { used: docsUsed, cap: null },
+    storage: { usedBytes: quota.usedBytes, capBytes: null },
     lastUsedAt: lastUsedAt ? lastUsedAt.toISOString() : null,
     resetAt: nextResetAt().toISOString(),
   }
 }
 
-export interface ActionCapResult {
-  blocked: boolean
-  bucket: ActionBucket
-  used: number
-  cap: number
-  usedBonusCredit: boolean
-}
-
-interface ClaimAiActionOptions {
-  enforceCap?: boolean
-}
-
-export async function claimAiAction(
-  userId: string,
-  plan: Plan,
-  options: ClaimAiActionOptions = {},
-): Promise<ActionCapResult> {
-  const bucket: ActionBucket = 'ai'
-  const cap = ACTION_CAPS[plan]
-  const capDisabled =
-    !options.enforceCap && env.AI_CAP_DISABLED === 'true' && env.NODE_ENV !== 'production'
-  if (capDisabled) {
-    await recordAiAction(userId, bucket)
-    const usage = await getCurrentMonthUsage(userId, plan)
-    return { blocked: false, bucket, used: usage.ai.used, cap: usage.ai.cap, usedBonusCredit: false }
-  }
-
-  const rows = await db
-    .insert(aiActionUsage)
-    .values({ userId, yearMonth: currentYearMonth(), bucket, count: 1 })
-    .onConflictDoUpdate({
-      target: [aiActionUsage.userId, aiActionUsage.yearMonth, aiActionUsage.bucket],
-      set: { count: sql`${aiActionUsage.count} + 1`, updatedAt: new Date() },
-      setWhere: lt(aiActionUsage.count, cap),
-    })
-    .returning({ count: aiActionUsage.count })
-
-  if (rows[0]) return { blocked: false, bucket, used: rows[0].count, cap, usedBonusCredit: false }
-
-  const [credit] = await db
-    .update(users)
-    .set({
-      profileAiActionCredits: sql`${users.profileAiActionCredits} - 1`,
-      updatedAt: new Date(),
-    })
-    .where(and(eq(users.id, userId), gt(users.profileAiActionCredits, 0)))
-    .returning({ profileAiActionCredits: users.profileAiActionCredits })
-
-  if (credit) {
-    try {
-      await recordAiAction(userId, bucket)
-    } catch (error) {
-      await db
-        .update(users)
-        .set({
-          profileAiActionCredits: sql`${users.profileAiActionCredits} + 1`,
-          updatedAt: new Date(),
-        })
-        .where(eq(users.id, userId))
-      throw error
-    }
-    const usage = await getCurrentMonthUsage(userId, plan)
-    return { blocked: false, bucket, used: usage.ai.used, cap: usage.ai.cap, usedBonusCredit: true }
-  }
-
-  const usage = await getCurrentMonthUsage(userId, plan)
-  return { blocked: true, bucket, used: usage.ai.used, cap: usage.ai.cap, usedBonusCredit: false }
-}
-
 export async function releaseAiAction(
   userId: string,
   bucket: ActionBucket,
-  usedBonusCredit = false,
 ): Promise<void> {
-  if (usedBonusCredit) {
-    await db
-      .update(users)
-      .set({
-        profileAiActionCredits: sql`${users.profileAiActionCredits} + 1`,
-        updatedAt: new Date(),
-      })
-      .where(eq(users.id, userId))
-    return
-  }
-
   await db
     .update(aiActionUsage)
     .set({
@@ -290,52 +191,14 @@ export async function releaseAiAction(
     )
 }
 
-export interface SlipVerifyCapResult {
-  blocked: boolean
-  used: number
-  cap: number | null
-}
-
-export async function claimSlipVerification(
-  userId: string,
-  plan: Plan,
-): Promise<SlipVerifyCapResult> {
-  const cap = SLIP_VERIFY_CAPS[plan]
-  if (cap === 0) return { blocked: true, used: 0, cap }
-
-  if (cap === null) {
-    const rows = await db
-      .insert(slipVerifyUsage)
-      .values({ userId, yearMonth: currentYearMonth(), count: 1 })
-      .onConflictDoUpdate({
-        target: [slipVerifyUsage.userId, slipVerifyUsage.yearMonth],
-        set: { count: sql`${slipVerifyUsage.count} + 1`, updatedAt: new Date() },
-      })
-      .returning({ count: slipVerifyUsage.count })
-    return { blocked: false, used: rows[0]!.count, cap }
-  }
-
-  const rows = await db
+export async function claimSlipVerification(userId: string): Promise<void> {
+  await db
     .insert(slipVerifyUsage)
     .values({ userId, yearMonth: currentYearMonth(), count: 1 })
     .onConflictDoUpdate({
       target: [slipVerifyUsage.userId, slipVerifyUsage.yearMonth],
       set: { count: sql`${slipVerifyUsage.count} + 1`, updatedAt: new Date() },
-      setWhere: lt(slipVerifyUsage.count, cap),
     })
-    .returning({ count: slipVerifyUsage.count })
-
-  if (rows[0]) return { blocked: false, used: rows[0].count, cap }
-  const [row] = await db
-    .select()
-    .from(slipVerifyUsage)
-    .where(
-      and(
-        eq(slipVerifyUsage.userId, userId),
-        eq(slipVerifyUsage.yearMonth, currentYearMonth()),
-      ),
-    )
-  return { blocked: true, used: row?.count ?? cap, cap }
 }
 
 export async function releaseSlipVerification(userId: string): Promise<void> {

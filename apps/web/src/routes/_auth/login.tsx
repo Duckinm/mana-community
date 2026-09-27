@@ -40,7 +40,7 @@ function LoginPage() {
     setErrorMsg(null);
     const { error } = await signIn.social({
       provider,
-      callbackURL: `${window.location.origin}/chat`,
+      callbackURL: `${window.location.origin}/home`,
       errorCallbackURL: `${window.location.origin}/login`,
     });
     if (error) setErrorMsg(error.message ?? t("login.failed"));

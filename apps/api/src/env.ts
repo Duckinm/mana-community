@@ -2,12 +2,11 @@ import { z } from "zod";
 
 const envSchema = z.object({
   NODE_ENV: z.string().default("development"),
-  DEPLOYMENT_MODE: z.enum(["cloud", "self-hosted"]).default("cloud"),
+  DEPLOYMENT_MODE: z.literal("self-hosted").default("self-hosted"),
   PORT: z.coerce.number().default(4000),
   CORS_ORIGIN: z.string().default("http://localhost:3000"),
   WEB_URL: z.string().default("http://localhost:3000"),
   PDF_WEB_ORIGIN: z.url().optional(),
-  LANDING_URL: z.url().default("http://localhost:4321"),
 
   DATABASE_URL: z.url(),
 
@@ -54,18 +53,8 @@ const envSchema = z.object({
 
   CRON_SECRET: z.string().optional(),
 
-  // CMS article ingest from the generator workflow. Declared optional the same way
-  // CRON_SECRET is: the ingest route fails closed when it is unset, so local dev and CI
-  // boot without it while prod must set it.
-  CMS_INGEST_SECRET: z.string().optional(),
-  // Landing rebuilds are dispatched to GitHub Actions; without a token the API logs a
-  // warning and skips the dispatch instead of failing the publish that triggered it.
-  GITHUB_REBUILD_TOKEN: z.string().optional(),
-  GITHUB_REPO: z.string().default("Duckinm/mana-community"),
-
   TRIAGE_AUTH_DISABLED: z.string().optional(),
 
-  AI_CAP_DISABLED: z.string().optional(),
 
   SENTRY_DSN: z.string().optional(),
   SENTRY_TRACES_SAMPLE_RATE: z.coerce.number().min(0).max(1).default(0.1),
@@ -76,19 +65,6 @@ const envSchema = z.object({
   DISCORD_CLIENT_SECRET: z.string().optional(),
   FACEBOOK_CLIENT_ID: z.string().optional(),
   FACEBOOK_CLIENT_SECRET: z.string().optional(),
-
-  STRIPE_SECRET_KEY: z.string().optional(),
-  STRIPE_WEBHOOK_SECRET: z.string().optional(),
-  STRIPE_PRICE_SOLO_MONTHLY: z.string().optional(),
-  STRIPE_PRICE_SOLO_ANNUAL: z.string().optional(),
-  STRIPE_PRICE_PRO_MONTHLY: z.string().optional(),
-  STRIPE_PRICE_PRO_ANNUAL: z.string().optional(),
-
-  FLY_API_TOKEN: z.string().optional(),
-  FLY_APP_NAME: z.string().optional(),
-
-  NEON_API_KEY: z.string().optional(),
-  NEON_PROJECT_ID: z.string().optional(),
 
   THUNDER_API_KEY: z.string().optional(),
 

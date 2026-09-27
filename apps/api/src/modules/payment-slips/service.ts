@@ -6,7 +6,7 @@ import { uploadFile } from '@api/modules/storage/service'
 import { extractReceiptTransaction } from '@api/modules/ai/service'
 import { createNotification } from '@api/modules/notifications/create'
 import { recordDocumentPayment } from '@api/modules/documents/payment'
-import { claimSlipVerification, releaseSlipVerification, type Plan } from '@api/modules/billing/usage'
+import { claimSlipVerification, releaseSlipVerification } from '@api/modules/billing/usage'
 import { checkSlipQr } from '@api/modules/payment-slips/qr-check'
 import { verifySlipViaThunder, isThunderConfigured } from '@api/modules/payment-slips/thunder'
 import { ACTIVE_SLIP_STATUSES, paymentSlipToDto, type PaymentSlipDto, type PaymentSlipSource, type PaymentSlipStatus } from '@api/modules/payment-slips/wire'
@@ -17,7 +17,7 @@ export { type PaymentSlipDto, type PaymentSlipSource, type PaymentSlipStatus, li
 // Tight tolerance for "matches" — extraction rounding, not a real amount discrepancy.
 const AMOUNT_TOLERANCE_CENTS = 1
 
-// Guest uploads bill the document owner's AI+Thunder quota — cap lifetime attempts per
+// Guest uploads bill the document owner's AI+Thunder provider — cap lifetime attempts per
 // document so an abusive guest link can't run the owner's usage up unbounded.
 const GUEST_SLIP_LIFETIME_CAP = 20
 
@@ -148,9 +148,8 @@ export async function uploadPaymentSlip({
   })
 
   // Fire tier-2 bank verification immediately on upload — owner or guest, doesn't matter, the
-  // check runs against the document owner's plan/quota. Falls back to leaving the slip unverified
-  // (owner can retry via the verify endpoint) when Thunder isn't configured, quota is exhausted, or
-  // the check itself fails — none of that should block the upload from succeeding.
+  // check runs against the document owner's configured provider. Falls back to leaving the slip unverified
+  // (owner can retry via the verify endpoint) when Thunder isn't configured, the check itself fails — none of that should block the upload from succeeding.
   if (qrCheck.qrFound && ACTIVE_SLIP_STATUSES.includes(status)) {
     try {
       return await runThunderVerification(document, slip)
@@ -234,7 +233,7 @@ export async function dismissPaymentSlip(userId: string, documentId: string, sli
 type PaymentSlipRow = typeof paymentSlips.$inferSelect
 type DocumentRow = typeof documents.$inferSelect
 
-/** Quota-gated real bank-side verification (Thunder Solution) — Tier 2. Fired on upload; also callable as a manual retry. */
+/** Real bank-side verification (Thunder Solution) — Tier 2. Fired on upload; also callable as a manual retry. */
 async function runThunderVerification(document: DocumentRow, slip: PaymentSlipRow): Promise<PaymentSlipDto> {
   if (!ACTIVE_SLIP_STATUSES.includes(slip.status as PaymentSlipStatus)) {
     throw new ConflictError('This slip has already been resolved')
@@ -243,13 +242,10 @@ async function runThunderVerification(document: DocumentRow, slip: PaymentSlipRo
     throw new ConflictError('No QR code was detected in this slip — a bank verification check cannot run')
   }
 
-  const [owner] = await db.select({ plan: users.plan }).from(users).where(eq(users.id, document.userId))
+  const [owner] = await db.select({ id: users.id }).from(users).where(eq(users.id, document.userId))
   if (!owner) throw new NotFoundError('User not found')
 
-  const claim = await claimSlipVerification(document.userId, owner.plan as Plan)
-  if (claim.blocked) {
-    throw new ConflictError("You have reached this month's bank-verification limit for your plan")
-  }
+  await claimSlipVerification(document.userId)
 
   const result = await verifySlipViaThunder(slip.qrRawText, document.amountDueCents, {
     accountNumber: document.accountNumber,

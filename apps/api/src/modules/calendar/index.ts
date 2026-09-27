@@ -8,7 +8,6 @@ import {
   UpdateCalendarEventBody,
 } from '@api/modules/calendar/model'
 import {
-  calendarSyncAllowed,
   disconnectGoogleCalendar,
   getCalendarConnection,
   listGoogleCalendars,
@@ -58,13 +57,9 @@ export const calendarModule = new Elysia({ name: 'calendar', prefix: '/api/calen
   })
 
   .patch('/connection', async ({ user, body, status }) => {
-    if (!(await calendarSyncAllowed(user.id))) {
-      return status(403, { message: 'PLAN_LIMIT_CALENDAR_SYNC' })
-    }
     const result = await selectGoogleCalendar(user.id, body.accountId, body.calendarId, body.calendarName, body.accountEmail)
     if (!result.ok) {
       if (result.reason === 'not_connected') return status(400, { message: 'Google Calendar is not connected' })
-      if (result.reason === 'limit') return status(403, { message: 'PLAN_LIMIT_CALENDAR_SYNC' })
       return status(409, { message: 'Calendar already synced' })
     }
     await syncGoogleCalendarInbound(user.id)
@@ -100,9 +95,6 @@ export const calendarModule = new Elysia({ name: 'calendar', prefix: '/api/calen
   })
 
   .post('/sync', async ({ user, status }) => {
-    if (!(await calendarSyncAllowed(user.id))) {
-      return status(403, { message: 'PLAN_LIMIT_CALENDAR_SYNC' })
-    }
     try {
       return await syncGoogleCalendarInbound(user.id)
     } catch {

@@ -82,7 +82,7 @@ export const EXTERNAL_MCP_TOOL_NAMES = [
   'get_item_templates',
   'get_labels',
   'get_outreach_queue',
-  'get_plan_usage',
+  'get_usage',
   'get_project',
   'get_project_profitability',
   'get_projects',

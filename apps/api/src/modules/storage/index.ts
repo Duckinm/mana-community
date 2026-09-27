@@ -113,9 +113,6 @@ export const storageModule = new Elysia({ name: 'storage', prefix: '/api' })
       })
       return status(201, file)
     } catch (err) {
-      if (err instanceof Error && err.message === 'QUOTA_EXCEEDED') {
-        return status(413, { error: 'Storage quota exceeded. Limit is 1 GB.' })
-      }
       throw err
     }
   }, {

@@ -293,8 +293,6 @@
   },
   "toast": {
     "createProjectFailed": "สร้างโปรเจกต์ไม่สำเร็จ",
-    "projectLimitReached": "คุณใช้โปรเจกต์ครบตามแพ็กเกจแล้ว",
-    "projectLimitUpgrade": "อัปเกรดแพ็กเกจ",
     "saveProjectFailed": "บันทึกโปรเจกต์ไม่สำเร็จ",
     "deleteProjectFailed": "ลบโปรเจกต์ไม่สำเร็จ",
     "restoreProjectFailed": "กู้คืนโปรเจกต์ไม่สำเร็จ",

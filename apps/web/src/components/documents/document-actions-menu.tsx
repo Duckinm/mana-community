@@ -483,13 +483,8 @@ function DocumentActionsHost({
         toast.warning(t('actionsMenu.emailFailed'))
       }
       setSendDialogOpen(false)
-    } catch (err) {
-      if (isApiError(err) && err.status === 403) {
-        toast.warning(t('actionsMenu.emailPlanLimit'))
-        setSendDialogOpen(false)
-      } else {
-        toast.warning(t('actionsMenu.emailFailed'))
-      }
+    } catch {
+      toast.warning(t('actionsMenu.emailFailed'))
     } finally {
       setSending(false)
     }

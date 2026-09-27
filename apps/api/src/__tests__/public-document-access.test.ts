@@ -120,7 +120,7 @@ describe('public document access', () => {
 
   it.each([
     { plan: 'free', hideBranding: false, expected: true },
-    { plan: 'free', hideBranding: true, expected: true },
+    { plan: 'free', hideBranding: true, expected: false },
     { plan: 'mana', hideBranding: false, expected: true },
     { plan: 'mana', hideBranding: true, expected: false },
     { plan: 'aether', hideBranding: true, expected: false },

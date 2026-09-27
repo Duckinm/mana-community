@@ -89,8 +89,8 @@ export function AIPanel() {
 
   return (
     <div>
-      <CapabilityNotice available={capabilities.data?.ai} unavailableKey="aiUnavailable" />
-      <CapabilityNotice available={capabilities.data?.transcription} unavailableKey="transcriptionUnavailable" />
+      <CapabilityNotice available={capabilities.data?.ai} unavailableKey="aiUnavailable" availableKey="aiCost" />
+      <CapabilityNotice available={capabilities.data?.transcription} unavailableKey="transcriptionUnavailable" availableKey="voiceCost" />
       <Row label={t("ai.model")} sub={t("ai.modelSub")}>
         <span
           className="text-xs px-3 py-1.5 max-w-max rounded-full flex items-center gap-1.5"

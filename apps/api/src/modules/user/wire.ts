@@ -16,5 +16,10 @@ const USER_TIMESTAMP_KEYS = [
 export type UserWire = WireTimestamps<UserRow, typeof USER_TIMESTAMP_KEYS[number]>
 
 export function userToWire<T extends UserRow>(user: T) {
-  return { ...wireTimestamps(user, USER_TIMESTAMP_KEYS), deploymentMode: env.DEPLOYMENT_MODE }
+  const {
+    plan, billingInterval, stripeCustomerId, stripeSubscriptionId,
+    subscriptionStatus, currentPeriodEnd, cancelAtPeriodEnd, stripeEventAt,
+    profileAiActionCredits, profileAiRewardClaimedAt, ...profile
+  } = wireTimestamps(user, USER_TIMESTAMP_KEYS)
+  return { ...profile, deploymentMode: env.DEPLOYMENT_MODE }
 }

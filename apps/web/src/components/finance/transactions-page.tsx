@@ -369,7 +369,7 @@ export function TransactionsPage() {
     <div className="page-scroll pb-6 pt-5 max-xl:pb-mobile-dock xl:pb-8 xl:pt-8">
       <div className="page-pad mx-auto w-full max-w-3xl">
         <motion.div {...fadeUp} className="mb-5 max-xl:mb-3">
-          <CapabilityNotice available={capabilities.data?.ai} unavailableKey="receiptUnavailable" />
+          <CapabilityNotice available={capabilities.data?.ai} unavailableKey="receiptUnavailable" availableKey="aiCost" />
           <div className="flex items-center justify-between gap-3">
             <div className="min-w-0 flex flex-wrap items-baseline gap-x-3 gap-y-1">
               <h1 className="text-xl font-semibold text-foreground tracking-tight">

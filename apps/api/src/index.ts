@@ -11,8 +11,6 @@ import { corsOrigin } from "@api/lib/cors-origins";
 import { AppError } from "@api/lib/errors";
 import { capabilitiesModule } from "@api/modules/capabilities";
 import { healthModule } from "@api/modules/health/index";
-import { landingSessionModule } from "@api/modules/landing-session/index";
-import { landingContactFormModule } from "@api/modules/landing-contact-form/index";
 import { userModule } from "@api/modules/user/index";
 import { contactsModule } from "@api/modules/contacts/index";
 import { financeModule } from "@api/modules/finance/index";
@@ -42,13 +40,7 @@ import { feedbackCronModule } from "@api/modules/feedback/cron";
 import { notificationsModule } from "@api/modules/notifications/index";
 import { pushModule } from "@api/modules/push/index";
 import { billingModule } from "@api/modules/billing/index";
-import { operationsModule } from "@api/modules/operations/index";
-import { ledgerModule } from "@api/modules/ledger/index";
-import { ledgerCronModule } from "@api/modules/ledger/cron";
 import { transcriptionModule } from "@api/modules/transcription/index";
-import { cmsModule } from "@api/modules/cms/index";
-import { cmsCronModule } from "@api/modules/cms/cron";
-import { blogPublicModule } from "@api/modules/cms/public";
 import { hitRateLimit, clientIp } from "@api/lib/rate-limiter";
 
 // Better-auth is mounted as an opaque handler (see auth-plugin.ts), so these can't
@@ -84,8 +76,6 @@ const appRoutes = new Elysia()
   .use(betterAuthPlugin)
   .use(capabilitiesModule)
   .use(healthModule)
-  .use(landingSessionModule)
-  .use(landingContactFormModule)
   .use(userModule)
   .use(projectsModule)
   .use(labelsModule)
@@ -115,13 +105,7 @@ const appRoutes = new Elysia()
   .use(notificationsModule)
   .use(pushModule)
   .use(billingModule)
-  .use(operationsModule)
-  .use(ledgerModule)
-  .use(ledgerCronModule)
   .use(transcriptionModule)
-  .use(cmsModule)
-  .use(cmsCronModule)
-  .use(blogPublicModule)
   .use(
     new Elysia()
       .guard({
@@ -149,14 +133,11 @@ const appRoutes = new Elysia()
               { name: "Chat", description: "AI chat with tool use" },
               { name: "Storage", description: "File uploads via R2" },
               { name: "Health", description: "Health check" },
-              { name: "Contact", description: "Public landing contact form" },
               { name: "Accounting", description: "Accounting summaries and recurring transactions" },
               { name: "Budgets", description: "Budget management" },
               { name: "Wallets", description: "User bank accounts, cards, and platform balances" },
-              { name: "Billing", description: "Stripe checkout and subscription plan" },
-              { name: "Operations", description: "Third-party provider status and statistics" },
+              { name: "Billing", description: "Resource usage" },
               { name: "Transcription", description: "Voice input audio transcription" },
-              { name: "CMS", description: "Blog articles, publishing windows, and the landing feed" },
             ],
           },
         }),
@@ -192,7 +173,7 @@ appRoutes
   // idleTimeout: chat SSE sends no bytes while an LLM round runs; Bun's default
   // (~30s) kills the connection mid-turn on slow local models (C-353).
   // maxRequestBodySize: above the largest legitimate upload (general file manager,
-  // bounded per-plan by storage quota elsewhere) — tighter per-route caps (payment
+  // bounded by request size) — tighter per-route caps (payment
   // slips, transcription, base64 images) apply well below this ceiling.
   .listen({ port: env.PORT, idleTimeout: 255, maxRequestBodySize: 100 * 1024 * 1024 });
 

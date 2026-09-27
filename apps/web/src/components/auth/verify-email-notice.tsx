@@ -18,7 +18,7 @@ export function VerifyEmailNotice({ email }: { email: string }) {
     setErrorMsg(null)
     const { error } = await sendVerificationEmail({
       email,
-      callbackURL: `${window.location.origin}/chat`,
+      callbackURL: `${window.location.origin}/home`,
     })
     if (error) {
       setErrorMsg(error.message ?? t('verify.resendFailed'))

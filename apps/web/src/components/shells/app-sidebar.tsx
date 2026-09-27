@@ -1,6 +1,7 @@
 import { FeedbackModal } from "@/components/feedback/feedback-modal";
 import {
   BookOpen,
+  Home,
   Calendar,
   ChevronDown,
   ChevronRight,
@@ -259,6 +260,7 @@ export function AppSidebar() {
           </div>
 
           <SectionLabel label={t("workspace")} collapsed={collapsed} />
+          <NavItem to="/home" icon={Home} label={t("home")} isActive={pathname === "/home"} collapsed={collapsed} />
           <ProjectSubNav
             collapsed={collapsed}
             isOnProjectsSection={isOnProjectsSection}

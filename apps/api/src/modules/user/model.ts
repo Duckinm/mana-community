@@ -21,20 +21,4 @@ export const GetStartedResponse = t.Object({
   hasDocument: t.Boolean(),
   hasTransaction: t.Boolean(),
   hasProfile: t.Boolean(),
-  profileAiActionCredits: t.Number(),
-})
-
-export const CompleteProfileRewardBody = t.Object({
-  freelancerType: t.String({ minLength: 1, maxLength: 120 }),
-  hourlyRate: t.Optional(t.Union([t.String({ maxLength: 80 }), t.Null()])),
-  currency: t.Optional(t.Union([t.String({ maxLength: 12 }), t.Null()])),
-  revenueGoal: t.Optional(t.Union([t.String({ maxLength: 80 }), t.Null()])),
-  activeProjects: t.Optional(t.Union([t.String({ maxLength: 12 }), t.Null()])),
-  painPoint: t.Optional(t.Union([t.String({ maxLength: 500 }), t.Null()])),
-  heardFrom: t.Optional(t.Union([t.String({ maxLength: 80 }), t.Null()])),
-})
-
-export const CompleteProfileRewardResponse = t.Object({
-  granted: t.Boolean(),
-  profileAiActionCredits: t.Number(),
 })

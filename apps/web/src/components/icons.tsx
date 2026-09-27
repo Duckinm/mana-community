@@ -16,6 +16,7 @@ export {
   Bell,
   CurrencyBtc as Bitcoin,
   BookOpen,
+  House as Home,
   Bookmark,
   Bug,
   Calendar,

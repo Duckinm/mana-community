@@ -9,17 +9,7 @@ import { libraryTools, libraryHandlers } from '@api/utils/mcp-tools/library'
 import { labelTools, labelHandlers } from '@api/utils/mcp-tools/labels'
 import { uiTools, uiHandlers } from '@api/utils/mcp-tools/ui'
 import { calendarTools, calendarHandlers } from '@api/utils/mcp-tools/calendar'
-import { AppError } from '@api/lib/errors'
-import {
-  buildAiActionLimitToolError,
-  buildProjectLimitToolError,
-  getProjectEntitlement,
-} from '@api/modules/billing/entitlements'
 import { claimAiAction, releaseAiAction } from '@api/modules/billing/usage'
-import { db } from '@api/db'
-import { users } from '@mana/db'
-import { eq } from 'drizzle-orm'
-import type { PlanId } from '@mana/db/plan-entitlements'
 import type { ToolContext } from '@api/utils/mcp-tools/tool-context'
 import { mcpToolAnnotations } from '@api/utils/mcp-tools/capabilities'
 
@@ -97,30 +87,15 @@ export async function executeToolCall(
   if (!run) throw new Error(`Unknown tool: ${toolName}`)
 
   let claimedAiAction = false
-  let usedBonusCredit = false
   if (context?.source === 'external-mcp' && EXTERNAL_MCP_AI_ACTION_TOOLS.has(toolName)) {
-    const [user] = await db.select({ plan: users.plan }).from(users).where(eq(users.id, userId))
-    if (!user) throw new Error('User not found')
-
-    const claim = await claimAiAction(userId, user.plan as PlanId, { enforceCap: true })
-    if (claim.blocked) {
-      return buildAiActionLimitToolError(user.plan as PlanId, claim.used, claim.cap)
-    }
+    await claimAiAction(userId)
     claimedAiAction = true
-    usedBonusCredit = claim.usedBonusCredit
   }
 
   try {
     return await run(userId, args, context)
   } catch (err) {
-    if (claimedAiAction) await releaseAiAction(userId, 'ai', usedBonusCredit)
-    if (err instanceof AppError && err.message === 'PLAN_LIMIT_PROJECTS') {
-      const [user] = await db.select({ plan: users.plan }).from(users).where(eq(users.id, userId))
-      if (!user) throw err
-      const plan = user.plan as PlanId
-      const { used, cap } = await getProjectEntitlement(userId, plan)
-      if (cap !== null) return buildProjectLimitToolError(plan, used, cap)
-    }
+    if (claimedAiAction) await releaseAiAction(userId, 'ai')
     throw err
   }
 }

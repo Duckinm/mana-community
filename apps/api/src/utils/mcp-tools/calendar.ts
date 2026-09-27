@@ -1,5 +1,4 @@
 import {
-  calendarSyncAllowed,
   getCalendarConnection,
   listGoogleCalendars,
   removeGoogleCalendarConnection,
@@ -168,13 +167,8 @@ function mutationScope(args: Record<string, unknown>) {
   return { scope, instanceStart }
 }
 
-async function requireCalendarSync(userId: string) {
-  if (!(await calendarSyncAllowed(userId))) throw new Error('PLAN_LIMIT_CALENDAR_SYNC')
-}
-
 async function selectCalendar(userId: string, args: Record<string, unknown>, context?: ToolContext) {
   requireGoogleSyncConfirmation(args, context)
-  await requireCalendarSync(userId)
   const result = await selectGoogleCalendar(
     userId,
     requiredString(args, 'accountId'),
@@ -184,7 +178,6 @@ async function selectCalendar(userId: string, args: Record<string, unknown>, con
   )
   if (!result.ok) {
     if (result.reason === 'not_connected') throw new Error('Google Calendar is not connected')
-    if (result.reason === 'limit') throw new Error('PLAN_LIMIT_CALENDAR_SYNC')
     throw new Error('Calendar already synced')
   }
   try {
@@ -299,7 +292,7 @@ export const calendarTools = [
   },
   {
     name: 'select_google_calendar',
-    description: 'Add one already-connected Google calendar to MANA sync, then perform an inbound sync. Requires the Calendar Sync plan entitlement and confirmGoogleSync true for external MCP after user confirmation.',
+    description: 'Add one already-connected Google calendar to MANA sync, then perform an inbound sync. Requires a connected Google account and confirmGoogleSync true for external MCP after user confirmation.',
     input_schema: {
       type: 'object' as const,
       properties: {
@@ -326,7 +319,7 @@ export const calendarTools = [
   },
   {
     name: 'sync_google_calendar',
-    description: 'Pull updates from Google calendars already selected in MANA. Requires the Calendar Sync plan entitlement and confirmGoogleSync true for external MCP after user confirmation.',
+    description: 'Pull updates from Google calendars already selected in MANA. Requires a connected Google account and confirmGoogleSync true for external MCP after user confirmation.',
     input_schema: {
       type: 'object' as const,
       properties: {
@@ -377,8 +370,7 @@ export const calendarHandlers: Record<string, McpToolHandler> = {
   },
   'sync_google_calendar': async (userId, args, context) => {
     requireGoogleSyncConfirmation(args, context)
-    await requireCalendarSync(userId)
-    try {
+      try {
       return await syncGoogleCalendarInbound(userId)
     } catch {
       throw new Error('Google Calendar sync is not configured')

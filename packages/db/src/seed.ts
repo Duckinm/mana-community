@@ -36,10 +36,11 @@ const db = drizzle(sql, { schema })
 
 // ─── Args ──────────────────────────────────────────────────────────────────────
 
-const emailArg = process.argv.find((a) => a.startsWith('--email='))?.split('=')[1]
-  ?? process.argv[process.argv.indexOf('--email') + 1]
+const emailIndex = process.argv.indexOf('--email')
+const emailArg = process.argv.find((a) => a.startsWith('--email='))?.slice('--email='.length)
+  ?? (emailIndex >= 0 ? process.argv[emailIndex + 1] : undefined)
 
-if (!emailArg) {
+if (!emailArg || emailArg.startsWith('--')) {
   console.error('ERROR: pass --email <user@example.com>')
   process.exit(1)
 }

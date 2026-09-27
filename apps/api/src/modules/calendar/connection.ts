@@ -1,7 +1,6 @@
 import { env } from '@api/env'
 import { db } from '@api/db'
-import { accounts, calendarConnections, calendarEvents, users } from '@mana/db'
-import { CALENDAR_SYNC_ALLOWED, getCoreEntitlements, type PlanId } from '@mana/db/plan-entitlements'
+import { accounts, calendarConnections, calendarEvents } from '@mana/db'
 import { and, asc, eq, isNotNull } from 'drizzle-orm'
 import {
   findGoogleCalendarAccounts,
@@ -43,17 +42,6 @@ export function isGoogleOAuthConfigured(): boolean {
   return !!(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET)
 }
 
-/** Calendar sync is a paid entitlement — free plans keep local events only. */
-export async function calendarSyncAllowed(userId: string): Promise<boolean> {
-  const [user] = await db.select({ plan: users.plan }).from(users).where(eq(users.id, userId))
-  return CALENDAR_SYNC_ALLOWED[(user?.plan ?? 'free') as PlanId]
-}
-
-async function getPlanLimit(userId: string): Promise<number | null> {
-  const [user] = await db.select({ plan: users.plan }).from(users).where(eq(users.id, userId))
-  return getCoreEntitlements((user?.plan ?? 'free') as PlanId, env.DEPLOYMENT_MODE).calendars
-}
-
 function toItem(row: typeof calendarConnections.$inferSelect): CalendarConnectionItem {
   return {
     id: row.id,
@@ -67,7 +55,7 @@ function toItem(row: typeof calendarConnections.$inferSelect): CalendarConnectio
 
 export async function getCalendarConnection(userId: string): Promise<CalendarConnectionDto> {
   const accountRows = await findGoogleCalendarAccounts(userId)
-  const limit = await getPlanLimit(userId)
+  const limit = null
   if (accountRows.length === 0) {
     return { connected: false, calendars: [], limit, oauthConfigured: isGoogleOAuthConfigured() }
   }
@@ -123,7 +111,7 @@ export async function listGoogleCalendars(userId: string): Promise<GoogleCalenda
 
 export type SelectGoogleCalendarResult =
   | { ok: true; item: CalendarConnectionItem }
-  | { ok: false; reason: 'not_connected' | 'limit' | 'duplicate' }
+  | { ok: false; reason: 'not_connected' | 'duplicate' }
 
 export async function selectGoogleCalendar(
   userId: string,
@@ -145,14 +133,8 @@ export async function selectGoogleCalendar(
     return { ok: false, reason: 'duplicate' }
   }
 
-  const selectedCount = existingRows.filter((row) => row.calendarId).length
   const pending = existingRows.find((row) => !row.calendarId)
 
-  if (!pending) {
-    const limit = await getPlanLimit(userId)
-    // ponytail: limit check is read-then-insert, not transactional; concurrent PATCHes can exceed the cap — wrap in a tx if that ever matters.
-    if (limit !== null && selectedCount >= limit) return { ok: false, reason: 'limit' }
-  }
 
   const [connection] = pending
     ? await db

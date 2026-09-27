@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { useCapabilities } from '@/hooks/use-capabilities'
 
-export function CapabilityNotice({ available, unavailableKey }: { available: boolean | undefined; unavailableKey: string }) {
+export function CapabilityNotice({ available, unavailableKey, availableKey }: { available: boolean | undefined; unavailableKey: string; availableKey?: string }) {
   const { t } = useTranslation('capabilities')
   const query = useCapabilities()
   if (query.isError) {
@@ -10,7 +10,7 @@ export function CapabilityNotice({ available, unavailableKey }: { available: boo
     </p>
   }
   if (query.isPending) return <p role="status" className="my-2 rounded-lg border border-border-subtle bg-surface-raised p-3 text-sm text-foreground">{t('loading')}</p>
-  if (available) return null
+  if (available) return availableKey ? <p className="my-2 text-sm leading-relaxed text-foreground">{t(availableKey)}</p> : null
   return <p role="status" className="my-2 rounded-lg border border-border-subtle bg-surface-raised p-3 text-sm text-foreground">{t(unavailableKey)}</p>
 }
 

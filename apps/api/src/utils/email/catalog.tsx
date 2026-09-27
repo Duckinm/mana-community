@@ -23,14 +23,6 @@ export const EMAIL_TEMPLATE_IDS = [
   'receipt-sent',
   'payment-reminder',
   'calendar-reminder',
-  'cancellation-scheduled',
-  'subscription-started',
-  'plan-changed',
-  'payment-action-required',
-  'payment-failed',
-  'payment-recovered',
-  'cancellation-resumed',
-  'subscription-ended',
   'document-viewed',
   'document-accepted',
   'document-rejected',
@@ -42,7 +34,7 @@ export const EMAIL_TEMPLATE_IDS = [
 ] as const
 
 export type EmailTemplateId = typeof EMAIL_TEMPLATE_IDS[number]
-export type EmailCategory = 'security' | 'documents' | 'calendar' | 'billing' | 'activity' | 'operations'
+export type EmailCategory = 'security' | 'documents' | 'calendar' | 'activity' | 'operations'
 
 export interface EmailTemplateData {
   eventId?: string
@@ -63,8 +55,6 @@ export interface EmailTemplateData {
   location?: string
   attendeeName?: string
   note?: string
-  planName?: string
-  previousPlanName?: string
   taskTitle?: string
   projectName?: string
   budgetName?: string
@@ -87,7 +77,7 @@ export interface EmailTemplateDefinition {
   category: EmailCategory
   audience: string
   trigger: string
-  owner: 'MANA' | 'Stripe'
+  owner: 'MANA'
   implementation: 'live' | 'planned'
   requiredData: readonly string[]
   fixture: EmailTemplateData
@@ -136,30 +126,6 @@ const definitions: EmailTemplateDefinition[] = [
   define('calendar-reminder', 'Calendar reminder', 'calendar', 'Account owner', 'An event reaches its configured reminder offset', ['recipientName', 'eventTitle', 'date'], {
     subject: 'Reminder: {{eventTitle}}', preheader: '{{eventTitle}} starts soon.', heading: '{{eventTitle}} starts soon', paragraphs: ['Here are the details for your upcoming event.'], facts: [['When', '{{date}}'], ['Location', '{{location}}'], ['Attendee', '{{attendeeName}}'], ['Note', '{{note}}']], actionLabel: 'Open calendar',
   }, { eventTitle: 'Acme kickoff', date: '16 July 2026 at 10:00 (Asia/Bangkok)', location: 'Google Meet', attendeeName: 'Narin at Acme', note: 'Bring the revised project plan.' }),
-  define('cancellation-scheduled', 'Cancellation scheduled', 'billing', 'Account owner', 'Stripe marks a subscription to cancel at period end', ['recipientName', 'planName', 'date', 'actionUrl'], {
-    subject: 'Your {{planName}} plan will end on {{date}}', preheader: 'Your cancellation is scheduled.', heading: 'Cancellation scheduled', paragraphs: ['Your {{planName}} subscription remains active until {{date}}.', 'You can resume it before then without losing access.'], actionLabel: 'Manage subscription',
-  }, { planName: 'Pro', date: '31 July 2026' }),
-  define('subscription-started', 'Subscription started', 'billing', 'Account owner', 'Stripe confirms the first paid subscription', ['recipientName', 'planName', 'actionUrl'], {
-    subject: 'Your {{planName}} plan is active', preheader: 'Your paid plan is active.', heading: 'Your {{planName}} plan is active', paragraphs: ['Your subscription is ready. You now have access to all features included in {{planName}}.'], actionLabel: 'Open MANA',
-  }, { planName: 'Pro' }),
-  define('plan-changed', 'Plan changed', 'billing', 'Account owner', 'Stripe confirms a subscription price change', ['recipientName', 'previousPlanName', 'planName', 'actionUrl'], {
-    subject: 'Your plan changed to {{planName}}', preheader: 'Your subscription has been updated.', heading: 'Plan updated', paragraphs: ['Your plan changed from {{previousPlanName}} to {{planName}}.'], actionLabel: 'Review billing',
-  }, { previousPlanName: 'Starter', planName: 'Pro' }),
-  define('payment-action-required', 'Payment action required', 'billing', 'Account owner', 'Stripe reports invoice.payment_action_required', ['recipientName', 'planName', 'actionUrl'], {
-    subject: 'Action required to keep your {{planName}} plan', preheader: 'Your bank needs you to confirm this payment.', heading: 'Confirm your payment', paragraphs: ['Your bank requires an extra confirmation before we can renew your {{planName}} plan.'], actionLabel: 'Complete payment', warning: 'Access may be limited if the payment is not completed.'
-  }, { planName: 'Pro' }),
-  define('payment-failed', 'Payment failed', 'billing', 'Account owner', 'Stripe reports invoice.payment_failed', ['recipientName', 'planName', 'actionUrl'], {
-    subject: 'Payment failed for your {{planName}} plan', preheader: 'Update your payment method to avoid losing access.', heading: 'We could not process your payment', paragraphs: ['The latest payment for your {{planName}} plan did not go through.'], actionLabel: 'Update payment method', warning: 'We will follow Stripe’s retry schedule before access ends.'
-  }, { planName: 'Pro' }),
-  define('payment-recovered', 'Payment recovered', 'billing', 'Account owner', 'A previously failed Stripe invoice is paid', ['recipientName', 'planName', 'actionUrl'], {
-    subject: 'Payment received — your {{planName}} plan is active', preheader: 'Your subscription payment succeeded.', heading: 'Payment received', paragraphs: ['Your payment was successful and your {{planName}} subscription is active.'], actionLabel: 'Open MANA',
-  }, { planName: 'Pro' }),
-  define('cancellation-resumed', 'Cancellation resumed', 'billing', 'Account owner', 'Stripe removes cancel_at_period_end', ['recipientName', 'planName', 'actionUrl'], {
-    subject: 'Your {{planName}} plan will continue', preheader: 'Your scheduled cancellation was removed.', heading: 'Subscription resumed', paragraphs: ['Your {{planName}} plan will now renew normally.'], actionLabel: 'Review billing',
-  }, { planName: 'Pro' }),
-  define('subscription-ended', 'Subscription ended', 'billing', 'Account owner', 'Stripe deletes the subscription or entitlement actually expires', ['recipientName', 'planName', 'actionUrl'], {
-    subject: 'Your {{planName}} subscription has ended', preheader: 'Your account is now on the free plan.', heading: 'Subscription ended', paragraphs: ['Your {{planName}} subscription has ended and your account has moved to the free plan.', 'Your data remains available.'], actionLabel: 'Choose a plan',
-  }, { planName: 'Pro' }),
   activityDefinition('document-viewed', 'Document viewed', 'A recipient first opens a public document', 'Your {{documentType}} {{documentNumber}} was viewed', 'opened'),
   activityDefinition('document-accepted', 'Document accepted', 'A client accepts a quotation', 'Quotation {{documentNumber}} was accepted', 'accepted'),
   activityDefinition('document-rejected', 'Document rejected', 'A client rejects a quotation', 'Quotation {{documentNumber}} was rejected', 'rejected'),

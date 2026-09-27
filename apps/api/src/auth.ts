@@ -1,20 +1,13 @@
 import { i18n } from "@better-auth/i18n";
-import { stripe, type StripeOptions } from "@better-auth/stripe";
 import * as schema from "@mana/db/schema";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { admin, bearer, lastLoginMethod, openAPI, twoFactor } from "better-auth/plugins";
-import type Stripe from "stripe";
 import { db } from "@api/db";
 import { env } from "@api/env";
 import { logUserChangedPassword, logUserSignedIn } from "@api/lib/activity";
 import { ac, adminRole, userRole } from "@api/lib/access-control";
 import { trustedWebOrigins } from "@api/lib/cors-origins";
-import {
-  getStripeClient,
-  isStripeWebhookConfigured,
-} from "@api/modules/billing/service";
-import { handleBillingStripeEvent } from "@api/modules/billing/stripe-events";
 import { seedDefaultRemarkTemplates } from "@api/modules/business/service";
 import { sendVerificationEmail } from "@api/utils/email/resend";
 import { renderCatalogEmail } from "@api/utils/email/catalog";
@@ -51,20 +44,6 @@ const socialProviders = {
   ...(discordProvider ? { discord: discordProvider } : {}),
   ...(facebookProvider ? { facebook: facebookProvider } : {}),
 };
-
-const stripeClient = env.DEPLOYMENT_MODE === "self-hosted" ? null : getStripeClient();
-const stripePlugin =
-  stripeClient && env.STRIPE_WEBHOOK_SECRET && isStripeWebhookConfigured()
-    ? stripe({
-        stripeClient: stripeClient as unknown as StripeOptions["stripeClient"],
-        stripeWebhookSecret: env.STRIPE_WEBHOOK_SECRET,
-        createCustomerOnSignUp: true,
-        // Stripe is the subscription authority. Better Auth only verifies the
-        // webhook and links Stripe customers; it does not keep a second plan state.
-        subscription: { enabled: false },
-        onEvent: async (event) => handleBillingStripeEvent(event as unknown as Stripe.Event),
-      })
-    : null;
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -125,7 +104,6 @@ export const auth = betterAuth({
         },
       },
     }),
-    ...(stripePlugin ? [stripePlugin] : []),
   ],
   account: {
     // sign-in re-grants only default scopes; without this, every plain Google

@@ -258,7 +258,6 @@ export function ChatSessionPage() {
     sendMessage,
     stopGeneration,
     clearMessages,
-    isCapped,
   } = useChatStream(
     sessionId,
     user,
@@ -332,7 +331,6 @@ export function ChatSessionPage() {
   }, [streamingMessages, sessionMessages]);
 
   const displayMessages = [...sessionMessages, ...streamingMessages];
-  const currentBucketCapped = isCapped();
 
   function handleExport() {
     const md = exportToMarkdown(displayMessages, sessionTitle);
@@ -467,7 +465,6 @@ export function ChatSessionPage() {
             hasMessages={displayMessages.length > 0}
             isStreaming={isStreaming}
             onStop={stopGeneration}
-            disabled={currentBucketCapped}
             leftSlot={<AutoModelChip />}
           />
         </div>

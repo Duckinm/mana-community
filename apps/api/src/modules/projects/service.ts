@@ -9,7 +9,6 @@ import { calendarDateFromTimestamp, parseCalendarDate, toCalendarDateString } fr
 import { normalizeTiptapDoc } from '@api/lib/rich-text'
 import { instantFieldToWire } from '@api/lib/wire-row'
 import { createNotification } from '@api/modules/notifications/create'
-import { assertProjectCreateAllowed } from '@api/modules/billing/entitlements'
 import { NotFoundError, ValidationError } from '@api/lib/errors'
 import type {
   CreateProjectBody,
@@ -214,7 +213,6 @@ export async function createProject(
   userId: string,
   body: Static<typeof CreateProjectBody>,
 ) {
-  await assertProjectCreateAllowed(userId)
   const prefix = await uniquePrefix(userId, body.name)
   const [project] = await db.insert(projects).values({
     userId,
@@ -255,13 +253,6 @@ export async function patchProject(
   if (body.contactId !== undefined) patch.contactId = body.contactId
   patch.updatedAt = new Date()
 
-  if (body.archived === false) {
-    const [existing] = await db
-      .select({ archived: projects.archived })
-      .from(projects)
-      .where(and(eq(projects.id, projectId), eq(projects.userId, userId)))
-    if (existing?.archived) await assertProjectCreateAllowed(userId)
-  }
 
   const [updated] = await db
     .update(projects)
@@ -293,7 +284,6 @@ export async function softDeleteProject(userId: string, projectId: string) {
 }
 
 export async function restoreProject(userId: string, projectId: string) {
-  await assertProjectCreateAllowed(userId)
   const [updated] = await db
     .update(projects)
     .set({ deletedAt: null, updatedAt: new Date() })
@@ -323,7 +313,6 @@ export async function duplicateProject(userId: string, projectId: string) {
     .from(projects)
     .where(and(eq(projects.id, projectId), eq(projects.userId, userId)))
   if (!original) return null
-  await assertProjectCreateAllowed(userId)
   const prefix = await uniquePrefix(userId, `${original.name} copy`)
   const [copy] = await db.insert(projects).values({
     userId,

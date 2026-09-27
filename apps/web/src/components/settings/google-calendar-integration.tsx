@@ -11,13 +11,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { useSettings } from '@/context/settings'
 import { useCalendarConnection } from '@/hooks/use-calendar-connection'
 import { linkSocial } from '@/lib/auth-client'
 import { formatTimestampRelative } from '@/lib/timestamp'
-import { CALENDAR_SYNC_ALLOWED, type PlanId } from '@mana/db/plan-entitlements'
 import { GOOGLE_CALENDAR_SCOPES } from '@mana/db/google-scopes'
-import { Link } from '@tanstack/react-router'
 
 function GoogleCalendarIcon() {
   return (
@@ -41,9 +38,6 @@ export function GoogleCalendarIntegration() {
   const capabilities = useCapabilities()
   const providerAvailable = !capabilities.isError && capabilities.data?.googleCalendar === true
   const { t } = useTranslation('settings')
-  const { user } = useSettings()
-  const plan = (user?.plan as PlanId | undefined) ?? 'free'
-  const syncLocked = !CALENDAR_SYNC_ALLOWED[plan]
   const {
     connection,
     calendarGroups,
@@ -131,7 +125,7 @@ export function GoogleCalendarIntegration() {
 
   const connected = !!connection?.connected
   const syncedCalendars = connection?.calendars ?? []
-  const limit = connection ? connection.limit : 1
+  const limit = connection?.limit ?? null
   const atLimit = limit !== null && syncedCalendars.length >= limit
 
   const syncedByAccount = new Map<string, typeof syncedCalendars>()
@@ -259,14 +253,6 @@ export function GoogleCalendarIntegration() {
                   )}
                 </SelectContent>
               </Select>
-            ) : atLimit && plan !== 'aether' ? (
-              <Link
-                to="/settings/billing"
-                search={{ success: false, canceled: false }}
-                className="text-2xs text-primary hover:underline"
-              >
-                {t('integrations.googleCalendar.upgradeForMore')}
-              </Link>
             ) : !atLimit && brokenGroups.length === 0 ? (
               <p className="text-2xs text-muted-foreground">
                 {t('integrations.googleCalendar.noCalendarsFound')}
@@ -304,17 +290,11 @@ export function GoogleCalendarIntegration() {
       <div className="col-start-2 flex flex-wrap items-center gap-2 sm:col-start-3 sm:row-start-1 sm:justify-end">
         {connected ? (
           <>
-            {syncLocked ? (
-              <Badge variant="warning" size="pill" className="gap-1.5">
-                {t('integrations.googleCalendar.syncPaused')}
-              </Badge>
-            ) : (
-              <Badge variant="success" size="pill" className="gap-1.5">
-                <StatusDot status="active" />
-                {t('integrations.connected')}
-              </Badge>
-            )}
-            {syncedCalendars.length > 0 && !syncLocked ? (
+            <Badge variant="success" size="pill" className="gap-1.5">
+              <StatusDot status="active" />
+              {t('integrations.connected')}
+            </Badge>
+            {syncedCalendars.length > 0 ? (
               <button
                 type="button"
                 disabled={isPending || isLoading || !providerAvailable}
@@ -333,14 +313,6 @@ export function GoogleCalendarIntegration() {
               {t('integrations.googleCalendar.disconnectAll')}
             </button>
           </>
-        ) : syncLocked ? (
-          <Link
-            to="/settings/billing"
-            search={{ success: false, canceled: false }}
-            className="flex min-h-9 items-center rounded-lg border border-border-subtle px-3 py-1.5 text-xs text-muted-foreground transition-colors duration-base hover:border-border-default hover:text-foreground sm:min-h-8"
-          >
-            {t('integrations.googleCalendar.upgradeRequired')}
-          </Link>
         ) : (
           <button
             type="button"

@@ -36,7 +36,7 @@ export async function consumeSseJsonEvents(
           continue
         }
         onEvent(event)
-        if (['done', 'error', 'cap_reached'].includes(String(event.type))) return
+        if (['done', 'error'].includes(String(event.type))) return
       }
     }
   } finally {

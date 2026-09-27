@@ -68,7 +68,7 @@ export function useGetStarted(enabled: boolean) {
   const queryClient = useQueryClient();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
-  const { data, isPending } = useQuery({
+  const { data, isPending, isError, refetch } = useQuery({
     queryKey: queryKeys.getStarted,
     queryFn: async () =>
       expectEden(await client.api.users.me["get-started"].get()),
@@ -97,5 +97,5 @@ export function useGetStarted(enabled: boolean) {
   };
   const completed = STEP_KEYS.filter((key) => done[key]).length;
 
-  return { data, isPending, done, completed };
+  return { data, isPending, isError, refetch, done, completed };
 }

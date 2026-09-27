@@ -1,5 +1,4 @@
-import { documents, emailLogs, users } from "@mana/db";
-import { getCoreEntitlements, type PlanId } from "@mana/db/plan-entitlements";
+import { documents, emailLogs } from "@mana/db";
 import { and, count, eq, gte } from "drizzle-orm";
 import { db } from "@api/db";
 import { env } from "@api/env";
@@ -9,8 +8,7 @@ import { buildDocumentEmailHtml } from "@api/utils/email/document-email";
 
 export type SendDocumentEmailResult =
   | { status: "sent" | "blocked" | "failed"; sentAt: string | null }
-  | { status: "no_client_email"; sentAt: null }
-  | { status: "plan_limit"; sentAt: null; used: number; cap: number };
+  | { status: "no_client_email"; sentAt: null };
 
 function monthStartUtc(): Date {
   const now = new Date();
@@ -45,16 +43,6 @@ export async function sendDocumentEmail(
   if (!doc || doc.userId !== userId) throw new NotFoundError();
 
   if (!doc.clientEmail) return { status: "no_client_email", sentAt: null };
-
-  const [user] = await db
-    .select({ plan: users.plan })
-    .from(users)
-    .where(eq(users.id, userId));
-  const cap = getCoreEntitlements((user?.plan ?? "free") as PlanId, env.DEPLOYMENT_MODE).docsSent;
-  if (cap !== null) {
-    const used = await countDocumentsSentThisMonth(userId);
-    if (used >= cap) return { status: "plan_limit", sentAt: null, used, cap };
-  }
 
   const viewUrl = `${env.WEB_URL}/view/${doc.publicToken}`;
   const { subject, html } = await buildDocumentEmailHtml(doc, viewUrl);

@@ -46,7 +46,7 @@ export function AiNarrativeCard() {
  )}
  </button>
  </div>
- <CapabilityNotice available={capabilities.data?.ai} unavailableKey="aiUnavailable" />
+ <CapabilityNotice available={capabilities.data?.ai} unavailableKey="aiUnavailable" availableKey="aiCost" />
  {error && (
  <p className="text-xs text-red-400/90">{error}</p>
  )}

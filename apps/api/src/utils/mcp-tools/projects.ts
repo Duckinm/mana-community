@@ -514,7 +514,7 @@ export const projectTools = [
   {
     name: 'create_project',
     description:
-      'Create a new project. Only name is required — call create_project as soon as you have a project name. Do not ask the user for optional fields (client, dates, description, color) unless they volunteered them. If PLAN_LIMIT_PROJECTS is returned, quote the exact used/cap from the result (Free 1, Mana 10, Aether unlimited).',
+      'Create a new project. Only name is required — call create_project as soon as you have a project name. Do not ask the user for optional fields (client, dates, description, color) unless they volunteered them.',
     input_schema: {
       type: 'object' as const,
       properties: {
@@ -557,7 +557,7 @@ export const projectTools = [
   {
     name: 'restore_project',
     description:
-      'Restore a soft-deleted project from trash. Counts toward the active-project cap (Free 1, Mana 10, Aether unlimited) — returns PLAN_LIMIT_PROJECTS with exact used/cap when blocked.',
+      'Restore a soft-deleted project from trash.',
     input_schema: {
       type: 'object' as const,
       properties: { projectId: { type: 'string' } },
@@ -567,7 +567,7 @@ export const projectTools = [
   {
     name: 'duplicate_project',
     description:
-      'Duplicate a project (creates a copy with "(copy)" suffix, no tasks copied). Counts toward the active-project cap — returns PLAN_LIMIT_PROJECTS with exact used/cap when blocked.',
+      'Duplicate a project (creates a copy with "(copy)" suffix, no tasks copied).',
     input_schema: {
       type: 'object' as const,
       properties: { projectId: { type: 'string' } },

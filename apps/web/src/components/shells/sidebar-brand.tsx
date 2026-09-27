@@ -9,8 +9,7 @@ import { Link } from "@tanstack/react-router";
 export function SidebarBrand({ collapsed }: { collapsed: boolean }) {
   const link = (
     <Link
-      to="/chat"
-      search={{ new: true }}
+      to="/home"
       aria-label="MANA home"
       className="shrink-0 size-9 flex items-center justify-center"
     >

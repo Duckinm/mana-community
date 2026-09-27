@@ -1,6 +1,6 @@
 import {
   Bell,
-  CreditCard,
+  TrendingUp,
   Palette,
   Puzzle,
   Shield,
@@ -15,7 +15,7 @@ export type SettingsSectionId =
   | "appearance"
   | "notifications"
   | "ai"
-  | "billing"
+  | "usage"
   | "integrations"
   | "labels"
   | "privacy";
@@ -28,7 +28,7 @@ export const SETTINGS_SECTIONS: {
   { id: "appearance", icon: Palette },
   { id: "notifications", icon: Bell },
   { id: "ai", icon: ManaSparkle },
-  { id: "billing", icon: CreditCard },
+  { id: "usage", icon: TrendingUp },
   { id: "integrations", icon: Puzzle },
   { id: "labels", icon: Tag },
   { id: "privacy", icon: Shield },
@@ -39,7 +39,7 @@ export const SETTINGS_SECTION_ROUTES: Record<SettingsSectionId, string> = {
   appearance: "/settings/appearance",
   notifications: "/settings/notifications",
   ai: "/settings/ai",
-  billing: "/settings/billing",
+  usage: "/settings/usage",
   integrations: "/settings/integrations",
   labels: "/settings/labels",
   privacy: "/settings/privacy",
@@ -48,7 +48,7 @@ export const SETTINGS_SECTION_ROUTES: Record<SettingsSectionId, string> = {
 export const SETTINGS_NO_SAVE = new Set<SettingsSectionId>([
   "privacy",
   "labels",
-  "billing",
+  "usage",
 ]);
 
 export const SETTINGS_GROUPS: {
@@ -61,7 +61,7 @@ export const SETTINGS_GROUPS: {
   },
   {
     id: "workspace",
-    sectionIds: ["ai", "billing", "integrations", "labels"],
+    sectionIds: ["ai", "usage", "integrations", "labels"],
   },
   {
     id: "security",

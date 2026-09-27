@@ -15,5 +15,10 @@
   "emailUnavailable": "Email delivery is not configured on this server.",
   "aiOff": "AI unavailable",
   "paymentSlipExtractionUnavailable": "Automatic slip reading is not configured. You can still upload the image for the document owner to review and record the payment manually.",
-  "channelUnavailable": "This notification channel is unavailable or not connected."
+  "channelUnavailable": "This notification channel is unavailable or not connected.",
+  "aiCost": "AI actions use the connected provider account. Provider charges may apply.",
+  "voiceCost": "Voice transcription uses the connected provider account. Provider charges may apply.",
+  "aiVoiceCost": "AI chat and voice transcription use the connected provider accounts. Provider charges may apply.",
+  "verificationCost": "Bank verification uses the connected provider account. Provider charges may apply.",
+  "slipCost": "Automatic slip reading and bank verification use the connected provider accounts. Provider charges may apply."
 }

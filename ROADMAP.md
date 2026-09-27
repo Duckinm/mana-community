@@ -12,7 +12,8 @@ The first public milestone is a local self-hosted preview. Core contacts, projec
 ## Next milestones
 
 - Gather beginner installation reports across Linux, macOS and Windows.
-- Improve unconfigured integration controls and error messages.
+- ~~Improve unconfigured integration controls and error messages.~~
+- ~~Make the first screen useful without AI and remove Cloud pricing/reward flows from the community app.~~
 - Rehearse public-server HTTPS, outbound email, resource requirements and cross-version recovery before offering a supported hosting recipe.
 - Expand keyboard, small-screen and Thai/English verification.
 - Complete the auth/user test placeholders and fix asynchronous test cleanup so background-task failures cannot hide behind passing assertions.

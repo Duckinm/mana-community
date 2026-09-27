@@ -56,8 +56,7 @@ export async function getStartedStatus(userId: string) {
     db.select({ id: transactions.id }).from(transactions).where(eq(transactions.userId, userId)).limit(1),
     db
       .select({
-        profileAiActionCredits: users.profileAiActionCredits,
-        profileAiRewardClaimedAt: users.profileAiRewardClaimedAt,
+        freelancerType: users.freelancerType,
       })
       .from(users)
       .where(eq(users.id, userId))
@@ -69,56 +68,8 @@ export async function getStartedStatus(userId: string) {
     hasProject: projectRow.length > 0,
     hasDocument: documentRow.length > 0,
     hasTransaction: transactionRow.length > 0,
-    hasProfile: Boolean(userRow[0]?.profileAiRewardClaimedAt),
-    profileAiActionCredits: userRow[0]?.profileAiActionCredits ?? 0,
+    hasProfile: Boolean(userRow[0]?.freelancerType?.trim()),
   }
-}
-
-const PROFILE_AI_ACTION_REWARD = 5
-
-export async function completeProfileReward(
-  userId: string,
-  profile: {
-    freelancerType: string
-    hourlyRate?: string | null
-    currency?: string | null
-    revenueGoal?: string | null
-    activeProjects?: string | null
-    painPoint?: string | null
-    heardFrom?: string | null
-  },
-) {
-  const now = new Date()
-  const profilePatch = {
-    freelancerType: profile.freelancerType,
-    hourlyRate: profile.hourlyRate ?? null,
-    currency: profile.currency ?? null,
-    revenueGoal: profile.revenueGoal ?? null,
-    activeProjects: profile.activeProjects ?? null,
-    painPoint: profile.painPoint ?? null,
-    heardFrom: profile.heardFrom ?? null,
-    updatedAt: now,
-  }
-  const [claimed] = await db
-    .update(users)
-    .set({
-      ...profilePatch,
-      profileAiActionCredits: sql`${users.profileAiActionCredits} + ${PROFILE_AI_ACTION_REWARD}`,
-      profileAiRewardClaimedAt: now,
-    })
-    .where(and(eq(users.id, userId), isNull(users.profileAiRewardClaimedAt)))
-    .returning({ profileAiActionCredits: users.profileAiActionCredits })
-
-  if (claimed) {
-    return { granted: true, profileAiActionCredits: claimed.profileAiActionCredits }
-  }
-
-  const [updated] = await db
-    .update(users)
-    .set(profilePatch)
-    .where(eq(users.id, userId))
-    .returning({ profileAiActionCredits: users.profileAiActionCredits })
-  return { granted: false, profileAiActionCredits: updated?.profileAiActionCredits ?? 0 }
 }
 
 export async function updateUser(
@@ -296,7 +247,6 @@ export async function queryUserContext(userId: string) {
     .select({
       name: users.name,
       email: users.email,
-      plan: users.plan,
       hourlyRate: users.hourlyRate,
       currency: users.currency,
       revenueGoal: users.revenueGoal,

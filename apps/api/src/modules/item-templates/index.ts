@@ -2,7 +2,6 @@ import Elysia, { t } from 'elysia'
 import { betterAuthPlugin } from '@api/lib/auth-plugin'
 import type { itemTemplates } from '@mana/db'
 import { env } from '@api/env'
-import { assertStorageQuotaAvailable } from '@api/modules/storage/service'
 import {
   deleteTemplateImage,
   presignTemplateImage,
@@ -95,8 +94,6 @@ export const itemTemplatesModule = new Elysia({ name: 'item-templates', prefix: 
 
     let imageR2Key: string
     try {
-      const buffer = Buffer.from(body.data, 'base64')
-      await assertStorageQuotaAvailable(user.id, buffer.byteLength)
       imageR2Key = await uploadTemplateImage(
         params.id,
         body.data,
@@ -104,9 +101,6 @@ export const itemTemplatesModule = new Elysia({ name: 'item-templates', prefix: 
         current.imageR2Key,
       )
     } catch (err) {
-      if (err instanceof Error && err.message === 'QUOTA_EXCEEDED') {
-        return status(413, { error: 'Storage quota exceeded. Limit is 1 GB.' })
-      }
       const message = err instanceof Error ? err.message : 'Image upload failed'
       return status(400, { message })
     }

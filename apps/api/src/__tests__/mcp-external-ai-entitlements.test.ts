@@ -17,8 +17,8 @@ afterAll(async () => {
   await db.delete(users).where(inArray(users.id, createdUserIds))
 })
 
-describe('external MCP AI entitlements', () => {
-  it('blocks an external AI tool before it can call the provider once the plan cap is used', async () => {
+describe('external MCP AI usage', () => {
+  it('continues to domain validation above the old cap and releases failed action usage', async () => {
     const [user] = await db
       .insert(users)
       .values({ name: 'MCP entitlement test', email: `mcp-entitlement-${crypto.randomUUID()}@example.com` })
@@ -32,18 +32,16 @@ describe('external MCP AI entitlements', () => {
       count: 25,
     })
 
-    const result = await executeToolCall(
+    const result = executeToolCall(
       user.id,
       'generate_tasks',
       { projectId: 'not-reached', brief: 'This must not reach the AI provider.' },
       { source: 'external-mcp' },
     )
 
-    expect(result).toMatchObject({
-      error: 'PLAN_LIMIT_AI_ACTIONS',
-      plan: 'free',
-      used: 25,
-      cap: 25,
-    })
+    await expect(result).rejects.toThrow()
+    const [usage] = await db.select().from(aiActionUsage).where(inArray(aiActionUsage.userId, [user.id]))
+    expect(usage.count).toBe(25)
+
   })
 })

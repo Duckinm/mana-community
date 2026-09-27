@@ -296,8 +296,6 @@
   },
   "toast": {
     "createProjectFailed": "Failed to create project",
-    "projectLimitReached": "You've reached your plan's active project limit",
-    "projectLimitUpgrade": "Upgrade plan",
     "saveProjectFailed": "Failed to save project",
     "deleteProjectFailed": "Failed to delete project",
     "restoreProjectFailed": "Failed to restore project",

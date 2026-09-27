@@ -232,7 +232,7 @@ export const CommandInput = forwardRef<HTMLTextAreaElement, CommandInputProps>(
 
     return (
       <div className="w-full max-w-2xl">
-        <CapabilityNotice available={capabilities.data?.ai} unavailableKey="aiUnavailable" />
+        <CapabilityNotice available={capabilities.data?.ai} unavailableKey="aiUnavailable" availableKey={voiceEnabled && capabilities.data?.transcription ? "aiVoiceCost" : "aiCost"} />
         {voiceEnabled && capabilities.data?.ai && <CapabilityNotice available={capabilities.data?.transcription} unavailableKey="transcriptionUnavailable" />}
         <div className="flex min-w-0 flex-col overflow-hidden rounded-xl border border-input bg-card">
           {attachedFiles.length > 0 && (

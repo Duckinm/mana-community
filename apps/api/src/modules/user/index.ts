@@ -1,11 +1,10 @@
 import Elysia, { t } from 'elysia'
 import { PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3'
 import { betterAuthPlugin } from '@api/lib/auth-plugin'
-import { getUser, updateUser, deleteUser, exportUser, getStartedStatus, completeProfileReward } from '@api/modules/user/service'
-import { UpdateUserBody, UserResponse, AvatarUploadResponse, McpTokenRegenerateResponse, GetStartedResponse, CompleteProfileRewardBody, CompleteProfileRewardResponse, NotFoundResponse } from '@api/modules/user/model'
+import { getUser, updateUser, deleteUser, exportUser, getStartedStatus } from '@api/modules/user/service'
+import { UpdateUserBody, UserResponse, AvatarUploadResponse, McpTokenRegenerateResponse, GetStartedResponse, NotFoundResponse } from '@api/modules/user/model'
 import { MessageResponse, ErrorResponse } from '@api/lib/wire-schema'
 import { logUserUpdatedSettings } from '@api/lib/activity'
-import { assertStorageQuotaAvailable } from '@api/modules/storage/service'
 import { r2, R2_PUBLIC_BUCKET } from '@api/utils/r2'
 import { buildPublicUrl, extractR2Key } from '@api/utils/r2/public-url'
 import { env } from '@api/env'
@@ -27,15 +26,6 @@ export const userModule = new Elysia({ name: 'user', prefix: '/api/users' })
     return getStartedStatus(user.id)
   }, { auth: true, response: { 200: GetStartedResponse }, detail: { tags: ['Users'], summary: 'Get-started checklist status for current user' } })
 
-  .post('/me/complete-profile', async ({ user, body }) => {
-    return completeProfileReward(user.id, body)
-  }, {
-    auth: true,
-    body: CompleteProfileRewardBody,
-    response: { 200: CompleteProfileRewardResponse },
-    detail: { tags: ['Users'], summary: 'Save optional profile and grant its one-time AI Action credit' },
-  })
-
   .patch('/me', async ({ user, body, status }) => {
     if (body.disabledAiTools) {
       body.disabledAiTools = [...new Set(body.disabledAiTools.filter((name) => mcpToolNames.has(name)))]
@@ -43,10 +33,7 @@ export const userModule = new Elysia({ name: 'user', prefix: '/api/users' })
     if (body.disabledExternalMcpTools) {
       body.disabledExternalMcpTools = [...new Set(body.disabledExternalMcpTools.filter(isExternalMcpToolName))]
     }
-    if (body.hideBranding !== undefined) {
-      const current = await getUser(user.id)
-      if (env.DEPLOYMENT_MODE !== 'self-hosted' && current?.plan === 'free') delete body.hideBranding
-    }
+
     const updated = await updateUser(user.id, body)
     if (!updated) return status(404, { message: 'Not found' })
     logUserUpdatedSettings(user.id, Object.keys(body))
@@ -87,7 +74,6 @@ export const userModule = new Elysia({ name: 'user', prefix: '/api/users' })
     let avatarUrl: string
     try {
       const buffer = Buffer.from(base64Data, 'base64')
-      await assertStorageQuotaAvailable(user.id, buffer.byteLength)
       const ext = mediaType === 'image/jpeg' ? 'jpg' : (mediaType.split('/')[1] ?? 'jpg')
       const key = `avatars/${user.id}.${ext}`
 
@@ -107,9 +93,6 @@ export const userModule = new Elysia({ name: 'user', prefix: '/api/users' })
 
       avatarUrl = buildPublicUrl(key)
     } catch (err) {
-      if (err instanceof Error && err.message === 'QUOTA_EXCEEDED') {
-        return status(413, { error: 'Storage quota exceeded. Limit is 1 GB.' })
-      }
       const message = err instanceof Error ? err.message : 'Avatar upload failed'
       return status(500, { message })
     }

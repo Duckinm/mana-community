@@ -37,7 +37,7 @@ API integration tests require a disposable PostgreSQL database and explicit dumm
 
 ## Environment variables
 
-The [API example](../apps/api/.env.example) and [startup schema](../apps/api/src/env.ts) define the required values. Use `DEPLOYMENT_MODE=self-hosted` for core features without Cloud subscription caps. Email/password signup still requires verification through a working mail transport.
+The [API example](../apps/api/.env.example) and [startup schema](../apps/api/src/env.ts) define the required values. This repository runs only the community edition: features have no subscription tiers, checkout, or MANA usage quotas. Optional providers still require credentials and may charge for their services. Email/password signup still requires verification through a working mail transport.
 
 AI, OAuth and external integrations are optional. [Self-hosting](self-hosting.md#optional-integrations) explains the private integration configuration file. Provider credentials may incur costs. Container PDF rendering uses an internal web origin and browser-facing signed storage URLs; preserve that separation when changing networking.
 

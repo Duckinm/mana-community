@@ -38,7 +38,6 @@ export function externalMcpErrorMessage(err: unknown) {
   if (err instanceof Error && (
     err.message.startsWith('Unknown or unavailable tool:')
     || err.message.startsWith('Invalid arguments for ')
-    || err.message.startsWith('PLAN_LIMIT_')
   )) return err.message
   return 'Tool request failed. Check the supplied values and try again.'
 }

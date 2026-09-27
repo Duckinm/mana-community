@@ -11,12 +11,6 @@ import { client } from '@/lib/eden'
 
 const BASE_URL = resolveApiBaseUrl()
 
-export type CapReachedInfo = {
-  used: number
-  cap: number
-  resetAt: string
-}
-
 export type ChatMessage = {
   id: string
   role: 'user' | 'assistant'
@@ -24,12 +18,11 @@ export type ChatMessage = {
   isStreaming?: boolean
   toolCalls?: string[]
   toolResults?: ChatToolResult[]
-  capReached?: CapReachedInfo
 }
 
 const KNOWN_TOOLS = new Set([
   'get_projects', 'get_tasks', 'get_financial_summary', 'get_contacts',
-  'get_transactions', 'get_user_context', 'get_plan_usage', 'get_storage_summary',
+  'get_transactions', 'get_user_context', 'get_usage', 'get_storage_summary',
   'create_task', 'create_project', 'create_contact', 'create_transaction',
   'update_task', 'update_task_status', 'update_project', 'update_transaction',
   'update_contact', 'delete_task', 'delete_project', 'delete_contact',
@@ -79,8 +72,6 @@ type StreamEventDeps = {
   onUiActionRef: MutableRefObject<((overlay: ChatUiOverlay) => void) | undefined>
   pendingToolResultsRef: MutableRefObject<ChatToolResult[]>
   setError: (message: string | null) => void
-  setCapped: Dispatch<SetStateAction<boolean>>
-  cappedResetAtRef: MutableRefObject<string | null>
 }
 
 
@@ -124,25 +115,6 @@ function applyChatStreamEvent(event: Record<string, unknown>, d: StreamEventDeps
     case 'ui_action': {
       const overlay = parseChatUiAction(event)
       if (overlay) d.onUiActionRef.current?.(overlay)
-      return
-    }
-    case 'cap_reached': {
-      const capReached: CapReachedInfo = {
-        used: (event.used as number) ?? 0,
-        cap: (event.cap as number) ?? 0,
-        resetAt: (event.resetAt as string) ?? new Date().toISOString(),
-      }
-      d.setMessages((prev) =>
-        prev.map((m) =>
-          m.id === d.assistantId ? { ...m, content: '', capReached, isStreaming: false } : m,
-        ),
-      )
-      d.cappedResetAtRef.current = capReached.resetAt
-      d.setCapped(true)
-      d.setIsStreaming(false)
-      d.setToolStatus(null)
-      d.streamingIdRef.current = null
-      d.isStreamingRef.current = false
       return
     }
     case 'error': {
@@ -210,8 +182,6 @@ export function useChatStream(
     setError(null)
     return () => { abortControllerRef.current?.abort() }
   }, [sessionId])
-  const [capped, setCapped] = useState(false)
-  const cappedResetAtRef = useRef<string | null>(null)
   const streamingIdRef = useRef<string | null>(null)
   const abortControllerRef = useRef<AbortController | null>(null)
   const isStreamingRef = useRef(false)
@@ -321,8 +291,6 @@ export function useChatStream(
         onUiActionRef,
         pendingToolResultsRef,
         setError,
-        setCapped,
-        cappedResetAtRef,
       }
       await consumeSseJsonEvents(res.body, (ev) => {
         if (abortControllerRef.current === abortController) applyChatStreamEvent(ev, deps)
@@ -351,17 +319,6 @@ export function useChatStream(
     }
   }, [sessionId])
 
-  const isCapped = useCallback(() => {
-    if (!capped) return false
-    const resetAt = cappedResetAtRef.current
-    if (resetAt && Date.now() >= new Date(resetAt).getTime()) {
-      setCapped(false)
-      cappedResetAtRef.current = null
-      return false
-    }
-    return true
-  }, [capped])
-
   return {
     messages,
     error,
@@ -371,7 +328,5 @@ export function useChatStream(
     stopGeneration,
     clearHistory,
     clearMessages,
-    capped,
-    isCapped,
   }
 }

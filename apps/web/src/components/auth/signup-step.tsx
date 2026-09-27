@@ -49,8 +49,8 @@ export function SignupStep({
     sessionStorage.setItem('fast-lane-open-contact', '1');
     const { error } = await signIn.social({
       provider,
-      callbackURL: `${window.location.origin}/contacts`,
-      newUserCallbackURL: `${window.location.origin}/contacts`,
+      callbackURL: `${window.location.origin}/home`,
+      newUserCallbackURL: `${window.location.origin}/home`,
       errorCallbackURL: `${window.location.origin}/register`,
     });
     if (error) {
@@ -70,7 +70,7 @@ export function SignupStep({
         name,
         email: value.email,
         password: value.password,
-        callbackURL: `${window.location.origin}/chat`,
+        callbackURL: `${window.location.origin}/home`,
       });
       if (error) {
         setErrorMsg(error.message ?? t("register.failed"));

@@ -1,7 +1,6 @@
 import Elysia, { t } from 'elysia'
 import { betterAuthPlugin } from '@api/lib/auth-plugin'
 import { env } from '@api/env'
-import { assertStorageQuotaAvailable } from '@api/modules/storage/service'
 import {
   listSenderProfiles,
   createSenderProfile,
@@ -95,15 +94,10 @@ export const businessModule = new Elysia({ name: 'business', prefix: '/api/busin
       return status(400, { message: 'Invalid image kind' })
     }
     try {
-      const buffer = Buffer.from(body.data, 'base64')
-      await assertStorageQuotaAvailable(user.id, buffer.byteLength)
       const row = await setSenderProfileImage(user.id, params.id, params.kind, body.data, body.mediaType)
       if (!row) return status(404, { message: 'Not found' })
       return row
     } catch (err) {
-      if (err instanceof Error && err.message === 'QUOTA_EXCEEDED') {
-        return status(413, { error: 'Storage quota exceeded. Limit is 1 GB.' })
-      }
       const message = err instanceof Error ? err.message : 'Image upload failed'
       return status(400, { message })
     }

@@ -6,7 +6,6 @@ import { getCurrentMonthUsage } from '@api/modules/billing/usage'
 import { db } from '@api/db'
 import { users } from '@mana/db'
 import { eq } from 'drizzle-orm'
-import type { PlanId } from '@mana/db/plan-entitlements'
 import type { ToolContext } from '@api/utils/mcp-tools/tool-context'
 
 export { getDashboardSnapshot } from '@api/modules/accounting/service'
@@ -174,13 +173,13 @@ export const financeTools = [
   },
   {
     name: 'get_user_context',
-    description: 'Get user profile: name, plan, hourly rate, currency, revenue goal, freelancer type',
+    description: 'Get user profile: name, hourly rate, currency, revenue goal, freelancer type',
     input_schema: { type: 'object' as const, properties: {}, required: [] },
   },
   {
-    name: 'get_plan_usage',
+    name: 'get_usage',
     description:
-      'Get the user\'s current plan and live usage vs caps: active projects (Free 1, Mana 10, Aether unlimited) and AI Actions this month. Call this before explaining plan limits.',
+      'Get current resource usage and AI availability. MANA Community has no subscription limits; configured providers may charge for their services.',
     input_schema: { type: 'object' as const, properties: {}, required: [] },
   },
   {
@@ -345,11 +344,11 @@ export const financeHandlers: Record<string, McpToolHandler> = {
   'get_tax_estimate': (userId) => getTaxEstimate(userId),
   'get_profit_by_month': (userId) => getProfitByMonth(userId),
   'get_user_context': (userId) => queryUserContext(userId),
-  'get_plan_usage': async (userId) => {
-    const [user] = await db.select({ plan: users.plan }).from(users).where(eq(users.id, userId))
+  'get_usage': async (userId) => {
+    const [user] = await db.select({ id: users.id }).from(users).where(eq(users.id, userId))
     if (!user) return { found: false }
-    const usage = await getCurrentMonthUsage(userId, user.plan as PlanId)
-    return { plan: user.plan, ...usage }
+    const usage = await getCurrentMonthUsage(userId)
+    return usage
   },
   'update_user': async (userId, args) => {
     return updateUserContext(userId, {

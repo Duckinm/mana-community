@@ -15,7 +15,6 @@ import { NotFoundResponse, NoContentResponse } from '@api/lib/wire-schema'
 import { r2, R2_PUBLIC_BUCKET } from '@api/utils/r2'
 import { buildPublicUrl, extractR2Key } from '@api/utils/r2/public-url'
 import { env } from '@api/env'
-import { assertStorageQuotaAvailable } from '@api/modules/storage/service'
 
 function parseVcf(vcf: string) {
   const cards = vcf.split(/BEGIN:VCARD/i).filter((s) => s.trim())
@@ -145,7 +144,6 @@ export const contactsModule = new Elysia({ name: 'contacts', prefix: '/api' })
     let imageUrl: string
     try {
       const buffer = Buffer.from(base64Data, 'base64')
-      await assertStorageQuotaAvailable(user.id, buffer.byteLength)
       const ext = mediaType === 'image/jpeg' ? 'jpg' : (mediaType.split('/')[1] ?? 'jpg')
       const key = `contact-images/${params.id}-${Date.now()}.${ext}`
 
@@ -164,9 +162,6 @@ export const contactsModule = new Elysia({ name: 'contacts', prefix: '/api' })
 
       imageUrl = buildPublicUrl(key)
     } catch (err) {
-      if (err instanceof Error && err.message === 'QUOTA_EXCEEDED') {
-        return status(413, { error: 'Storage quota exceeded. Limit is 1 GB.' })
-      }
       const message = err instanceof Error ? err.message : 'Image upload failed'
       return status(500, { message })
     }

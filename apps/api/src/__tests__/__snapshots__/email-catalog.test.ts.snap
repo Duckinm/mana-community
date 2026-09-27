@@ -34,38 +34,6 @@ exports[`email catalog keeps subjects and plain-text copy reviewable 1`] = `
     "subject": "Reminder: Acme kickoff",
     "text": "MANA\\n\\n\\nACME KICKOFF STARTS SOON\\n\\nHi Mina,\\n\\nHere are the details for your upcoming event.\\n\\nWhen\\n16 July 2026 at 10:00 (Asia/Bangkok)\\n\\nLocation\\nGoogle Meet\\n\\nAttendee\\nNarin at Acme\\n\\nNote\\nBring the revised project plan.\\n\\nOpen calendar http://localhost:5173\\n\\n----------------------------------------\\n\\nSent by MANA · Manage notification preferences in Settings."
   },
-  "cancellation-scheduled": {
-    "subject": "Your Pro plan will end on 31 July 2026",
-    "text": "MANA\\n\\n\\nCANCELLATION SCHEDULED\\n\\nHi Mina,\\n\\nYour Pro subscription remains active until 31 July 2026.\\n\\nYou can resume it before then without losing access.\\n\\nManage subscription http://localhost:5173\\n\\n----------------------------------------\\n\\nSent by MANA · Manage notification preferences in Settings."
-  },
-  "subscription-started": {
-    "subject": "Your Pro plan is active",
-    "text": "MANA\\n\\n\\nYOUR PRO PLAN IS ACTIVE\\n\\nHi Mina,\\n\\nYour subscription is ready. You now have access to all features included in Pro.\\n\\nOpen MANA http://localhost:5173\\n\\n----------------------------------------\\n\\nSent by MANA · Manage notification preferences in Settings."
-  },
-  "plan-changed": {
-    "subject": "Your plan changed to Pro",
-    "text": "MANA\\n\\n\\nPLAN UPDATED\\n\\nHi Mina,\\n\\nYour plan changed from Starter to Pro.\\n\\nReview billing http://localhost:5173\\n\\n----------------------------------------\\n\\nSent by MANA · Manage notification preferences in Settings."
-  },
-  "payment-action-required": {
-    "subject": "Action required to keep your Pro plan",
-    "text": "MANA\\n\\n\\nCONFIRM YOUR PAYMENT\\n\\nHi Mina,\\n\\nYour bank requires an extra confirmation before we can renew your Pro plan.\\n\\nAccess may be limited if the payment is not completed.\\n\\nComplete payment http://localhost:5173\\n\\n----------------------------------------\\n\\nSent by MANA · Manage notification preferences in Settings."
-  },
-  "payment-failed": {
-    "subject": "Payment failed for your Pro plan",
-    "text": "MANA\\n\\n\\nWE COULD NOT PROCESS YOUR PAYMENT\\n\\nHi Mina,\\n\\nThe latest payment for your Pro plan did not go through.\\n\\nWe will follow Stripe’s retry schedule before access ends.\\n\\nUpdate payment method http://localhost:5173\\n\\n----------------------------------------\\n\\nSent by MANA · Manage notification preferences in Settings."
-  },
-  "payment-recovered": {
-    "subject": "Payment received — your Pro plan is active",
-    "text": "MANA\\n\\n\\nPAYMENT RECEIVED\\n\\nHi Mina,\\n\\nYour payment was successful and your Pro subscription is active.\\n\\nOpen MANA http://localhost:5173\\n\\n----------------------------------------\\n\\nSent by MANA · Manage notification preferences in Settings."
-  },
-  "cancellation-resumed": {
-    "subject": "Your Pro plan will continue",
-    "text": "MANA\\n\\n\\nSUBSCRIPTION RESUMED\\n\\nHi Mina,\\n\\nYour Pro plan will now renew normally.\\n\\nReview billing http://localhost:5173\\n\\n----------------------------------------\\n\\nSent by MANA · Manage notification preferences in Settings."
-  },
-  "subscription-ended": {
-    "subject": "Your Pro subscription has ended",
-    "text": "MANA\\n\\n\\nSUBSCRIPTION ENDED\\n\\nHi Mina,\\n\\nYour Pro subscription has ended and your account has moved to the free plan.\\n\\nYour data remains available.\\n\\nChoose a plan http://localhost:5173\\n\\n----------------------------------------\\n\\nSent by MANA · Manage notification preferences in Settings."
-  },
   "document-viewed": {
     "subject": "Your invoice INV-2026-042 was viewed",
     "text": "MANA\\n\\n\\nDOCUMENT OPENED\\n\\nHi Mina,\\n\\nAcme Corp opened your invoice INV-2026-042.\\n\\nOpen document http://localhost:5173\\n\\n----------------------------------------\\n\\nSent by MANA · Manage notification preferences in Settings."

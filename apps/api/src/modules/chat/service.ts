@@ -9,16 +9,15 @@ import type { ToolContext } from '@api/utils/mcp-tools/tool-context'
 import { displayRowsFor, type DisplayRow } from '@api/utils/mcp-tools/display'
 import { env } from '@api/env'
 import { todayCalendarDate } from '@api/lib/calendar-date'
-import { claimAiAction, nextResetAt, type Plan } from '@api/modules/billing/usage'
+import { claimAiAction } from '@api/modules/billing/usage'
 import { assertAiConfigured, trackedCreate, trackedStream } from '@api/modules/ai/client'
-import { buildPlanContextLine } from '@api/modules/billing/entitlements'
 import { settleAiAction } from '@api/modules/chat/ai-action'
 import { extractImageText } from '@api/modules/chat/ocr'
 import { formatThaiGlossary } from '@api/modules/chat/thai-glossary'
 import { verifySessionOwnership } from '@api/modules/chat/sessions'
 
 // Per-action cost bounds (C-409): one chat Action must have a bounded worst case,
-// or action-based plan caps stop meaning anything (the Cursor failure mode).
+// so one request cannot keep spending provider tokens indefinitely.
 const MAX_TOOL_ROUNDS = 8
 const MAX_TOOL_RESULT_CHARS = 16_000
 const MAX_HISTORY_MESSAGE_CHARS = 8_000
@@ -179,12 +178,12 @@ interface SystemPromptParams {
   locale: ChatLocale
   tone: string | null
   nudgeContext: string | null
-  planContext: string | null
+  communityContext: string | null
   fileCount: number
 }
 
 function buildSystemPrompt(params: SystemPromptParams): string {
-  const { userName, locale, tone, nudgeContext, planContext, fileCount } = params
+  const { userName, locale, tone, nudgeContext, communityContext, fileCount } = params
 
   const parts = [
     `You are an AI assistant for ${userName}'s freelance business on MANA.`,
@@ -207,7 +206,7 @@ function buildSystemPrompt(params: SystemPromptParams): string {
   ]
 
   if (nudgeContext) parts.push(nudgeContext)
-  if (planContext) parts.push(planContext)
+  if (communityContext) parts.push(communityContext)
   if (fileCount > 0) parts.push(`The user has attached ${fileCount} file(s). Analyse and reference them in your response.`)
 
   return parts.join('\n')
@@ -229,22 +228,7 @@ export async function buildChatStream(
   const owned = await verifySessionOwnership(userId, sessionId)
   if (!owned) throw new Error('Session not found')
 
-  const capResult = await claimAiAction(userId, user.plan as Plan)
-
-  if (capResult.blocked) {
-    return new ReadableStream({
-      start(controller) {
-        controller.enqueue(new TextEncoder().encode(sseEvent({
-          type: 'cap_reached',
-          bucket: capResult.bucket,
-          used: capResult.used,
-          cap: capResult.cap,
-          resetAt: nextResetAt().toISOString(),
-        })))
-        controller.close()
-      },
-    })
-  }
+  await claimAiAction(userId)
 
   let historyMessages: MessageParam[] = []
   if (user.aiMemory) {
@@ -279,19 +263,15 @@ export async function buildChatStream(
 
   const needsTitleGeneration = isFirstMessage && !sessionRow?.titleGeneratedAt
 
-  const [nudgeContext, planContext] = isFirstMessage
-    ? await Promise.all([
-        buildNudgeContext(userId),
-        buildPlanContextLine(userId, user.plan as Plan),
-      ])
-    : [null, await buildPlanContextLine(userId, user.plan as Plan)]
+  const nudgeContext = isFirstMessage ? await buildNudgeContext(userId) : null
+  const communityContext = 'MANA Community has no subscription limits. AI and integrations use the administrator’s configured provider. Call get_usage for resource usage.'
 
   const systemPrompt = buildSystemPrompt({
     userName: user.name,
     locale: chatLocale,
     tone: user.aiTone,
     nudgeContext,
-    planContext,
+    communityContext,
     fileCount: files?.length ?? 0,
   })
 
@@ -436,8 +416,7 @@ export async function buildChatStream(
             assistantText: finalAssistantText,
             toolCalls: usedToolCalls,
             aborted: !!signal?.aborted,
-            actionBucket: capResult.bucket,
-            usedBonusCredit: capResult.usedBonusCredit,
+            actionBucket: 'ai',
           })
 
           if (needsTitleGeneration && !signal?.aborted) {

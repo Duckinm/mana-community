@@ -25,7 +25,6 @@ import type {
   ApiPaymentSlipDismissResult,
   ApiPaymentSlipVerifyResult,
 } from "@/lib/api-types";
-import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -67,12 +66,6 @@ export function PaymentSlipReviewPanel({
   const [pendingAction, setPendingAction] = useState<"confirm" | "verify" | null>(null);
   const [unverifiedDialogOpen, setUnverifiedDialogOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const { data: usage } = useQuery({
-    queryKey: ["billing", "usage"],
-    queryFn: async () => expectEden(await client.api.billing.usage.get()),
-  });
-  const slipVerifyCap = usage && "slipVerify" in usage ? usage.slipVerify : undefined;
 
   async function handleConfirm(allowUnverified = false) {
     setConfirming(true);
@@ -147,14 +140,9 @@ export function PaymentSlipReviewPanel({
   const isResolved = slip.status === "confirmed" || slip.status === "dismissed";
   const busy = confirming || dismissing || verifying || retrying;
   const needsConfirmationGate = isMismatched || slip.qrWarning === "qr_reused";
-  const quotaAvailable =
-    slipVerifyCap !== undefined &&
-    (slipVerifyCap.cap === null || slipVerifyCap.used < slipVerifyCap.cap);
-  const quotaExhausted = slipVerifyCap !== undefined && !quotaAvailable;
   const verifyEligible =
     !slip.apiVerified && slip.qrFound && !isResolved && !isFailed;
-  const canVerify = verifyEligible && quotaAvailable && !capabilities.isError && capabilities.data?.paymentSlipVerification === true;
-  const showVerifyUpsell = verifyEligible && quotaExhausted && capabilities.data?.paymentSlipVerification === true;
+  const canVerify = verifyEligible && !capabilities.isError && capabilities.data?.paymentSlipVerification === true;
 
   return (
     <div className="rounded-xl border border-border p-4 space-y-3">
@@ -180,8 +168,8 @@ export function PaymentSlipReviewPanel({
         </p>
       </div>
 
-      {!slip.apiVerified && <CapabilityNotice available={capabilities.data?.paymentSlipVerification} unavailableKey="paymentSlipVerificationUnavailable" />}
-      {isFailed && <CapabilityNotice available={capabilities.data?.ai} unavailableKey="paymentSlipExtractionUnavailable" />}
+      {!slip.apiVerified && <CapabilityNotice available={capabilities.data?.paymentSlipVerification} unavailableKey="paymentSlipVerificationUnavailable" availableKey={canVerify ? "verificationCost" : undefined} />}
+      {isFailed && <CapabilityNotice available={capabilities.data?.ai} unavailableKey="paymentSlipExtractionUnavailable" availableKey={capabilities.data?.paymentSlipVerification ? "slipCost" : "aiCost"} />}
       {!slip.apiVerified && (
         <div className="flex items-center justify-between gap-3 rounded-xl border border-border-subtle bg-surface-raised p-3">
           <p className="text-xs text-muted-foreground">
@@ -362,16 +350,6 @@ export function PaymentSlipReviewPanel({
           </Button>
         )}
       </div>
-
-      {showVerifyUpsell && (
-        <Link
-          to="/settings/billing"
-          search={{ success: false, canceled: false }}
-          className="block text-xs text-muted-foreground hover:text-foreground transition-colors duration-fast"
-        >
-          {t("paymentSlip.verifyQuotaExceeded")}
-        </Link>
-      )}
 
       <AlertDialog open={confirmDialogOpen} onOpenChange={setConfirmDialogOpen}>
         <AlertDialogContent>

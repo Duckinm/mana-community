@@ -59,7 +59,7 @@ The public catalog is an explicit capability profile, not a mirror of every in-a
 
 The client discovers only the tools enabled for that token. List-style reads are bounded (normally 50 items by default, up to 100 where supported), so a client starts with the smallest useful context. Use a returned ID to request a detail or make a change.
 
-External MCP uses the same service-layer checks as the app. For example, `create_document` applies the document workflow's sender, client, item, project, recurring-schedule, and date rules; AI actions and Google Calendar sync still enforce plan entitlements.
+External MCP uses the same service-layer checks as the app. For example, `create_document` applies the document workflow's sender, client, item, project, recurring-schedule, and date rules; AI actions require a configured provider, and Google Calendar sync requires a connected account. Community features have no subscription tiers or action quotas.
 
 Before an external client publishes a document, it must first ask the owner and send `confirmPublish: true`. Calendar events stay in MANA by default; sending one to an already-connected Google Calendar requires both `syncToGoogle: true` and `confirmGoogleSync: true` after the owner confirms. Calendar connection setup and removal stay in MANA's settings UI.
 
@@ -72,6 +72,6 @@ External MCP never exposes:
 - outbound email/reminder sends, token rotation, account settings, chat-only UI controls, file uploads, or signed download URLs;
 - permanent deletion, signed download links, and unbounded account exports.
 
-Google Calendar is an exception to the integration boundary only in a narrow sense: the client can work with connections the user has already made inside MANA. MANA performs provider work under its own existing ownership and plan checks; the client never receives a Google credential.
+Google Calendar is an exception to the integration boundary only in a narrow sense: the client can work with connections the user has already made inside MANA. MANA performs provider work under its own existing ownership and provider-connection checks; the client never receives a Google credential.
 
 New tools are private by default. A tool becomes public only when it is added to the external allow-list in `apps/api/src/utils/mcp-tools/capabilities.ts` and is reviewed for ownership, validation, result size, and side effects.

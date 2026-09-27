@@ -1,5 +1,4 @@
-import { FileSignature, List } from "@/components/icons";
-import { ManaSparkle } from "@/components/icons/mana-sparkle";
+import { FileSignature, Home, List } from "@/components/icons";
 import { NotificationBell } from "@/components/notifications/notification-bell";
 import { ProjectPicker } from "@/components/shells/project-picker";
 import type { Project } from "@/components/projects/types";
@@ -62,7 +61,7 @@ function useHideOnScroll(enabled: boolean) {
 }
 
 export function MobileDock({
-  isOnChat,
+  isOnHome,
   isOnProjects,
   isOnDocuments,
   projects,
@@ -76,7 +75,7 @@ export function MobileDock({
   onOpenMenu,
   menuOpen = false,
 }: {
-  isOnChat: boolean;
+  isOnHome: boolean;
   isOnProjects: boolean;
   isOnDocuments: boolean;
   projects: Project[];
@@ -104,15 +103,15 @@ export function MobileDock({
       <div className="pointer-events-auto flex w-full max-w-xs items-center gap-2 bg-transparent">
         <div className="flex min-w-0 flex-1 items-center justify-evenly gap-1 rounded-full border border-border-subtle/60 bg-surface-raised/40 px-2 py-2 shadow-popup backdrop-blur-2xl supports-[backdrop-filter]:bg-surface-raised/35">
           <Link
-            to="/chat"
-            aria-label={t("chatWithAi")}
-            aria-current={isOnChat ? "page" : undefined}
+            to="/home"
+            aria-label={t("home")}
+            aria-current={isOnHome ? "page" : undefined}
             className={cn(
               dockIconBtn,
-              isOnChat && "bg-surface-overlay/70 text-foreground",
+              isOnHome && "bg-surface-overlay/70 text-foreground",
             )}
           >
-            <ManaSparkle size={20} className="shrink-0" />
+            <Home size={20} className="shrink-0" />
           </Link>
 
           <Link

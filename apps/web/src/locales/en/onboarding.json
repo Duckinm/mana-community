@@ -3,17 +3,17 @@
   "steps": {
     "profile": "Profile",
     "preferences": "Preferences",
-    "account": "Account"
+    "account": "Review"
   },
   "actions": {
     "back": "← Back",
     "continue": "Continue →",
-    "submit": "Submit",
+    "submit": "Save profile",
     "finish": "Let's rock!",
     "optional": "optional"
   },
   "flow": {
-    "title": "Get to know you more"
+    "title": "Your work preferences"
   },
   "identity": {
     "iAmA": "I am a",
@@ -23,7 +23,7 @@
     "otherPlaceholder": "Tell us what you do",
     "hourlyRate": "Hourly rate",
     "rangePlaceholder": "Select a range",
-    "rateHint": "Used only to size up your profit estimates in the AI command centre — it never changes how you invoice clients, and you can update it anytime.",
+    "rateHint": "Used for work estimates. It does not change your invoices, and you can update it anytime.",
     "revenueGoal": "Revenue goal",
     "revenueGoalPlaceholder": "Select a goal",
     "perMonth": "/mo",
@@ -62,15 +62,15 @@
     }
   },
   "finish": {
-    "subtitle": "Your freelance command centre is ready.",
+    "subtitle": "Review your preferences, then save when you are ready.",
     "role": "Role",
     "rate": "Rate",
     "goal": "Goal",
     "projects": "Projects",
-    "waiting": "✦ What's waiting for you",
-    "ai": "→ Your AI command centre — ask anything about your business",
-    "finance": "→ Financial snapshot with manday rate calculations",
-    "board": "→ Project board pre-loaded with your work style in mind",
+    "waiting": "Your workspace is ready",
+    "ai": "Optional AI assistance when you connect a provider",
+    "finance": "Record income and expenses manually",
+    "board": "Create a project and organize its tasks",
     "saving": "Setting up…",
     "error": "We couldn't save your profile. Please try again."
   },
@@ -95,7 +95,7 @@
     "navLabel": "Get started",
     "badge": "{{completed}}/{{total}}",
     "popoverTitle": "Get started",
-    "popoverSubtitle": "A few quick things to unlock the full picture of your business.",
+    "popoverSubtitle": "Start with a client, then connect the work and its finances.",
     "hide": "Hide this",
     "completeTitle": "All set!",
     "completeSubtitle": "You've wrapped up the get-started checklist.",
@@ -110,7 +110,7 @@
       },
       "document": {
         "title": "Create your first document",
-        "description": "Send a quotation, invoice, or receipt."
+        "description": "Prepare a quotation, invoice, or receipt."
       },
       "transaction": {
         "title": "Record your first transaction",
@@ -119,19 +119,25 @@
     },
     "profile": {
       "title": "Personalize MANA",
-      "description": "Tell us your work style and get 5 extra AI Actions.",
-      "credit": "+5 AI"
+      "description": "Optional: set your work preferences. You can change them in Settings."
     }
   },
-  "profileReward": {
-    "close": "Close profile setup",
-    "title": "Make MANA more useful",
-    "subtitle": "Your answers tune the business context MANA uses for suggestions. You can change them anytime in Settings.",
-    "creditTitle": "5 one-time AI Actions",
-    "creditDescription": "They stay on your account and are used only after your normal monthly Actions are exhausted.",
-    "roleRequired": "Choose your role before claiming the credit.",
-    "claim": "Save profile + claim 5 Actions",
-    "saving": "Saving your profile…",
-    "error": "We couldn't save your profile. Please try again."
+  "home": {
+    "title": "Your workspace",
+    "intro": "Keep clients, work and money connected. Start wherever you need — no AI account required.",
+    "start": "Build your first workflow",
+    "ready": "Continue your work",
+    "progress": "{{completed}} of {{total}} first steps complete",
+    "next": "Next: {{step}}",
+    "openProjects": "Open projects",
+    "completed": "Completed",
+    "optional": "Optional connections",
+    "optionalDescription": "AI and external integrations use your own provider credentials. Providers may charge for usage.",
+    "configure": "Set up integrations",
+    "free": "All community features are available without a MANA subscription.",
+    "contacts": "Contacts",
+    "projects": "Projects",
+    "documents": "Documents",
+    "transactions": "Transactions"
   }
 }

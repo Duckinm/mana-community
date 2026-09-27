@@ -2,7 +2,6 @@ import Elysia, { t } from 'elysia'
 import { betterAuthPlugin } from '@api/lib/auth-plugin'
 import { env } from '@api/env'
 import { setDocumentImage, clearDocumentImage } from '@api/modules/documents/service'
-import { assertStorageQuotaAvailable } from '@api/modules/storage/service'
 import {
   listDocuments,
   createDocument,
@@ -162,9 +161,7 @@ export const documentsModule = new Elysia({ name: 'documents', prefix: '/api/doc
       if (result.status === 'no_client_email') {
         return status(400, { message: 'This document has no client email on file' })
       }
-      if (result.status === 'plan_limit') {
-        return status(403, { message: `PLAN_LIMIT_DOCS_SENT:${result.used}/${result.cap}` })
-      }
+
       return { emailStatus: result.status, sentAt: result.sentAt }
     } catch (err) {
       const mapped = mapRouteError(err)
@@ -329,15 +326,10 @@ export const documentsModule = new Elysia({ name: 'documents', prefix: '/api/doc
       return status(400, { message: 'Invalid image kind' })
     }
     try {
-      const buffer = Buffer.from(body.data, 'base64')
-      await assertStorageQuotaAvailable(user.id, buffer.byteLength)
       const doc = await setDocumentImage(user.id, params.id, params.kind, body.data, body.mediaType)
       if (!doc) return status(404, { message: 'Not found' })
       return doc
     } catch (err) {
-      if (err instanceof Error && err.message === 'QUOTA_EXCEEDED') {
-        return status(413, { error: 'Storage quota exceeded. Limit is 1 GB.' })
-      }
       const message = err instanceof Error ? err.message : 'Image upload failed'
       return status(400, { message })
     }

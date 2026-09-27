@@ -4,7 +4,6 @@ import { toast } from 'sonner'
 import i18next from '@/lib/i18n'
 import { queryKeys } from '@/lib/query-keys'
 import { client, expectEden, expectEdenVoid } from '@/lib/eden'
-import { isApiError } from '@/lib/api-error'
 import { invalidateProjects } from '@/lib/invalidate-helpers'
 import { makeOptimisticMutation } from '@/lib/optimistic-mutation'
 import type { ApiProjectCreateBody, ApiTaskCreateBody, ApiTaskPatchBody } from '@/lib/api-types'
@@ -16,21 +15,6 @@ import {
   removeTask as cacheRemoveTask,
   reorderColumns as cacheReorderColumns,
 } from '@/context/projects/project-cache'
-
-function toastProjectLimitError() {
-  toast.error(i18next.t('toast.projectLimitReached', { ns: 'projects' }), {
-    action: {
-      label: i18next.t('toast.projectLimitUpgrade', { ns: 'projects' }),
-      onClick: () => {
-        window.location.assign('/settings/billing')
-      },
-    },
-  })
-}
-
-function isProjectLimitError(error: unknown): boolean {
-  return isApiError(error) && error.status === 403 && error.message === 'PLAN_LIMIT_PROJECTS'
-}
 
 export interface ProjectsContextValue {
   projects: Project[]
@@ -83,11 +67,7 @@ function useProjectsContextValue(): ProjectsContextValue {
     mutationFn: async (project: ApiProjectCreateBody) =>
       expectEden(await client.api.projects.post(project)),
     onSuccess: () => { void invalidateProjects(queryClient) },
-    onError: (error, project) => {
-      if (isProjectLimitError(error)) {
-        toastProjectLimitError()
-        return
-      }
+    onError: (_error, project) => {
       toast.error(i18next.t('toast.createProjectFailed', { ns: 'projects' }), {
         action: { label: i18next.t('retry', { ns: 'common' }), onClick: () => addProjectMutation.mutate(project) },
       })
@@ -134,11 +114,7 @@ function useProjectsContextValue(): ProjectsContextValue {
       queryClient.setQueryData<Project[]>(queryKeys.trashedProjects, (prev = []) => prev.filter((p) => p.id !== restored.id))
       queryClient.setQueryData<Project[]>(queryKeys.projects, (prev = []) => [...prev, restored])
     },
-    onError: (error, id) => {
-      if (isProjectLimitError(error)) {
-        toastProjectLimitError()
-        return
-      }
+    onError: (_error, id) => {
       toast.error(i18next.t('toast.restoreProjectFailed', { ns: 'projects' }), {
         action: { label: i18next.t('retry', { ns: 'common' }), onClick: () => restoreProjectMutation.mutate(id) },
       })
@@ -151,11 +127,7 @@ function useProjectsContextValue(): ProjectsContextValue {
     onSuccess: (copy) => {
       queryClient.setQueryData<Project[]>(queryKeys.projects, (prev = []) => [...prev, copy])
     },
-    onError: (error, id) => {
-      if (isProjectLimitError(error)) {
-        toastProjectLimitError()
-        return
-      }
+    onError: (_error, id) => {
       toast.error(i18next.t('toast.duplicateProjectFailed', { ns: 'projects' }), {
         action: { label: i18next.t('retry', { ns: 'common' }), onClick: () => duplicateProjectMutation.mutate(id) },
       })
