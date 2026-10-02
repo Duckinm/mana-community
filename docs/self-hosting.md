@@ -8,7 +8,7 @@ The supplied setup listens only on your computer. It does not deliver email to r
 
 ## First start
 
-Install Git and [Docker Desktop with Compose](https://docs.docker.com/desktop/) and start Docker. Compose 2.24 or newer is required. On Linux, Docker Engine with the Compose plugin also supplies the required commands. The current local rehearsal covers Apple Silicon; Linux x64 is included in CI but needs a successful hosted run before claiming platform verification. Bun is included in the containers.
+Install Git and [Docker Desktop with Compose](https://docs.docker.com/desktop/) and start Docker. Compose 2.24 or newer is required. On Linux, Docker Engine with the Compose plugin also supplies the required commands. The preview has passed local acceptance on Apple Silicon and [hosted acceptance on Linux x64](https://github.com/Duckinm/mana-community/actions/runs/36264810058). Windows installation has not yet been verified. Bun is included in the containers.
 
 From a terminal:
 
@@ -105,7 +105,7 @@ sh scripts/self-host-backup.sh backup "$HOME/mana-backup-$(date +%Y%m%d-%H%M%S)"
 
 The backup briefly stops the installation, copies all three volumes at the same point, records checksums and the database image, and restarts it. The directory includes account data, inbox messages, and secrets. Keep an encrypted copy on a different device; the script itself does not encrypt it. Only a directory with a `complete` marker is a completed backup.
 
-Restore into a separate checkout of the **same source version**, on the same CPU architecture and exact database image. Keep that version's source with your backup until a tagged release is available. Do not initialize the destination with `self-host.sh` first. Choose an unused Compose project name; stop the source installation before starting the restored copy, because the restored configuration uses the same ports.
+Restore into a separate checkout of the **same source version**, on the same CPU architecture and exact database image. Keep that version's source or exact release tag with your backup. Do not initialize the destination with `self-host.sh` first. Choose an unused Compose project name; stop the source installation before starting the restored copy, because the restored configuration uses the same ports.
 
 ```sh
 export COMPOSE_PROJECT_NAME=mana-selfhost-restored
